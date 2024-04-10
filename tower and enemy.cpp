@@ -10,7 +10,52 @@ struct tower
     int damage;
     int attackspeed;
     int range;
-    string type[5];  
+    string type[5];
+
+    tower mage()
+    {
+        name = "Mage";
+        icon = 'M';
+        cost = 4;
+        damage = 2;
+        attackspeed = 2;
+        range = 1;
+        type[0] = "AOE"; type[1] = "Ground"; type[2] = "Air";
+    }
+
+    tower archer()
+    {
+        name = "Archer";
+        icon = 'A';
+        cost = 3;
+        damage = 3;
+        attackspeed = 1;
+        range = 1;
+        type[0] = "Single"; type[1] = "Ground"; type[2] = "Air";     
+    }
+
+    tower sniper()
+    {
+        name = "Sniper";
+        icon = 'S';
+        cost = 5;
+        damage = 6;
+        attackspeed = 3;
+        range = 2;
+        type[0] = "Single"; type[1] = "Ground"; type[2] = "Air"; type[3] = "Camo";
+    }
+
+    tower cannon()
+    {
+        name = "Cannon";
+        icon = 'C';
+        cost = 4;
+        damage = 4;
+        attackspeed = 3;
+        range = 1;
+        type[0] = "AOE"; type[1] = "Ground";
+    }
+
 };
 
 struct enemy
@@ -19,62 +64,29 @@ struct enemy
     char icon;
     int health;
     string type[5];
+
+    enemy knight()
+    {
+        name = "Knight";
+        icon = 'K';
+        health = 14;
+        type[0] = "Ground";
+    }
+
+    enemy dragon()
+    {
+        name = "Dragon";
+        icon = 'D';
+        health = 12;
+        type[0] = "Air";
+    }
+
+    enemy ghost()
+    {
+        name = "Ghost";
+        icon = 'G';
+        health = 9;
+        type[0] = "Ground"; type[1] ="Camo";
+    }
+
 };
-
-int main()
-{
-    tower mage;
-    mage.name = "Mage";
-    mage.icon = 'M';
-    mage.cost =  4;
-    mage.damage = 2;
-    mage.attackspeed = 2;
-    mage.range = 1;
-    mage.type[0] = "AOE"; mage.type[1] = "Ground"; mage.type[2] = "Air";
-
-    tower archer;
-    archer.name = "Archer";
-    archer.icon = 'A';
-    archer.cost = 3;
-    archer.damage = 3;
-    archer.attackspeed = 1;
-    archer.range = 1;
-    archer.type[0] = "Single"; archer.type[1] = "Ground"; archer.type[2] = "Air";
-
-    tower sniper;
-    sniper.name = "Sniper";
-    sniper.icon = 'S';
-    sniper.cost = 5;
-    sniper.damage = 6;
-    sniper.attackspeed = 3;
-    sniper.range = 2;
-    sniper.type[0] = "Single"; sniper.type[1] = "Ground"; sniper.type[2] = "Air"; sniper.type[3] = "Camo";
-
-    tower cannon;
-    cannon.name = "Cannon";
-    cannon.icon = 'C';
-    cannon.cost = 4;
-    cannon.damage = 4;
-    cannon.attackspeed = 3;
-    cannon.range = 1;
-    cannon.type[0] = "AOE"; cannon.type[1] = "Ground";
-
-
-    enemy knight;
-    knight.name = "Knight";
-    knight.icon = 'K';
-    knight.health = 14;
-    knight.type[0] = "Ground";
-
-    enemy dragon;
-    dragon.name = "Dragon";
-    dragon.icon = 'D';
-    dragon.health = 12;
-    dragon.type[0] = "Air";
-
-   enemy ghost;
-   ghost.name = "Ghost";
-   ghost.icon = 'G';
-   ghost.health = 9;
-   ghost.type[0] = "Ground"; ghost.type[1] = "Camo";
-} 
