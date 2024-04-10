@@ -1,11 +1,18 @@
-
+#include "path.h"
 using namespace std;
 
-struct pathtile {
-    int row, col;
-    pathtile* next;
-    enemy* on_top = NULL;
-};
+bool is_bounded(int row, int col) {
+    return row >= 0 && row < 9 && col >= 0 && col < 16;
+}
+
+bool is_path(char map[9][16], int row, int col) {
+    return (is_bounded(row, col)) &&
+    (map[row][col] == 'X' || map[row][col] == 'S' || map[row][col] == 'E');
+}
+
+bool is_not_previous(pathtile*& previous, int row, int col) {
+    return previous == NULL || previous->row != row || previous->col != col;
+}
 
 void set_start(char map[9][16], char target, pathtile*& pathhead) {
     for (int row = 0; row < 9; row++) {

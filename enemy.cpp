@@ -1,35 +1,27 @@
 #include <string>
+#include "enemy.h"
 using namespace std;
 
-struct enemy
+void enemy::knight()
 {
-    string name;
-    char icon;
-    int health;
-    string type[5];
+    name = "Knight";
+    icon = 'K';
+    health = 14;
+    type[0] = "Ground";
+}
 
-    void knight()
-    {
-        name = "Knight";
-        icon = 'K';
-        health = 14;
-        type[0] = "Ground";
-    }
+void enemy::dragon()
+{
+    name = "Dragon";
+    icon = 'D';
+    health = 12;
+    type[0] = "Air";
+}
 
-    void dragon()
-    {
-        name = "Dragon";
-        icon = 'D';
-        health = 12;
-        type[0] = "Air";
-    }
-
-    void ghost()
-    {
-        name = "Ghost";
-        icon = 'G';
-        health = 9;
-        type[0] = "Ground"; type[1] ="Camo";
-    }
-
-};
+void enemy::ghost()
+{
+    name = "Ghost";
+    icon = 'G';
+    health = 9;
+    type[0] = "Ground"; type[1] = "Camo";
+}
