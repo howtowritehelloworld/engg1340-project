@@ -6,7 +6,7 @@
 #include <vector>
 #include <fstream>
 
-struct Block{
+struct Block{ // Structure for tower/ground placed, most of these variables dont do anything yet
     char icon;
     std::string type;
     std::string name;
@@ -16,11 +16,12 @@ struct Block{
     int cost;
 };
 
-struct Coords{
+struct Coords{ // I didnt know pair existed and this looks nicer
     int y;
     int x;
 };
 
+// The blocks
 Block tower1 = {'A', "Tower", "tower1", 1, 5, 3, 100};
 Block tower2 = {'B', "Tower", "tower2", 1, 5, 3, 100};
 Block tower3 = {'C', "Tower", "tower3", 1, 5, 3, 100};
@@ -32,9 +33,9 @@ int mainmenu(WINDOW *);
 int playscreen(WINDOW *);
 int helpscreen(WINDOW *);
 
-void printMap(WINDOW *mainBox, std::vector<std::vector<Block>> gameMap)
+void printMap(WINDOW *mainBox, std::vector<std::vector<Block>> gameMap) // Print the map of the game inside of the main window
 {   
-
+    // Define background colors for map
     init_pair(1, COLOR_WHITE, COLOR_GREEN);
     init_pair(2, COLOR_WHITE, COLOR_CYAN);
     init_pair(3, COLOR_WHITE, COLOR_BLUE);
@@ -42,6 +43,7 @@ void printMap(WINDOW *mainBox, std::vector<std::vector<Block>> gameMap)
     init_pair(5, COLOR_WHITE, COLOR_YELLOW);
     init_pair(6, COLOR_WHITE, COLOR_RED);
 
+    // Looping each square to print the map
     for (int row = 0; row < 9; row++)
     {
         for (int col = 0; col < 16; col++)
@@ -50,13 +52,13 @@ void printMap(WINDOW *mainBox, std::vector<std::vector<Block>> gameMap)
             switch(gameMap[row][col].icon)
             {
                 case 'X':
-                    wattron(mainBox, COLOR_PAIR(1));
+                    wattron(mainBox, COLOR_PAIR(1)); // Turn on the color effect
                     for (int i = 0; i < 3; i++){
                         for (int k = 0; k < 5; k++){
                             mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
                             }
                         }
-                    wattroff(mainBox, COLOR_PAIR(1));
+                    wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
                     break;
                 case 'O':
                     for (int i = 0; i < 3; i++){
@@ -165,7 +167,7 @@ int main(int agrc, char **argv)
     return 0;
 }
 
-Coords selectSquare(WINDOW *win)
+Coords selectSquare(WINDOW *win) // Allow player to control cursor to select the tile they want to interact with
 {   
     keypad(win, true);
     int ch;
@@ -173,10 +175,8 @@ Coords selectSquare(WINDOW *win)
     
     curs_set(1);
     wmove(win, 3*selected.y+2, 6*selected.x+4);
-    // Loop until the user presses the 'q' key to quit
     while (1) {
         ch = wgetch(win);
-        // Process arrow key input
         switch(ch) {
             case KEY_UP:
                 selected.y--;
@@ -359,14 +359,14 @@ int playscreen(WINDOW *win)
         //Print the Map
         printMap(mainBox, gameMap);
         
-        // update stats, enemies, towers, the fun stuff ig
+        // update stats, enemies, towers, the fun stuff ig, but they dont do anything rn
         mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
         mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
         mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave);
 
         for(int i = 0; i < 5; i++) // action box
-        {
-            if (i == highlight)
+        {   
+            if (i == highlight) // highlight the choice being selected by the player
                 wattron(actionBox, A_REVERSE);
             mvwprintw(actionBox, i+2, 4, choices[i].c_str());
             wattroff(actionBox, A_REVERSE);
@@ -379,6 +379,7 @@ int playscreen(WINDOW *win)
         wrefresh(statsBox);
         wrefresh(confirmBox);
 
+        // depending on key pressed, change the choice of the player
         switch(actionChoice)
         {
             case KEY_UP:
