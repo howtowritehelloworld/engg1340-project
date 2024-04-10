@@ -12,7 +12,7 @@ struct tower
     int range;
     string type[5];
 
-    tower mage()
+    void mage()
     {
         name = "Mage";
         icon = 'M';
@@ -23,7 +23,7 @@ struct tower
         type[0] = "AOE"; type[1] = "Ground"; type[2] = "Air";
     }
 
-    tower archer()
+    void archer()
     {
         name = "Archer";
         icon = 'A';
@@ -34,7 +34,7 @@ struct tower
         type[0] = "Single"; type[1] = "Ground"; type[2] = "Air";     
     }
 
-    tower sniper()
+    void sniper()
     {
         name = "Sniper";
         icon = 'S';
@@ -45,7 +45,7 @@ struct tower
         type[0] = "Single"; type[1] = "Ground"; type[2] = "Air"; type[3] = "Camo";
     }
 
-    tower cannon()
+    void cannon()
     {
         name = "Cannon";
         icon = 'C';
@@ -65,7 +65,7 @@ struct enemy
     int health;
     string type[5];
 
-    enemy knight()
+    void knight()
     {
         name = "Knight";
         icon = 'K';
@@ -73,7 +73,7 @@ struct enemy
         type[0] = "Ground";
     }
 
-    enemy dragon()
+    void dragon()
     {
         name = "Dragon";
         icon = 'D';
@@ -81,7 +81,7 @@ struct enemy
         type[0] = "Air";
     }
 
-    enemy ghost()
+    void ghost()
     {
         name = "Ghost";
         icon = 'G';
