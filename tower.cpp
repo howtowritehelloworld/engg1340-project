@@ -45,6 +45,22 @@ void tower::cannon()
     type[0] = "AOE"; type[1] = "Ground";
 }
 
+void tower::configure(std::string tname, int row, int col){
+    if (tname == "Mage"){
+        mage();
+    }
+    else if (tname == "Archer"){
+        archer();
+    }
+    else if (tname == "Sniper"){
+        sniper();
+    }
+    else if (tname == "Cannon"){
+        cannon();
+    }
+    coordinates.push_back({row, col});
+}
+
 void tower::check_coverage(pathtile*& pathhead){
     pathtile* current = pathhead;
     while (current != NULL){
@@ -61,8 +77,7 @@ void tower::check_coverage(pathtile*& pathhead){
 int main(){
     pathtile* pathhead = new pathtile;
     tower* test = new tower;
-    test->mage();
-    test->coordinates = {{1,5}};
+    test->configure("Mage", 2, 3);
     char map[9][16] = {
       {'.','.','.','.','.','.','.','.','.','.', '.', '.', '.', '.', '.', '.'},
       {'.','.','.','.','.','.','.','.','.','.', '.', '.', '.', '.', '.', '.'},
