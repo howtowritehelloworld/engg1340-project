@@ -4,6 +4,7 @@
 #include "path.h"
 #include "enemy.h"
 #include "map.h"
+#include "tower.h"
 
 using namespace std;
 

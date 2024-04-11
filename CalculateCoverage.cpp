@@ -15,8 +15,8 @@ void check(vector <pair<int,int>> &tiles, vector<pair<int,int>> coor, int range,
 }
 int main(){
   vector<pair<int,int>> tiles;
-  vector<pair<int,int>> towercoordinates = {{3,3}};
-  int range = 1;
+  vector<pair<int,int>> towercoordinates = {{0,0}};
+  int range = 3;
   char map[9][16] = {
       {'.','.','.','.','.','.','.','.','.','.', '.', '.', '.', '.', '.', '.'},
       {'.','.','.','.','.','.','.','.','.','.', '.', '.', '.', '.', '.', '.'},
