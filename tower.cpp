@@ -45,19 +45,28 @@ void tower::cannon()
     type[0] = "AOE"; type[1] = "Ground";
 }
 
-void tower::check_coverage(char map[][16]){
-    for (int i = -range; i <= range; i++){
-        for (int j = -range; j <= range; j++){
-            if (map[coordinates[0].first + i][coordinates[0].second + j] == 'X'){
-                tiles_covered.push_back(make_pair(coordinates[0].first + i, coordinates[0].second + j));
-            }
+void tower::check_coverage(pathtile*& pathhead){
+    // for (int i = -range; i <= range; i++){
+    //     for (int j = -range; j <= range; j++){
+    //         if (map[coordinates[0].first + i][coordinates[0].second + j] == 'X'){
+    //             tiles_covered.push_back(make_pair(coordinates[0].first + i, coordinates[0].second + j));
+    //         }
+    //     }
+    // }
+    pathtile* current = pathhead;
+    while (current != NULL){
+        int row = current->row;
+        int col = current->col;
+        if (abs(row - coordinates[0].first) <= range && abs(col - coordinates[0].second) <= range){
+            tiles_covered.push_back(make_pair(row, col));
         }
+        current = current->next;
     }
 }
 
-test code
+// test code
 int main(){
-
+    pathtile* pathhead = new pathtile;
     tower* test = new tower;
     test->mage();
     test->coordinates = {{1,2}};
@@ -72,7 +81,8 @@ int main(){
       {'.','.','.','X','X','.','.','.','X','.', 'X', 'X', 'X', 'X', 'X', 'E'},
       {'.','.','.','.','X','X','X','X','X','.', '.', '.', '.', '.', '.', '.'},
     };
-    test->check_coverage(map);
+    int path_length = configpath(map, pathhead);
+    test->check_coverage(pathhead);
     for (int i = 0; i < test->tiles_covered.size(); i++){
       cout << test->tiles_covered[i].first << " " << test->tiles_covered[i].second << endl;
     }

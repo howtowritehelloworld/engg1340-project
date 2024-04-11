@@ -23,7 +23,7 @@ struct tower{
     void archer();
     void sniper();
     void cannon();
-    void check_coverage(char map[][16]);
+    void check_coverage(pathtile*& pathhead);
 
 };
 
