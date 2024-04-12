@@ -3,12 +3,12 @@
 
 #include <string>
 #include <vector>
+#include "map.h"
 #include "enemy.h"
 #include "path.h"
-#include "map.h"
+
 
 struct tower{
-
     std::string name;
     char icon;
     int cost;
@@ -28,4 +28,5 @@ struct tower{
 
 void configure_tower(std::string tname, int row, int col, std::vector<tower*>& towers, pathtile*& pathhead);
 void print_towers(std::vector<tower*> towers);
+
 #endif

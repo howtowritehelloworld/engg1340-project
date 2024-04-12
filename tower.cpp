@@ -112,6 +112,8 @@ int main(){
     configure_tower("Sniper", 0, 0, towers, pathhead);
     cout << "Testing" << endl;
     print_towers(towers);
+    updatemap(map, pathhead, towers);
+    printmap(map);
 
     return 0;
 }
