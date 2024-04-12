@@ -26,7 +26,7 @@ void tower::archer()
 void tower::sniper()
 {
     name = "Sniper";
-    icon = 'S';
+    icon = 's';
     cost = 5;
     damage = 6;
     attackspeed = 3;
@@ -91,20 +91,20 @@ void print_towers(std::vector<tower*> towers){
     }
 }
 // test code
-int main(){
-    pathtile* pathhead = new pathtile;
+// int main(){
+//     pathtile* pathhead = new pathtile;
 
-    char map[9][16];
-    readmap(map, 1);
-    int path_length = configpath(map, pathhead);
+//     char map[9][16];
+//     readmap(map, 1);
+//     int path_length = configpath(map, pathhead);
 
-    vector<tower*> towers;
-    configure_tower("Mage", 2, 3, towers, pathhead);
-    configure_tower("Sniper", 0, 0, towers, pathhead);
-    cout << "Testing" << endl;
-    print_towers(towers);
-    updatemap(map, pathhead, towers);
-    printmap(map);
+//     vector<tower*> towers;
+//     configure_tower("Mage", 2, 3, towers, pathhead);
+//     configure_tower("Sniper", 0, 0, towers, pathhead);
+//     cout << "Testing" << endl;
+//     print_towers(towers);
+//     updatemap(map, pathhead, towers);
+//     printmap(map);
 
-    return 0;
-}
+//     return 0;
+// }

@@ -5,6 +5,10 @@
 #include <unistd.h>
 #include <vector>
 #include <fstream>
+#include "map.h"
+#include "path.h"
+#include "tower.h"
+#include "enemy.h"
 
 struct Block{ // Structure for tower/ground placed, most of these variables dont do anything yet
     char icon;
@@ -22,18 +26,25 @@ struct Coords{ // I didnt know pair existed and this looks nicer
 };
 
 // The blocks
-Block tower1 = {'A', "Tower", "tower1", 1, 5, 3, 100};
-Block tower2 = {'B', "Tower", "tower2", 1, 5, 3, 100};
-Block tower3 = {'C', "Tower", "tower3", 1, 5, 3, 100};
-Block tower4 = {'D', "Tower", "tower4", 1, 5, 3, 100};
-Block tower5 = {'E', "Tower", "tower5", 1, 5, 3, 100};
-Block ground = {'X', "Ground", "ground", 0, 0, 0, 0};
+// Block tower1 = {'A', "Tower", "tower1", 1, 5, 3, 100};
+// Block tower2 = {'B', "Tower", "tower2", 1, 5, 3, 100};
+// Block tower3 = {'C', "Tower", "tower3", 1, 5, 3, 100};
+// Block tower4 = {'D', "Tower", "tower4", 1, 5, 3, 100};
+// Block tower5 = {'E', "Tower", "tower5", 1, 5, 3, 100};
+// Block ground = {'X', "Ground", "ground", 0, 0, 0, 0};
 
 int mainmenu(WINDOW *);
 int playscreen(WINDOW *);
 int helpscreen(WINDOW *);
 
-void printMap(WINDOW *mainBox, std::vector<std::vector<Block>> gameMap) // Print the map of the game inside of the main window
+std::string getString(char x)
+{
+    std::string s(1, x);
+ 
+    return s;   
+}
+
+void printMap(WINDOW *mainBox, char map[9][16]) // Print the map of the game inside of the main window
 {   
     // Define background colors for map
     init_pair(1, COLOR_WHITE, COLOR_GREEN);
@@ -49,85 +60,115 @@ void printMap(WINDOW *mainBox, std::vector<std::vector<Block>> gameMap) // Print
         for (int col = 0; col < 16; col++)
         {   
             
-            switch(gameMap[row][col].icon)
-            {
-                case 'X':
-                    wattron(mainBox, COLOR_PAIR(1)); // Turn on the color effect
-                    for (int i = 0; i < 3; i++){
-                        for (int k = 0; k < 5; k++){
-                            mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                            }
-                        }
-                    wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
-                    break;
-                case 'O':
-                    for (int i = 0; i < 3; i++){
-                        for (int k = 0; k < 5; k++){
-                            mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                            }
-                        }
-                    break;
-                case 'A':
-                    wattron(mainBox, COLOR_PAIR(2));
-                    for (int i = 0; i < 3; i++){
-                        for (int k = 0; k < 5; k++){
-                            mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                            }
-                        }
-                    wattroff(mainBox, COLOR_PAIR(2));
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "A");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "A");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "A");
-                    break;
-                case 'B':
-                    wattron(mainBox, COLOR_PAIR(3));
-                    for (int i = 0; i < 3; i++){
-                        for (int k = 0; k < 5; k++){
-                            mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                            }
-                        }
-                    wattroff(mainBox, COLOR_PAIR(3));
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "B");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "B");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "B");
-                    break;
-                case 'C':
-                    wattron(mainBox, COLOR_PAIR(4));
-                    for (int i = 0; i < 3; i++){
-                        for (int k = 0; k < 5; k++){
-                            mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                            }
-                        }
-                    wattroff(mainBox, COLOR_PAIR(4));
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "C");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "C");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "C");
-                    break;
-                case 'D':
-                    wattron(mainBox, COLOR_PAIR(5));
-                    for (int i = 0; i < 3; i++){
-                        for (int k = 0; k < 5; k++){
-                            mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                            }
-                        }
-                    wattroff(mainBox, COLOR_PAIR(5));
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "D");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "D");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "D");
-                    break;
-                case 'E':
-                    wattron(mainBox, COLOR_PAIR(6));
-                    for (int i = 0; i < 3; i++){
-                        for (int k = 0; k < 5; k++){
-                            mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                            }
-                        }
-                    wattroff(mainBox, COLOR_PAIR(6));
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "E");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "E");
-                    mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "E");
-                    break;
-            } 
+            if (map[row][col] == '.'){
+                wattron(mainBox, COLOR_PAIR(1)); // Turn on the color effect
+                for (int i = 0; i < 3; i++){
+                    for (int k = 0; k < 5; k++){
+                        mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+                    }
+                }
+                wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
+            }
+            else if (map[row][col] == 'X' || map[row][col] == 'S' || map[row][col] == 'E'){
+                for (int i = 0; i < 3; i++){
+                    for (int k = 0; k < 5; k++){
+                        mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+                    }
+                }
+            }
+
+            else {
+                std::string colors = "MAsC";
+                wattron(mainBox, COLOR_PAIR(colors.find(map[row][col]) + 2));
+                for (int i = 0; i < 3; i++){
+                    for (int k = 0; k < 5; k++){
+                        mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+                    }
+                }
+                wattroff(mainBox, COLOR_PAIR(colors.find(map[row][col]) + 2));
+                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(map[row][col]).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(map[row][col]).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(map[row][col]).c_str());
+            }
+            // switch(gameMap[row][col].icon)
+            // {
+            //     case 'X':
+            //         wattron(mainBox, COLOR_PAIR(1)); // Turn on the color effect
+            //         for (int i = 0; i < 3; i++){
+            //             for (int k = 0; k < 5; k++){
+            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+            //                 }
+            //             }
+            //         wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
+            //         break;
+            //     case 'O':
+            //         for (int i = 0; i < 3; i++){
+            //             for (int k = 0; k < 5; k++){
+            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+            //                 }
+            //             }
+            //         break;
+            //     case 'A':
+            //         wattron(mainBox, COLOR_PAIR(2));
+            //         for (int i = 0; i < 3; i++){
+            //             for (int k = 0; k < 5; k++){
+            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+            //                 }
+            //             }
+            //         wattroff(mainBox, COLOR_PAIR(2));
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "A");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "A");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "A");
+            //         break;
+            //     case 'B':
+            //         wattron(mainBox, COLOR_PAIR(3));
+            //         for (int i = 0; i < 3; i++){
+            //             for (int k = 0; k < 5; k++){
+            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+            //                 }
+            //             }
+            //         wattroff(mainBox, COLOR_PAIR(3));
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "B");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "B");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "B");
+            //         break;
+            //     case 'C':
+            //         wattron(mainBox, COLOR_PAIR(4));
+            //         for (int i = 0; i < 3; i++){
+            //             for (int k = 0; k < 5; k++){
+            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+            //                 }
+            //             }
+            //         wattroff(mainBox, COLOR_PAIR(4));
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "C");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "C");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "C");
+            //         break;
+            //     case 'D':
+            //         wattron(mainBox, COLOR_PAIR(5));
+            //         for (int i = 0; i < 3; i++){
+            //             for (int k = 0; k < 5; k++){
+            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+            //                 }
+            //             }
+            //         wattroff(mainBox, COLOR_PAIR(5));
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "D");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "D");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "D");
+            //         break;
+            //     case 'E':
+            //         wattron(mainBox, COLOR_PAIR(6));
+            //         for (int i = 0; i < 3; i++){
+            //             for (int k = 0; k < 5; k++){
+            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+            //                 }
+            //             }
+            //         wattroff(mainBox, COLOR_PAIR(6));
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "E");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "E");
+            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "E");
+            //         break;
+            // } 
         }
     }
 }
@@ -296,39 +337,45 @@ int playscreen(WINDOW *win)
     wrefresh(statsBox);
     wrefresh(confirmBox);
 
-    std::vector<std::vector<Block>> gameMap(9, std::vector<Block>(16, {' ', "", "", 0, 0, 0, 0}));
+    char map[9][16];
+    readmap(map, 4);
+    pathtile* pathhead = new pathtile;
+    int path_length = configpath(map, pathhead);
+    std::vector<struct tower*> towers;
+
+    // std::vector<std::vector<Block>> gameMap(9, std::vector<Block>(16, {' ', "", "", 0, 0, 0, 0}));
     
     // Input the Map into the 2D vector
 
-    std::string line;
-    std::ifstream fin ("map.txt");
-    fin.setf(std::ios::skipws);
-    char c;
+    // std::string line;
+    // std::ifstream fin ("map.txt");
+    // fin.setf(std::ios::skipws);
+    // char c;
     
-    for (int row = 0; row < 9; row++)
-    {
-        for (int col = 0; col < 16; col++)
-        {
+    // for (int row = 0; row < 9; row++)
+    // {
+    //     for (int col = 0; col < 16; col++)
+    //     {
             
-            fin.get(c);
-            while (c == '\n'){
-                fin.get(c);
-            }
-            if (c == 'X') {
-                gameMap[row][col] = ground;
-            }
-            else {
-                gameMap[row][col].icon = c;
-                gameMap[row][col].name = "Road";
-                gameMap[row][col].type = "GROUND";
-            }
+    //         fin.get(c);
+    //         while (c == '\n'){
+    //             fin.get(c);
+    //         }
+    //         if (c == 'X') {
+    //             gameMap[row][col] = ground;
+    //         }
+    //         else {
+    //             gameMap[row][col].icon = c;
+    //             gameMap[row][col].name = "Road";
+    //             gameMap[row][col].type = "GROUND";
+    //         }
             
-        }   
-    }
+    //     }   
+    // }
 
-    fin.close();
+    // fin.close();
 
-    printMap(mainBox, gameMap);
+    printMap(mainBox, map);
     
     wrefresh(mainBox);
 
@@ -357,7 +404,7 @@ int playscreen(WINDOW *win)
     while(1)
     {
         //Print the Map
-        printMap(mainBox, gameMap);
+        printMap(mainBox, map);
         
         // update stats, enemies, towers, the fun stuff ig, but they dont do anything rn
         mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
@@ -405,17 +452,19 @@ int playscreen(WINDOW *win)
                     
                     keypad(actionBox, false);
                     keypad(towerBox, true);
-                    std::string towers[5] = {"Tower 1", "Tower 2", "Tower 3", "Tower 4", "Tower 5"};
+                    std::string tower_options[] = {"Mage", "Archer", "Sniper", "Cannon"};
                     highlight = 0;
                     while (towerChoice != 10)
                     {   
-                        printMap(mainBox, gameMap);
-                        for(int i = 0; i < 5; i++) // tower box
+                        printMap(mainBox, map);
+                        for(int i = 0; i < 4; i++) // tower box
                         {
-                            if (i == highlight)
+                            if (i == highlight){
                                 wattron(towerBox, A_REVERSE);
-                            mvwprintw(towerBox, i+2, 4, towers[i].c_str());
+                            }    
+                            mvwprintw(towerBox, i+2, 4, tower_options[i].c_str());
                             wattroff(towerBox, A_REVERSE);
+                            
                         }
                         towerChoice = wgetch(towerBox);
                         
@@ -428,8 +477,8 @@ int playscreen(WINDOW *win)
                                 break;
                             case KEY_DOWN:
                                 highlight++;
-                                if (highlight == 5)
-                                    highlight = 4;
+                                if (highlight == 4)
+                                    highlight = 3;
                                 break;
                             default:
                                 break;
@@ -440,22 +489,22 @@ int playscreen(WINDOW *win)
 
                     switch(highlight)
                     {
-                        case 0: { // place tower 1
-                            gameMap[selected.y][selected.x] = tower1;
-                        }   
-                            break;
+                        case 0: // place tower 1
+                            configure_tower("Mage", selected.y, selected.x, towers, pathhead);
+                            updatemap(map, pathhead, towers);
+                            break;  
                         case 1:
-                            gameMap[selected.y][selected.x] = tower2;
-                            break; // place tower 2
+                            configure_tower("Archer", selected.y, selected.x, towers, pathhead);
+                            updatemap(map, pathhead, towers);
+                            break;
                         case 2:
-                            gameMap[selected.y][selected.x] = tower3;
-                            break; // place tower 3
+                            configure_tower("Sniper", selected.y, selected.x, towers, pathhead);
+                            updatemap(map, pathhead, towers);
+                            break;
                         case 3:
-                            gameMap[selected.y][selected.x] = tower4;
-                            break; // place tower 4
-                        case 4:
-                            gameMap[selected.y][selected.x] = tower5;
-                            break; // place tower 5
+                            configure_tower("Cannon", selected.y, selected.x, towers, pathhead);
+                            updatemap(map, pathhead, towers);
+                            break;
                     }
 
                     wclear(towerBox);
@@ -467,29 +516,29 @@ int playscreen(WINDOW *win)
                     break;
                 }
 
-                case 1:
-                    selected = selectSquare(mainBox); // Upgrade Tower Sequence
-                    if (gameMap[selected.y][selected.x].type == "Tower" && gameMap[selected.y][selected.x].level < 3) {
-                        gameMap[selected.y][selected.x].level++;
-                    break;
-                    }
-                case 2:
-                    selected = selectSquare(mainBox); // Move Tower Sequence
-                    if (gameMap[selected.y][selected.x].type == "Tower") {
-                        selected2 = selectSquare(mainBox);
-                        if (gameMap[selected2.y][selected2.x].name == "ground") {
-                            gameMap[selected2.y][selected2.x] = gameMap[selected.y][selected.x];
-                            gameMap[selected.y][selected.x] = ground;
-                        }
-                    }
-                    break;
-                case 3: {
-                    selected = selectSquare(mainBox);  // Sell Tower Sequence
-                    if (gameMap[selected.y][selected.x].type == "Tower"){
-                        gameMap[selected.y][selected.x] = ground;
-                    }                        
-                    break;
-                }
+                // case 1:
+                //     selected = selectSquare(mainBox); // Upgrade Tower Sequence
+                //     if (gameMap[selected.y][selected.x].type == "Tower" && gameMap[selected.y][selected.x].level < 3) {
+                //         gameMap[selected.y][selected.x].level++;
+                //     break;
+                //     }
+                // case 2:
+                //     selected = selectSquare(mainBox); // Move Tower Sequence
+                //     if (gameMap[selected.y][selected.x].type == "Tower") {
+                //         selected2 = selectSquare(mainBox);
+                //         if (gameMap[selected2.y][selected2.x].name == "ground") {
+                //             gameMap[selected2.y][selected2.x] = gameMap[selected.y][selected.x];
+                //             gameMap[selected.y][selected.x] = ground;
+                //         }
+                //     }
+                //     break;
+                // case 3: {
+                //     selected = selectSquare(mainBox);  // Sell Tower Sequence
+                //     if (gameMap[selected.y][selected.x].type == "Tower"){
+                //         gameMap[selected.y][selected.x] = ground;
+                //     }                        
+                //     break;
+                // }
                     
                 case 4:
                     return 0; // Quit Sequence
