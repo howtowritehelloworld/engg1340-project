@@ -23,10 +23,9 @@ struct tower{
     void archer();
     void sniper();
     void cannon();
-    void configure(std::string tname, int row, int col);
     void check_coverage(pathtile*& pathhead);
 };
 
-
-
+void configure_tower(std::string tname, int row, int col, std::vector<tower*>& towers, pathtile*& pathhead);
+void print_towers(std::vector<tower*> towers);
 #endif
