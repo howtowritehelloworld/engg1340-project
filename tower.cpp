@@ -45,22 +45,6 @@ void tower::cannon()
     type[0] = "AOE"; type[1] = "Ground";
 }
 
-void tower::configure(std::string tname, int row, int col){
-    if (tname == "Mage"){
-        mage();
-    }
-    else if (tname == "Archer"){
-        archer();
-    }
-    else if (tname == "Sniper"){
-        sniper();
-    }
-    else if (tname == "Cannon"){
-        cannon();
-    }
-    coordinates.push_back({row, col});
-}
-
 void tower::check_coverage(pathtile*& pathhead){
     pathtile* current = pathhead;
     while (current != NULL){
@@ -73,11 +57,43 @@ void tower::check_coverage(pathtile*& pathhead){
     }
 }
 
+void configure_tower(std::string tname, int row, int col, std::vector<tower*>& towers, pathtile*& pathhead){
+    tower* new_tower = new tower;
+    
+    if (tname == "Mage"){
+        new_tower->mage();
+    }
+    else if (tname == "Archer"){
+        new_tower->archer();
+    }
+    else if (tname == "Sniper"){
+        new_tower->sniper();
+    }
+    else if (tname == "Cannon"){
+        new_tower->cannon();
+    }
+
+    new_tower->coordinates.push_back({row, col});
+
+    new_tower->check_coverage(pathhead);
+
+    towers.push_back(new_tower);
+}
+
+void print_towers(std::vector<tower*> towers){
+    for (int i = 0; i < towers.size(); i++){
+        cout << "***************************" << endl;
+        cout << "Tower " << towers[i]->name << " at " << towers[i]->coordinates[0].first << " " << towers[i]->coordinates[0].second << " covers:" << endl;
+        for (int j = 0; j < towers[i]->tiles_covered.size(); j++){
+            cout << "Tile " << towers[i]->tiles_covered[j]->row << " " << towers[i]->tiles_covered[j]->col << endl;
+        }
+        cout << "***************************" << endl;
+    }
+}
 // test code
 int main(){
     pathtile* pathhead = new pathtile;
-    tower* test = new tower;
-    test->configure("Mage", 2, 3);
+
     char map[9][16] = {
       {'.','.','.','.','.','.','.','.','.','.', '.', '.', '.', '.', '.', '.'},
       {'.','.','.','.','.','.','.','.','.','.', '.', '.', '.', '.', '.', '.'},
@@ -90,9 +106,12 @@ int main(){
       {'.','.','.','.','X','X','X','X','X','.', '.', '.', '.', '.', '.', '.'},
     };
     int path_length = configpath(map, pathhead);
-    test->check_coverage(pathhead);
-    for (int i = 0; i < test->tiles_covered.size(); i++){
-      cout << test->tiles_covered[i]->row << " " << test->tiles_covered[i]->col << endl;
-    }
+
+    vector<tower*> towers;
+    configure_tower("Mage", 2, 3, towers, pathhead);
+    configure_tower("Sniper", 0, 0, towers, pathhead);
+    cout << "Testing" << endl;
+    print_towers(towers);
+
     return 0;
 }
