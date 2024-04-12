@@ -49,3 +49,14 @@ void updatemap(char map[9][16], pathtile*& pathhead, vector<tower*> towers){
         map[currentpath->row][currentpath->col] = 'E';
     }
 }
+
+void readmap(char map[9][16], int map_num){
+    string filename = "map/map_" + std::to_string(map_num) + ".txt";
+    ifstream inputfile(filename);
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 16; j++) {
+            inputfile >> map[i][j];
+        }
+    }
+    inputfile.close();
+}
