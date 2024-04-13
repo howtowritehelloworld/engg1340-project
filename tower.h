@@ -10,6 +10,7 @@
 
 struct tower{
     std::string name;
+    int color_id;
     char icon;
     int cost;
     int damage;

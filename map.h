@@ -10,7 +10,6 @@
 
 struct tile{
     std::pair<int,int> coordinates;
-    int color_id;
     enemy* enemy_on_top = NULL;
     struct tower* tower_on_top = NULL;
     tile* next = NULL;

@@ -44,7 +44,7 @@ std::string getString(char x)
     return s;   
 }
 
-void printMap(WINDOW *mainBox, char map[9][16]) // Print the map of the game inside of the main window
+void printMap(WINDOW *mainBox, tile map[9][16]) // Print the map of the game inside of the main window
 {   
     // Define background colors for map
     init_pair(1, COLOR_WHITE, COLOR_GREEN);
@@ -60,7 +60,7 @@ void printMap(WINDOW *mainBox, char map[9][16]) // Print the map of the game ins
         for (int col = 0; col < 16; col++)
         {   
             
-            if (map[row][col] == '.'){
+            if (map[row][col].is_empty()){
                 wattron(mainBox, COLOR_PAIR(1)); // Turn on the color effect
                 for (int i = 0; i < 3; i++){
                     for (int k = 0; k < 5; k++){
@@ -69,26 +69,24 @@ void printMap(WINDOW *mainBox, char map[9][16]) // Print the map of the game ins
                 }
                 wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
             }
-            else if (map[row][col] == 'X' || map[row][col] == 'S' || map[row][col] == 'E'){
+            else if (map[row][col].is_path){
                 for (int i = 0; i < 3; i++){
                     for (int k = 0; k < 5; k++){
                         mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
                     }
                 }
             }
-
-            else {
-                std::string colors = "MAsC";
-                wattron(mainBox, COLOR_PAIR(colors.find(map[row][col]) + 2));
+            else if (map[row][col].is_tower()){
+                wattron(mainBox, COLOR_PAIR(map[row][col].tower_on_top->color_id));
                 for (int i = 0; i < 3; i++){
                     for (int k = 0; k < 5; k++){
                         mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
                     }
                 }
-                wattroff(mainBox, COLOR_PAIR(colors.find(map[row][col]) + 2));
-                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(map[row][col]).c_str());
-                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(map[row][col]).c_str());
-                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(map[row][col]).c_str());
+                wattroff(mainBox, COLOR_PAIR(map[row][col].tower_on_top->color_id));
+                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(map[row][col].tower_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(map[row][col].tower_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(map[row][col].tower_on_top->icon).c_str());
             }
             // switch(gameMap[row][col].icon)
             // {
@@ -336,13 +334,11 @@ int playscreen(WINDOW *win)
     wrefresh(towerBox);
     wrefresh(statsBox);
     wrefresh(confirmBox);
-
-    char map[9][16];
-    readmap(map, 4);
-    pathtile* pathhead = new pathtile;
-    int path_length = configpath(map, pathhead);
-    std::vector<struct tower*> towers;
-
+    
+    tile map[9][16];
+    tile* path_start = new tile;
+    readmap(map, 4, path_start);
+    
     // std::vector<std::vector<Block>> gameMap(9, std::vector<Block>(16, {' ', "", "", 0, 0, 0, 0}));
     
     // Input the Map into the 2D vector
@@ -490,20 +486,16 @@ int playscreen(WINDOW *win)
                     switch(highlight)
                     {
                         case 0: // place tower 1
-                            configure_tower("Mage", selected.y, selected.x, towers, pathhead);
-                            updatemap(map, pathhead, towers);
+                            map[selected.y][selected.x].create_new_tower("mage", path_start);
                             break;  
                         case 1:
-                            configure_tower("Archer", selected.y, selected.x, towers, pathhead);
-                            updatemap(map, pathhead, towers);
+                            map[selected.y][selected.x].create_new_tower("archer", path_start);
                             break;
                         case 2:
-                            configure_tower("Sniper", selected.y, selected.x, towers, pathhead);
-                            updatemap(map, pathhead, towers);
+                            map[selected.y][selected.x].create_new_tower("sniper", path_start);
                             break;
                         case 3:
-                            configure_tower("Cannon", selected.y, selected.x, towers, pathhead);
-                            updatemap(map, pathhead, towers);
+                            map[selected.y][selected.x].create_new_tower("cannon", path_start);
                             break;
                     }
 

@@ -1,4 +1,6 @@
 
+#include <chrono>
+#include <thread>
 #include "map.h"
 using namespace std;
 
@@ -89,10 +91,20 @@ void readmap(tile map[9][16], int map_num, tile*& path_start){
     inputfile.close();
 }
 
-void spawn_enemy(tile*& path_start, int i) {
-    if (i < 5) {
+void spawn_enemy(tile*& path_start, int i, vector<string> enemies) {
+    if (i < enemies.size()) {
         enemy* new_enemy = new enemy;
-        new_enemy->knight();
+        
+        if (enemies[i] == "knight"){
+            new_enemy->knight();
+        }
+        else if (enemies[i] == "ghost"){
+            new_enemy->ghost();
+        }
+        else if (enemies[i] == "dragon"){
+            new_enemy->dragon();
+        }
+
         path_start->enemy_on_top = new_enemy;
     }
 }
@@ -121,35 +133,39 @@ void move(tile map[9][16], tile*& path_start) {
 
 
 
-int main(){
-    tile map[9][16];
-    tile* path_start = new tile;
-    readmap(map, 1, path_start);
-    printmap(map);
+// int main(){
+//     tile map[9][16];
+//     tile* path_start = new tile;
+//     readmap(map, 1, path_start);
+//     printmap(map);
     
-    configpath(map, path_start);
+//     configpath(map, path_start);
 
-    // test set path
-    // tile* current = path_start;
-    // while (current != NULL) {
-    //     cout << current->coordinates.first << " " << current->coordinates.second << endl;
-    //     current = current->next;
-    // }
+//     // test set path
+//     tile* current = path_start;
+//     while (current != NULL) {
+//         cout << current->coordinates.first << " " << current->coordinates.second << endl;
+//         current = current->next;
+//     }
 
-    // test enemy movement
-    // int i = 0;
-    // while (i<30){
-    //     spawn_enemy(path_start, i);
-    //     printmap(map);
-    //     i++;
-    //     move(map, path_start);
-    // }
+//     // test placing new tower
+//     map[2][1].create_new_tower("mage", path_start);
+//     for (int i = 0; i < map[2][1].tower_on_top->tiles_covered.size(); i++){
+//         cout << map[2][1].tower_on_top->tiles_covered[i]->coordinates.first << " " << map[2][1].tower_on_top->tiles_covered[i]->coordinates.second << endl;
+//     }
 
-    // test placing new tower
-    map[2][1].create_new_tower("mage", path_start);
-    for (int i = 0; i < map[2][1].tower_on_top->tiles_covered.size(); i++){
-        cout << map[2][1].tower_on_top->tiles_covered[i]->coordinates.first << " " << map[2][1].tower_on_top->tiles_covered[i]->coordinates.second << endl;
-    }
+//     printmap(map);
 
-    printmap(map);
-}
+//     // test enemy movement
+//     vector<string> enemies = {"knight", "ghost", "knight", "dragon", "knight"};
+//     int i = 0;
+//     while (i<30){
+//         spawn_enemy(path_start, i, enemies);
+//         printmap(map);
+//         i++;
+//         std::this_thread::sleep_for(std::chrono::milliseconds(500));
+//         move(map, path_start);
+//     }
+
+    
+// }

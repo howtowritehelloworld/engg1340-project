@@ -4,6 +4,7 @@ using namespace std;
 void tower::mage()
 {
     name = "Mage";
+    color_id = 3;
     icon = 'M';
     cost = 4;
     damage = 2;
@@ -15,6 +16,7 @@ void tower::mage()
 void tower::archer()
 {
     name = "Archer";
+    color_id = 4;
     icon = 'A';
     cost = 3;
     damage = 3;
@@ -26,6 +28,7 @@ void tower::archer()
 void tower::sniper()
 {
     name = "Sniper";
+    color_id = 5;
     icon = 's';
     cost = 5;
     damage = 6;
@@ -37,6 +40,7 @@ void tower::sniper()
 void tower::cannon()
 {
     name = "Cannon";
+    color_id = 6;
     icon = 'C';
     cost = 4;
     damage = 4;
