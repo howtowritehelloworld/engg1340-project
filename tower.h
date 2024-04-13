@@ -17,16 +17,16 @@ struct tower{
     int range;
     std::string type[5];
     std::vector<std::pair<int,int>> coordinates;
-    std::vector<pathtile*> tiles_covered;
+    std::vector<struct tile*> tiles_covered;
 
     void mage();
     void archer();
     void sniper();
     void cannon();
-    void check_coverage(pathtile*& pathhead);
+    // void check_coverage(pathtile*& pathhead);
 };
 
-void configure_tower(std::string tname, int row, int col, std::vector<tower*>& towers, pathtile*& pathhead);
+// void configure_tower(std::string tname, int row, int col, std::vector<tower*>& towers, pathtile*& pathhead);
 void print_towers(std::vector<tower*> towers);
 
 #endif
