@@ -1,27 +1,22 @@
-//Not yet finished
 #include <ncurses.h>
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 using namespace std;
 
-void printmap(int count, int xMax) {
-    string line;
-    ifstream fin;
-    fin.open("map_" + to_string(count) + ".txt");
-    if (fin.fail()) {
-        exit(1);
-    }
-
-    int y = 9;
-    while (getline(fin, line)) {
-        move(y, (xMax - 17) / 2);
-        printw(line.c_str());
-        y++;
-    }
-
-    fin.close(); // Close the file after reading
+void mapdisplay(WINDOW* mapwin, int count){
+  ifstream mapfile;
+  mapfile.open("map_" + to_string(count) + ".txt");
+  string line;
+  int y = 0;
+  while(getline(mapfile, line)){
+    mvwprintw(mapwin, y, 0, line.c_str());
+    y++;
+  }
 }
+
+
 
 void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 0) {
     // Print "Choose a map" title
@@ -48,8 +43,8 @@ void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 0) {
     wrefresh(titlewin);
 
     // Create a window for the map display
-    WINDOW* mapwin = newwin(11, 19, 8, (xMax - 17) / 2);
-    box(mapwin, 0, 0);
+    WINDOW* mapwin = newwin(11, 32, 8, xMax/2 - 16);
+    mapdisplay(mapwin, count);
     wrefresh(mapwin);
 
     // Create a window for the menu
@@ -110,12 +105,8 @@ void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 0) {
                 exit(1);
             }
 
-            werase(mapwin);  // Clear the map window
             wrefresh(mapwin);
-
-            printmap(count, xMax);  // Print the updated map
-
-            mainscreen(titlewin, highlight, count);  // Recursive call to continue the loop
+            mainscreen(titlewin, highlight, count);  
         }
     }
 
@@ -132,10 +123,9 @@ int main(int argc, char** argv) {
     // Get screen size
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
-
+    
     // Create a window for the title
     WINDOW* titlewin = newwin(6, xMax, 0, 0);
-    printmap(0, xMax);
     mainscreen(titlewin);
 
     getch();
