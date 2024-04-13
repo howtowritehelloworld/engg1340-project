@@ -1,3 +1,4 @@
+//Almost done
 #include <ncurses.h>
 #include <iostream>
 #include <string>
