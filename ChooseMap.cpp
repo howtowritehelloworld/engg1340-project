@@ -1,23 +1,33 @@
-//Not yet done
+//Not yet finished
 #include <ncurses.h>
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
-int main(int argc, char **argv) {
-    initscr();
-    noecho();
-    cbreak();
-    curs_set(0);
+void printmap(int count, int xMax) {
+    string line;
+    ifstream fin;
+    fin.open("map_" + to_string(count) + ".txt");
+    if (fin.fail()) {
+        exit(1);
+    }
 
-    // Get screen size
+    int y = 9;
+    while (getline(fin, line)) {
+        move(y, (xMax - 17) / 2);
+        printw(line.c_str());
+        y++;
+    }
+
+    fin.close(); // Close the file after reading
+}
+
+void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 0) {
+    // Print "Choose a map" title
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-    // Create a window for the title
-    WINDOW *titlewin = newwin(6, xMax, 0 , 0);
-
-    // Print "Choose a map" title
     string title1 = "    ___ _                              _                         ";
     string title2 = "   / __\\ |__   ___   ___  ___  ___    /_\\     /\\/\\   __ _ _ __   ";
     string title3 = "  / /  | '_ \\ / _ \\ / _ \\/ __|/ _ \\  //_\\\\   /    \\ / _` | '_ \\  ";
@@ -38,15 +48,12 @@ int main(int argc, char **argv) {
     wrefresh(titlewin);
 
     // Create a window for the map display
-    WINDOW *mapwin = newwin(9, 16, 9, (xMax - 17) /2);
+    WINDOW* mapwin = newwin(11, 19, 8, (xMax - 17) / 2);
     box(mapwin, 0, 0);
     wrefresh(mapwin);
 
-
-
-  
     // Create a window for the menu
-    WINDOW *menuwin = newwin(7, xMax - 12, yMax -17, 5);
+    WINDOW* menuwin = newwin(7, xMax - 12, yMax - 17, 5);
     box(menuwin, 0, 0);
 
     // For arrow keys
@@ -54,7 +61,6 @@ int main(int argc, char **argv) {
 
     string choices[3] = {"Next", "Previous", "Select"};
     int choice;
-    int highlight = 0;
 
     while (1) {
         // Print the menu options
@@ -88,9 +94,49 @@ int main(int argc, char **argv) {
                 break;
         }
         if (choice == 10) {
-            break;
+            if (highlight == 0) {
+                count++;
+                if (count == 6) {
+                    count = 0;
+                }
+            }
+            else if (highlight == 1) {
+                count--;
+                if (count == -1) {
+                    count = 5;
+                }
+            }
+            else {
+                exit(1);
+            }
+
+            werase(mapwin);  // Clear the map window
+            wrefresh(mapwin);
+
+            printmap(count, xMax);  // Print the updated map
+
+            mainscreen(titlewin, highlight, count);  // Recursive call to continue the loop
         }
     }
+
+    delwin(mapwin);
+    delwin(menuwin);
+}
+
+int main(int argc, char** argv) {
+    initscr();
+    noecho();
+    cbreak();
+    curs_set(0);
+
+    // Get screen size
+    int yMax, xMax;
+    getmaxyx(stdscr, yMax, xMax);
+
+    // Create a window for the title
+    WINDOW* titlewin = newwin(6, xMax, 0, 0);
+    printmap(0, xMax);
+    mainscreen(titlewin);
 
     getch();
     endwin();
