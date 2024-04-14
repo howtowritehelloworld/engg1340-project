@@ -1,22 +1,21 @@
 #include <ncurses.h>
 #include <iostream>
-#include <string>
 #include <fstream>
 #include <vector>
+#include <ctime>
+
 using namespace std;
 
-void mapdisplay(WINDOW* mapwin, int count){
-  ifstream mapfile;
-  mapfile.open("map_" + to_string(count) + ".txt");
-  string line;
-  int y = 0;
-  while(getline(mapfile, line)){
-    mvwprintw(mapwin, y, 0, line.c_str());
-    y++;
-  }
+void mapdisplay(WINDOW* mapwin, int count) {
+    ifstream mapfile("map_" + to_string(count) + ".txt");
+    string line;
+    int y = 0;
+    while (getline(mapfile, line)) {
+        mvwprintw(mapwin, y, 0, line.c_str());
+        y++;
+    }
+    mapfile.close();
 }
-
-
 
 void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 1) {
     // Print "Choose a map" title
@@ -30,7 +29,7 @@ void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 1) {
     string title5 = " \\____/|_| |_|\\___/ \\___/|___/\\___| \\_/ \\_/ \\/    \\/\\__,_| .__/  ";
     string title6 = "                                                         |_|     ";
 
-    int titleX = (xMax - title1.length()) / 2;
+    int titleX = (xMax - title1.length()) / 2 - 3;
 
     mvwprintw(titlewin, 0, titleX, title1.c_str());
     mvwprintw(titlewin, 1, titleX, title2.c_str());
@@ -102,7 +101,19 @@ void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 1) {
                 }
             }
             else {
-                exit(1);
+                if (count == 6) {
+                    srand(time(0));
+                    count = rand() % 5 + 1;
+                    werase(mapwin);
+                    werase(menuwin);
+                    werase(titlewin);
+                    mvprintw(yMax/2, xMax/2 - 5, to_string(count).c_str());
+                    refresh();
+                }
+                // Clear the screen and print the count
+                clear();
+                printw("Selected map: %d", count);
+                refresh();
             }
 
             wrefresh(mapwin);
@@ -120,15 +131,14 @@ int main(int argc, char** argv) {
     cbreak();
     curs_set(0);
 
-    // Get screen size
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
-    
-    // Create a window for the title
-    WINDOW* titlewin = newwin(6, xMax, 0, 0);
+
+    WINDOW* titlewin = newwin(8, xMax - 12, 1, 5);
+    refresh();
+
     mainscreen(titlewin);
 
-    getch();
     endwin();
     return 0;
 }
