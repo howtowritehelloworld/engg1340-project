@@ -1,4 +1,3 @@
-//Almost done
 #include <ncurses.h>
 #include <iostream>
 #include <string>
@@ -19,7 +18,7 @@ void mapdisplay(WINDOW* mapwin, int count){
 
 
 
-void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 0) {
+void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 1) {
     // Print "Choose a map" title
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
@@ -92,14 +91,14 @@ void mainscreen(WINDOW* titlewin, int highlight = 0, int count = 0) {
         if (choice == 10) {
             if (highlight == 0) {
                 count++;
-                if (count == 6) {
-                    count = 0;
+                if (count == 7) {
+                    count = 1;
                 }
             }
             else if (highlight == 1) {
                 count--;
-                if (count == -1) {
-                    count = 5;
+                if (count == 0) {
+                    count = 6;
                 }
             }
             else {
