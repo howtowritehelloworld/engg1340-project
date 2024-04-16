@@ -6,6 +6,7 @@ struct enemy
     std::string name;
     char icon;
     int health;
+    int weight;
     std::string type[5];
     void knight();
     void dragon();
