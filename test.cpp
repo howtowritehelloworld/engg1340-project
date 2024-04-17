@@ -9,6 +9,7 @@
 #include "path.h"
 #include "tower.h"
 #include "enemy.h"
+#include "chooseMap.h"
 
 struct Block{ // Structure for tower/ground placed, most of these variables dont do anything yet
     char icon;
@@ -20,7 +21,7 @@ struct Block{ // Structure for tower/ground placed, most of these variables dont
     int cost;
 };
 
-struct Coords{ // I didnt know pair existed and this looks nicer
+struct Coords{ // I didnt know pair existed and this looks nicer (to me)
     int y;
     int x;
 };
@@ -323,6 +324,13 @@ int playscreen(WINDOW *win)
     WINDOW * statsBox = newwin(5, 82, 29, mid_x - 41 - 5);
     WINDOW * confirmBox = newwin(5, 20, 29, mid_x + 41 - 5);
     
+    int yMax, xMax;
+    getmaxyx(stdscr, yMax, xMax);
+
+    WINDOW* titlewin = newwin(8, xMax - 12, 1, 5);
+    refresh();
+    int mapnum = mainscreen(titlewin);
+
     box(mainBox, ACS_VLINE, ACS_HLINE);
     box(actionBox, ACS_VLINE, ACS_HLINE);
     box(towerBox, ACS_VLINE, ACS_HLINE);
@@ -337,7 +345,7 @@ int playscreen(WINDOW *win)
     
     tile map[9][16];
     tile* path_start = new tile;
-    readmap(map, 4, path_start);
+    readmap(map, mapnum, path_start);
     
     // std::vector<std::vector<Block>> gameMap(9, std::vector<Block>(16, {' ', "", "", 0, 0, 0, 0}));
     
@@ -375,7 +383,7 @@ int playscreen(WINDOW *win)
     
     wrefresh(mainBox);
 
-    keypad(actionBox, true);
+ 
     std::string choices[5] = {"Place Tower", "Upgrade Tower", "Move Tower", "Sell Tower", "Quit"};
     int actionChoice = 0;
     int towerChoice = 0;
@@ -397,6 +405,10 @@ int playscreen(WINDOW *win)
     Coords selected;
     Coords selected2;
 
+    keypad(actionBox, true);
+
+    bool wave_state = false;
+
     while(1)
     {
         //Print the Map
@@ -414,6 +426,14 @@ int playscreen(WINDOW *win)
             mvwprintw(actionBox, i+2, 4, choices[i].c_str());
             wattroff(actionBox, A_REVERSE);
         }
+        if (wave_state == false) {
+            if (5 == highlight) // highlight the choice being selected by the player
+                wattron(actionBox, A_REVERSE);
+            mvwprintw(actionBox, 7, 4, "Start Wave");
+            wattroff(actionBox, A_REVERSE);
+            wave_state == true;
+        }
+        
         actionChoice = wgetch(actionBox);
         
         wrefresh(mainBox);
@@ -432,8 +452,12 @@ int playscreen(WINDOW *win)
                 break;
             case KEY_DOWN:
                 highlight++;
-                if (highlight == 5)
+                if (highlight == 5 && wave_state == true) {
                     highlight = 4;
+                }
+                else if (highlight == 6 && wave_state == false) {
+                    highlight = 5;
+                }
                 break;
             default:
                 break;
@@ -534,6 +558,13 @@ int playscreen(WINDOW *win)
                     
                 case 4:
                     return 0; // Quit Sequence
+
+                case 5:
+                    wave_state = true; // Start Wave
+                    highlight = 4;
+                    wclear(actionBox);
+                    box(actionBox, ACS_VLINE, ACS_HLINE);
+                    break;
 
             }
         }
