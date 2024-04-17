@@ -19,10 +19,10 @@ struct tower{
     std::string type[5];
     std::vector<struct tile*> tiles_covered;
 
-    void mage();
-    void archer();
-    void sniper();
-    void cannon();
+    void mage(int level);
+    void archer(int level);
+    void sniper(int level);
+    void cannon(int level);
 };
 
 #endif
