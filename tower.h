@@ -15,6 +15,7 @@ struct tower{
     int cost;
     int damage;
     int attackspeed;
+    int cd;
     int range;
     std::string type[5];
     std::vector<struct tile*> tiles_covered;
