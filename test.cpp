@@ -33,9 +33,33 @@ struct Coords{ // I didnt know pair existed and this looks nicer
 // Block tower5 = {'E', "Tower", "tower5", 1, 5, 3, 100};
 // Block ground = {'X', "Ground", "ground", 0, 0, 0, 0};
 
+
+
 int mainmenu(WINDOW *);
 int playscreen(WINDOW *);
 int helpscreen(WINDOW *);
+
+std::vector<std::string> wave(int wave_num)
+{
+    std::vector<std::vector<std::string>> wave = 
+    {
+        {"K1"}, 
+        {"K1", "K1"}, 
+        {"K1", "K1", "K1"},
+        {"D1"},
+        {"D1", "K2"},
+        {"D1", "D1", "K2"},
+        {"G1", "G1"},
+        {"G2", "D2", "K3"},
+        {"G1", "G2", "D2", "K3"},
+        {"V1", "V1"},
+        {"V1", "V2", "G2", "D3", "K3"},
+        {"V3", "V3", "G3", "G3"},
+        {"K3", "K3", "K3", "D3", "D3", "D3"},
+        {"K3", "K3", "D3", "D3", "G3", "G3", "V3", "V3"},
+    };
+    return wave[wave_num];
+}
 
 std::string getString(char x)
 {
