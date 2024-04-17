@@ -10,7 +10,7 @@ void enemy::knight(int level)
     type[0] = "Ground";
 }
 
-void enemy::dragon()
+void enemy::dragon(int level)
 {
     name = "Dragon";
     icon = 'D';
@@ -19,7 +19,7 @@ void enemy::dragon()
     type[0] = "Air";
 }
 
-void enemy::vampire()
+void enemy::vampire(int level)
 {
     name = "Vampire";
     icon = 'V';
@@ -28,7 +28,7 @@ void enemy::vampire()
     type[0] = "Air";
 }
 
-void enemy::ghost()
+void enemy::ghost(int level)
 {
     name = "Ghost";
     icon = 'G';
