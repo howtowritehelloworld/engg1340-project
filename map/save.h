@@ -7,6 +7,7 @@
 #include "tower.h"
 #include "enemy.h"
 #include "path.h"
+#include "map.h"
 
 void saveGame();
 void loadGame();
