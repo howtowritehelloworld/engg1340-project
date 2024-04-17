@@ -11,7 +11,7 @@ struct enemy
     void knight(int level);
     void dragon(int level);
     void ghost(int level);
-
+    void vampire(int level);
 };
 
 #endif // ENEMY_H
