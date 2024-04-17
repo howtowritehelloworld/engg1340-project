@@ -3,3 +3,5 @@
 
 void saveGame();
 void loadGame();
+
+#endif
