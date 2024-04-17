@@ -7,6 +7,7 @@ void enemy::knight(int level)
     icon = 'K';
     health = 6*level;
     weight = 2*level;
+    money = 2*level;
     type[0] = "Ground";
 }
 
@@ -16,6 +17,7 @@ void enemy::dragon(int level)
     icon = 'D';
     health = 9*level;
     weight = 4*level;
+    money = 4*level;
     type[0] = "Air";
 }
 
@@ -25,6 +27,7 @@ void enemy::vampire(int level)
     icon = 'V';
     health = 6*level;
     weight = 3*level;
+    money = 3*level;
     type[0] = "Air";
 }
 
@@ -34,5 +37,6 @@ void enemy::ghost(int level)
     icon = 'G';
     health = 6*level;
     weight = 3*level;
+    money = 3*level;
     type[0] = "Ground"; type[1] = "Camo";
 }
