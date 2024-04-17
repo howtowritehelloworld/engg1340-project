@@ -116,17 +116,19 @@ void move(tile map[9][16], tile*& path_start) {
     path_start->enemy_on_top = t;
     delete t;
     while (current != NULL){
-        if (current->enemy_on_top != NULL) {
-                cout << "enemy " << current->enemy_on_top->icon << " is at "  << current->coordinates.first << " " << current->coordinates.second << endl;
-            }
+        // if (current->enemy_on_top != NULL) {
+        //         cout << "enemy " << current->enemy_on_top->icon << " is at "  << current->coordinates.first << " " << current->coordinates.second << endl;
+        //         cout << "health: " << current->enemy_on_top->health << endl;
+        //     }
 
         enemy* temp = current->enemy_on_top;
-        current->enemy_on_top = previous;
+        if (previous != NULL && previous->health <= 0){
+            current->enemy_on_top = NULL;
+        }
+        else{
+            current->enemy_on_top = previous;
+        }
         previous = temp;
-        
-        
-        
-
         current = current->next;
     }
 }
@@ -160,6 +162,10 @@ void move(tile map[9][16], tile*& path_start) {
 //     vector<string> enemies = {"knight", "ghost", "knight", "dragon", "knight"};
 //     int i = 0;
 //     while (i<30){
+//         if (map[4][5].is_enemy()&&map[4][5].enemy_on_top->icon == 'D'){
+//             map[4][5].enemy_on_top->health = 0;
+//         }
+        
 //         spawn_enemy(path_start, i, enemies);
 //         printmap(map);
 //         i++;
