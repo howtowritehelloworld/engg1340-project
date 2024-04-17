@@ -8,9 +8,9 @@ struct enemy
     int health;
     int weight;
     std::string type[5];
-    void knight();
-    void dragon();
-    void ghost();
+    void knight(int level);
+    void dragon(int level);
+    void ghost(int level);
 
 };
 
