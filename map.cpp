@@ -28,22 +28,22 @@ void tile::set_tower_coverage(tile*& path_start){
     }
 }
 
-void tile::create_new_tower(string name, tile*& path_start){
+void tile::create_new_tower(string name, int level, tile*& path_start){
     if (is_path || is_tower()){
         return;
     }
     tower* t = new tower;
     if (name == "mage"){
-        t->mage();
+        t->mage(level);
     }
     else if (name == "archer"){
-        t->archer();
+        t->archer(level);
     }
     else if (name == "sniper"){
-        t->sniper();
+        t->sniper(level);
     }
     else if (name == "cannon"){
-        t->cannon();
+        t->cannon(level);
     }
     tower_on_top = t;
     set_tower_coverage(path_start);
@@ -95,14 +95,14 @@ void spawn_enemy(tile*& path_start, int i, vector<string> enemies) {
     if (i < enemies.size()) {
         enemy* new_enemy = new enemy;
         
-        if (enemies[i] == "knight"){
-            new_enemy->knight();
+        if (enemies[i][0] == 'K'){
+            new_enemy->knight((int)enemies[i][1]);
         }
-        else if (enemies[i] == "ghost"){
-            new_enemy->ghost();
+        else if (enemies[i][0] == 'G'){
+            new_enemy->ghost((int)enemies[i][1]);
         }
-        else if (enemies[i] == "dragon"){
-            new_enemy->dragon();
+        else if (enemies[i][0] == 'D'){
+            new_enemy->dragon((int)enemies[i][1]);
         }
 
         path_start->enemy_on_top = new_enemy;

@@ -510,16 +510,16 @@ int playscreen(WINDOW *win)
                     switch(highlight)
                     {
                         case 0: // place tower 1
-                            map[selected.y][selected.x].create_new_tower("mage", path_start);
+                            map[selected.y][selected.x].create_new_tower("mage", 1, path_start);
                             break;  
                         case 1:
-                            map[selected.y][selected.x].create_new_tower("archer", path_start);
+                            map[selected.y][selected.x].create_new_tower("archer", 1, path_start);
                             break;
                         case 2:
-                            map[selected.y][selected.x].create_new_tower("sniper", path_start);
+                            map[selected.y][selected.x].create_new_tower("sniper", 1, path_start);
                             break;
                         case 3:
-                            map[selected.y][selected.x].create_new_tower("cannon", path_start);
+                            map[selected.y][selected.x].create_new_tower("cannon", 1, path_start);
                             break;
                     }
 

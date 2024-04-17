@@ -37,7 +37,7 @@ void tower::sniper(int level)
     type[0] = "Single"; type[1] = "Ground"; type[2] = "Air"; type[3] = "Camo";
 }
 
-void tower::cannon()
+void tower::cannon(int level)
 {
     name = "Cannon";
     color_id = 6;
