@@ -1,10 +1,11 @@
 #include "save.h"
 #include <iostream>
+#include <fstream>
 
 void saveGame() {
-    std::cout << "Saving the game..." << std::endl;
+    
 }
 
 void loadGame() {
-    std::cout << "Loading the game..." << std::endl;
+    
 }
