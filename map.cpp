@@ -139,44 +139,44 @@ void move(tile map[9][16], tile*& path_start, int& killed_enemies, int& health) 
 
 
 
-int main(){
-    tile map[9][16];
-    tile* path_start = new tile;
-    readmap(map, 1, path_start);
-    printmap(map);
-    configpath(map, path_start);
+// int main(){
+//     tile map[9][16];
+//     tile* path_start = new tile;
+//     readmap(map, 4, path_start);
+//     printmap(map);
+//     configpath(map, path_start);
 
-    cout << (path_start->next == NULL) << endl;
-    // test set path
-    tile* current = path_start;
-    while (current) {
-        cout << current->coordinates.first << " " << current->coordinates.second << endl;
-        current = current->next;
-    }
-    // test placing new tower
-    map[0][0].create_new_tower("mage", 1, path_start);
-    for (int i = 0; i < map[2][1].tower_on_top->tiles_covered.size(); i++){
-        cout << map[2][1].tower_on_top->tiles_covered[i]->coordinates.first << " " << map[2][1].tower_on_top->tiles_covered[i]->coordinates.second << endl;
-    }
+//     cout << (path_start->next == NULL) << endl;
+//     // test set path
+//     tile* current = path_start;
+//     while (current) {
+//         cout << current->coordinates.first << " " << current->coordinates.second << endl;
+//         current = current->next;
+//     }
+//     // test placing new tower
+//     map[0][0].create_new_tower("mage", 1, path_start);
+//     for (int i = 0; i < map[0][0].tower_on_top->tiles_covered.size(); i++){
+//         cout << map[0][0].tower_on_top->tiles_covered[i]->coordinates.first << " " << map[0][0].tower_on_top->tiles_covered[i]->coordinates.second << endl;
+//     }
 
-    printmap(map);
+//     printmap(map);
 
-    // test enemy movement
-    vector<string> enemies = {"K1"};
-    int i = 0;
-    int health = 3;
-    int killed_enemies = 0;
-    while (i<30){
-        // if (map[4][5].is_enemy()&&map[4][5].enemy_on_top->icon == 'D'){
-        //     map[4][5].enemy_on_top->health = 0;
-        // }
+//     // test enemy movement
+//     vector<string> enemies = {"K1"};
+//     int i = 0;
+//     int health = 3;
+//     int killed_enemies = 0;
+//     while (i<30){
+//         // if (map[4][5].is_enemy()&&map[4][5].enemy_on_top->icon == 'D'){
+//         //     map[4][5].enemy_on_top->health = 0;
+//         // }
         
-        spawn_enemy(path_start, i, enemies);
-        printmap(map);
-        i++;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        move(map, path_start, killed_enemies, health);
-    }
+//         spawn_enemy(path_start, i, enemies);
+//         printmap(map);
+//         i++;
+//         std::this_thread::sleep_for(std::chrono::milliseconds(500));
+//         move(map, path_start, killed_enemies, health);
+//     }
 
     
-}
+// }
