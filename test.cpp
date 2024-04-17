@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <vector>
 #include <fstream>
+#include <chrono>
+#include <thread>
 #include "map.h"
 #include "path.h"
 #include "tower.h"
@@ -79,6 +81,7 @@ void printMap(WINDOW *mainBox, tile map[9][16]) // Print the map of the game ins
     init_pair(5, COLOR_WHITE, COLOR_YELLOW);
     init_pair(6, COLOR_WHITE, COLOR_RED);
 
+    int enemies = 0;
     // Looping each square to print the map
     for (int row = 0; row < 9; row++)
     {
@@ -93,6 +96,11 @@ void printMap(WINDOW *mainBox, tile map[9][16]) // Print the map of the game ins
                     }
                 }
                 wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
+            }
+            else if (map[row][col].is_enemy()){
+                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(map[row][col].enemy_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(map[row][col].enemy_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(map[row][col].enemy_on_top->icon).c_str());
             }
             else if (map[row][col].is_path){
                 for (int i = 0; i < 3; i++){
@@ -370,6 +378,7 @@ int playscreen(WINDOW *win)
     tile map[9][16];
     tile* path_start = new tile;
     readmap(map, mapnum, path_start);
+    configpath(map, path_start);
     
     // std::vector<std::vector<Block>> gameMap(9, std::vector<Block>(16, {' ', "", "", 0, 0, 0, 0}));
     
@@ -413,8 +422,8 @@ int playscreen(WINDOW *win)
     int towerChoice = 0;
     int highlight = 0;
 
-    int health = 100;
-    int wave = 1;
+    int health = 3;
+    int wave_num = 1;
     int money = 500;
 
     noecho();
@@ -441,7 +450,7 @@ int playscreen(WINDOW *win)
         // update stats, enemies, towers, the fun stuff ig, but they dont do anything rn
         mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
         mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
-        mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave);
+        mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
 
         for(int i = 0; i < 5; i++) // action box
         {   
@@ -588,6 +597,27 @@ int playscreen(WINDOW *win)
                     highlight = 4;
                     wclear(actionBox);
                     box(actionBox, ACS_VLINE, ACS_HLINE);
+                    int i = 0;
+                    int killed_enemies = 0;
+                    while (killed_enemies < wave(wave_num).size() && health > 0 && i<100){
+                        spawn_enemy(path_start, i, wave(wave_num));
+                        printMap(mainBox, map);
+                        mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
+                        mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
+                        mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
+                        wrefresh(mainBox);
+                        wrefresh(actionBox);
+                        wrefresh(towerBox);
+                        wrefresh(statsBox);
+                        wrefresh(confirmBox);
+                        
+                        i++;
+                        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                        // attack
+                        move(map, path_start, killed_enemies, health);
+                    }
+                    wave_num++;
+                    wave_state = false;
                     break;
 
             }

@@ -25,10 +25,9 @@ struct tile{
 };
 
 
-
-void printmap(tile map[9][16]);
-// void updatemap(char map[9][16], pathtile*& pathhead, std::vector<struct tower*> towers);
 void readmap(tile map[9][16], int map_num, tile*& path_start);
-void move(tile map[9][16], tile*& path_start);
+void spawn_enemy(tile*& path_start, int i, std::vector<std::string> enemies);
+void move(tile map[9][16], tile*& path_start, int& killed_enemies, int& health);
+
 
 #endif // MAP_H
