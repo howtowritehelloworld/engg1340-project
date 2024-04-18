@@ -152,20 +152,16 @@ Coords selectSquare(WINDOW *win) // Allow player to control cursor to select the
         ch = wgetch(win);
         switch(ch) {
             case KEY_UP:
-                selected.y--;
-                if (selected.y == -1) {selected.y = 0;}
+                selected.y = std::max(0, selected.y-1);
                 break;
             case KEY_DOWN:
-                selected.y++;
-                if (selected.y == 9) {selected.y = 8;}
+                selected.y = std::min(8, selected.y+1);
                 break;
             case KEY_LEFT:
-                selected.x--;
-                if (selected.x == -1) {selected.x = 0;}
+                selected.x = std::max(0, selected.x-1);
                 break;
             case KEY_RIGHT:
-                selected.x++;
-                if (selected.x == 16) {selected.x = 15;}
+                selected.x = std::min(15, selected.x+1);
                 break;
         }
         wmove(win, 3*selected.y+2, 5*selected.x+4);
@@ -219,14 +215,10 @@ int mainmenu(WINDOW *win)
         switch(choice)
         {
             case KEY_UP:
-                highlight--;
-                if (highlight == -1)
-                    highlight = 0;
+                highlight = std::max(0, highlight-1);
                 break;
             case KEY_DOWN:
-                highlight++;
-                if (highlight == 3)
-                    highlight = 2;
+                highlight = std::min(2, highlight+1);
                 break;
             default:
                 break;
@@ -235,16 +227,7 @@ int mainmenu(WINDOW *win)
             break;
     }
 
-    switch(highlight)
-    {
-        case 0:
-            return 1;
-        case 1:
-            return 2;
-        case 2:
-            return 3;
-    }
-    return 0;
+    return highlight+1;
 }
 
 int playscreen(WINDOW *win)
@@ -407,22 +390,7 @@ int playscreen(WINDOW *win)
                     }
 
                     selected = selectSquare(mainBox);
-
-                    switch(highlight)
-                    {
-                        case 0: // place tower 1
-                            map[selected.y][selected.x].create_new_tower("mage", 1, path_start);
-                            break;  
-                        case 1:
-                            map[selected.y][selected.x].create_new_tower("archer", 1, path_start);
-                            break;
-                        case 2:
-                            map[selected.y][selected.x].create_new_tower("sniper", 1, path_start);
-                            break;
-                        case 3:
-                            map[selected.y][selected.x].create_new_tower("cannon", 1, path_start);
-                            break;
-                    }
+                    map[selected.y][selected.x].create_new_tower(tower_options[highlight], 1, path_start);
 
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
