@@ -13,30 +13,10 @@
 #include "enemy.h"
 #include "chooseMap.h"
 
-struct Block{ // Structure for tower/ground placed, most of these variables dont do anything yet
-    char icon;
-    std::string type;
-    std::string name;
-    int level;
-    int damage;
-    int range;
-    int cost;
-};
-
 struct Coords{ // I didnt know pair existed and this looks nicer (to me)
     int y;
     int x;
 };
-
-// The blocks
-// Block tower1 = {'A', "Tower", "tower1", 1, 5, 3, 100};
-// Block tower2 = {'B', "Tower", "tower2", 1, 5, 3, 100};
-// Block tower3 = {'C', "Tower", "tower3", 1, 5, 3, 100};
-// Block tower4 = {'D', "Tower", "tower4", 1, 5, 3, 100};
-// Block tower5 = {'E', "Tower", "tower5", 1, 5, 3, 100};
-// Block ground = {'X', "Ground", "ground", 0, 0, 0, 0};
-
-
 
 int mainmenu(WINDOW *);
 int playscreen(WINDOW *);
@@ -121,85 +101,6 @@ void printMap(WINDOW *mainBox, tile map[9][16]) // Print the map of the game ins
                 mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(map[row][col].tower_on_top->icon).c_str());
                 mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(map[row][col].tower_on_top->icon).c_str());
             }
-            // switch(gameMap[row][col].icon)
-            // {
-            //     case 'X':
-            //         wattron(mainBox, COLOR_PAIR(1)); // Turn on the color effect
-            //         for (int i = 0; i < 3; i++){
-            //             for (int k = 0; k < 5; k++){
-            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-            //                 }
-            //             }
-            //         wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
-            //         break;
-            //     case 'O':
-            //         for (int i = 0; i < 3; i++){
-            //             for (int k = 0; k < 5; k++){
-            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-            //                 }
-            //             }
-            //         break;
-            //     case 'A':
-            //         wattron(mainBox, COLOR_PAIR(2));
-            //         for (int i = 0; i < 3; i++){
-            //             for (int k = 0; k < 5; k++){
-            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-            //                 }
-            //             }
-            //         wattroff(mainBox, COLOR_PAIR(2));
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "A");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "A");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "A");
-            //         break;
-            //     case 'B':
-            //         wattron(mainBox, COLOR_PAIR(3));
-            //         for (int i = 0; i < 3; i++){
-            //             for (int k = 0; k < 5; k++){
-            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-            //                 }
-            //             }
-            //         wattroff(mainBox, COLOR_PAIR(3));
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "B");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "B");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "B");
-            //         break;
-            //     case 'C':
-            //         wattron(mainBox, COLOR_PAIR(4));
-            //         for (int i = 0; i < 3; i++){
-            //             for (int k = 0; k < 5; k++){
-            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-            //                 }
-            //             }
-            //         wattroff(mainBox, COLOR_PAIR(4));
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "C");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "C");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "C");
-            //         break;
-            //     case 'D':
-            //         wattron(mainBox, COLOR_PAIR(5));
-            //         for (int i = 0; i < 3; i++){
-            //             for (int k = 0; k < 5; k++){
-            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-            //                 }
-            //             }
-            //         wattroff(mainBox, COLOR_PAIR(5));
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "D");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "D");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "D");
-            //         break;
-            //     case 'E':
-            //         wattron(mainBox, COLOR_PAIR(6));
-            //         for (int i = 0; i < 3; i++){
-            //             for (int k = 0; k < 5; k++){
-            //                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-            //                 }
-            //             }
-            //         wattroff(mainBox, COLOR_PAIR(6));
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "E");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, "E");
-            //         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "E");
-            //         break;
-            // } 
         }
     }
 }
@@ -379,39 +280,6 @@ int playscreen(WINDOW *win)
     tile* path_start = new tile;
     readmap(map, mapnum, path_start);
     configpath(map, path_start);
-    
-    // std::vector<std::vector<Block>> gameMap(9, std::vector<Block>(16, {' ', "", "", 0, 0, 0, 0}));
-    
-    // Input the Map into the 2D vector
-
-    // std::string line;
-    // std::ifstream fin ("map.txt");
-    // fin.setf(std::ios::skipws);
-    // char c;
-    
-    // for (int row = 0; row < 9; row++)
-    // {
-    //     for (int col = 0; col < 16; col++)
-    //     {
-            
-    //         fin.get(c);
-    //         while (c == '\n'){
-    //             fin.get(c);
-    //         }
-    //         if (c == 'X') {
-    //             gameMap[row][col] = ground;
-    //         }
-    //         else {
-    //             gameMap[row][col].icon = c;
-    //             gameMap[row][col].name = "Road";
-    //             gameMap[row][col].type = "GROUND";
-    //         }
-            
-    //     }   
-    // }
-
-    // fin.close();
-
     printMap(mainBox, map);
     
     wrefresh(mainBox);
