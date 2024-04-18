@@ -10,7 +10,7 @@ void tower::mage(int level)
     damage = 2*level;
     attackspeed = 2;
     range = 1;
-    type[0] = "AOE"; type[1] = "Ground"; type[2] = "Air";
+    type[0] = "AOE"; type[1] = "Ground"; type[2] = "Air"; type[3] = NULL;
 }
 
 void tower::archer(int level)
@@ -22,7 +22,7 @@ void tower::archer(int level)
     damage = 3*level;
     attackspeed = 1;
     range = 1;
-    type[0] = "Single"; type[1] = "Ground"; type[2] = "Air";     
+    type[0] = "Single"; type[1] = "Ground"; type[2] = "Air"; type[3] = NULL; 
 }
 
 void tower::sniper(int level)
@@ -46,6 +46,6 @@ void tower::cannon(int level)
     damage = 4*level;
     attackspeed = 3;
     range = 1;
-    type[0] = "AOE"; type[1] = "Ground";
+    type[0] = "AOE"; type[1] = "Ground"; type[2] = NULL; type[3] = NULL;
 }
 
