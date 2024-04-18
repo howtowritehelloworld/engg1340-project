@@ -298,7 +298,6 @@ int playscreen(WINDOW *win)
     wrefresh(mainBox);
 
     std::vector<std::string> options = {"Start Wave", "Edit", "Quit"};
-    std::string choices[5] = {"Place Tower", "Upgrade Tower", "Move Tower", "Sell Tower", "Quit"};
     int actionChoice = 0;
     int towerChoice = 0;
     int highlight = 0;
@@ -341,9 +340,9 @@ int playscreen(WINDOW *win)
         highlight = chooseOption(actionBox, options);
         switch(highlight)
         {
-            case 0:
+            case 0: // Start Wave
             {
-                wave_state = true; // Start Wave
+                wave_state = true; 
                 wclear(actionBox);
                 box(actionBox, ACS_VLINE, ACS_HLINE);
                 int i = 0;
@@ -355,10 +354,7 @@ int playscreen(WINDOW *win)
                     mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                     mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
                     wrefresh(mainBox);
-                    wrefresh(actionBox);
-                    wrefresh(towerBox);
                     wrefresh(statsBox);
-                    wrefresh(confirmBox);
                     
                     i++;
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -369,88 +365,30 @@ int playscreen(WINDOW *win)
                 wave_state = false;
                 break;
             }
-            case 1:
+            case 1: // Edit
             {
                 selected = selectSquare(mainBox);
                 if (map[selected.y][selected.x].is_empty()){
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(towerBox, 2, 5, "Empty Tile");
+                    mvwprintw(towerBox, 2, 4, "Empty Tile");
                     wrefresh(towerBox);
-                    wclear(actionBox);
-                    box(actionBox, ACS_VLINE, ACS_HLINE);
-                    std::string choices[] = {"Place Tower", "Cancel"};
+                    std::vector<std::string> choices = {"Place Tower", "Cancel"};
                     int choice = 0;
-                    int highlight = 0;
-                    while (choice != 10)
-                    {
-                        for(int i = 0; i < 2; i++) // tower box
-                        {
-                            if (i == highlight){
-                                wattron(actionBox, A_REVERSE);
-                            }    
-                            mvwprintw(actionBox, i+2, 4, choices[i].c_str());
-                            wattroff(actionBox, A_REVERSE);
-                            
-                        }
-                        choice = wgetch(actionBox);
-                        
-                        switch(choice)
-                        {
-                            case KEY_UP:
-                                highlight = std::max(0, highlight-1);
-                                break;
-                            case KEY_DOWN:
-                                highlight = std::min(1, highlight+1);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                    highlight = chooseOption(actionBox, choices);
                     switch(highlight)
                     {
                         case 0:
                         {
-                            
-                            wclear(actionBox);
-                            box(actionBox, ACS_VLINE, ACS_HLINE); 
-                            std::string tower_options[] = {"Mage", "Archer", "Sniper", "Cannon"};
-                            highlight = 0;
-                            while (towerChoice != 10)
-                            {   
-                                printMap(mainBox, map);
-                                for(int i = 0; i < 4; i++) // tower box
-                                {
-                                    if (i == highlight){
-                                        wattron(actionBox, A_REVERSE);
-                                    }    
-                                    mvwprintw(actionBox, i+2, 4, tower_options[i].c_str());
-                                    wattroff(actionBox, A_REVERSE);
-                                    
-                                }
-                                towerChoice = wgetch(actionBox);
-                                
-                                switch(towerChoice)
-                                {
-                                    case KEY_UP:
-                                        highlight = std::max(0, highlight-1);
-                                        break;
-                                    case KEY_DOWN:
-                                        highlight = std::min(3, highlight+1);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
+                            std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon"};
+                            highlight = chooseOption(actionBox, tower_options);
 
                             map[selected.y][selected.x].create_new_tower(tower_options[highlight], 1, path_start);
-
-                            wclear(actionBox);
-                            box(actionBox, ACS_VLINE, ACS_HLINE);
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
-                            towerChoice = 0;
-                            highlight = 0;
+                            printMap(mainBox, map);
+                            wrefresh(mainBox);
+                            wrefresh(towerBox);
                             break;
                         }
                         case 1:
@@ -462,139 +400,61 @@ int playscreen(WINDOW *win)
                         
 
                 }
+                if (map[selected.y][selected.x].is_tower()){
+                    do 
+                    {
+                        std::vector<std::string> options = {"Upgrade", "Sell", "Cancel"};
+                        wclear(towerBox);
+                        box(towerBox, ACS_VLINE, ACS_HLINE);
+                        mvwprintw(towerBox, 2, 4, map[selected.y][selected.x].tower_on_top->name.c_str());
+                        mvwprintw(towerBox, 4, 4, "Level: %d", map[selected.y][selected.x].tower_on_top->level);
+                        mvwprintw(towerBox, 5, 4, "Damage: %d", map[selected.y][selected.x].tower_on_top->damage);
+                        mvwprintw(towerBox, 6, 4, "Range: %d", map[selected.y][selected.x].tower_on_top->range);
+                        mvwprintw(towerBox, 7, 4, "Cost: %d", map[selected.y][selected.x].tower_on_top->cost);
+                        wrefresh(towerBox);
+                        highlight = chooseOption(actionBox, options);
+                        switch (highlight)
+                        {
+                            case 0: // Upgrade
+                            {
+                                map[selected.y][selected.x].upgrade_tower(path_start);
+                                wclear(towerBox);
+                                box(towerBox, ACS_VLINE, ACS_HLINE);
+                                break;
+                            }
+                            case 1:
+                            {
+                                map[selected.y][selected.x].tower_on_top = NULL;
+                                wclear(towerBox);
+                                box(towerBox, ACS_VLINE, ACS_HLINE);
+                                break;
+                            }
+                            case 2:
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    while (highlight == 0);
+                }
                 else if (map[selected.y][selected.x].is_path){
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(towerBox, 2, 7, "Path");
+                    mvwprintw(towerBox, 2, 4, "Path");
                     
-                }
-                else if (map[selected.y][selected.x].is_tower()){
-                    wclear(towerBox);
-                    box(towerBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(towerBox, 2, 5, map[selected.y][selected.x].tower_on_top->name.c_str());
                 }
                 else {
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(towerBox, 2, 5, "Unknown");
+                    mvwprintw(towerBox, 2, 4, "Unknown");
                 }
                 break;
             }
-            case 2:
+            case 2: // Quit
             {
                 return 0;
             }
         }
-        
-        
-        // if (actionChoice == 10) {
-        //     actionChoice = 0;
-        //     switch(highlight)
-        //     {
-        //         case 0: // Place Tower Sequence
-        //         {   
-                    
-        //             keypad(actionBox, false);
-        //             keypad(towerBox, true);
-        //             std::string tower_options[] = {"Mage", "Archer", "Sniper", "Cannon"};
-        //             highlight = 0;
-        //             while (towerChoice != 10)
-        //             {   
-        //                 printMap(mainBox, map);
-        //                 for(int i = 0; i < 4; i++) // tower box
-        //                 {
-        //                     if (i == highlight){
-        //                         wattron(towerBox, A_REVERSE);
-        //                     }    
-        //                     mvwprintw(towerBox, i+2, 4, tower_options[i].c_str());
-        //                     wattroff(towerBox, A_REVERSE);
-                            
-        //                 }
-        //                 towerChoice = wgetch(towerBox);
-                        
-        //                 switch(towerChoice)
-        //                 {
-        //                     case KEY_UP:
-        //                         highlight = std::max(0, highlight-1);
-        //                         break;
-        //                     case KEY_DOWN:
-        //                         highlight = std::min(3, highlight+1);
-        //                         break;
-        //                     default:
-        //                         break;
-        //                 }
-        //             }
-
-        //             selected = selectSquare(mainBox);
-        //             map[selected.y][selected.x].create_new_tower(tower_options[highlight], 1, path_start);
-
-        //             wclear(towerBox);
-        //             box(towerBox, ACS_VLINE, ACS_HLINE);
-        //             keypad(towerBox, false);
-        //             keypad(actionBox, true);
-        //             towerChoice = 0;
-        //             highlight = 0;
-        //             break;
-        //         }
-
-        //         case 1:
-        //             selected = selectSquare(mainBox); // Upgrade Tower Sequence
-        //             if (map[selected.y][selected.x].is_tower()) {
-        //                 money -= map[selected.y][selected.x].tower_on_top->cost;
-        //                 map[selected.y][selected.x].upgrade_tower(path_start);
-        //             }
-        //             break;
-        //         // case 2:
-        //         //     selected = selectSquare(mainBox); // Move Tower Sequence
-        //         //     if (gameMap[selected.y][selected.x].type == "Tower") {
-        //         //         selected2 = selectSquare(mainBox);
-        //         //         if (gameMap[selected2.y][selected2.x].name == "ground") {
-        //         //             gameMap[selected2.y][selected2.x] = gameMap[selected.y][selected.x];
-        //         //             gameMap[selected.y][selected.x] = ground;
-        //         //         }
-        //         //     }
-        //         //     break;
-        //         // case 3: {
-        //         //     selected = selectSquare(mainBox);  // Sell Tower Sequence
-        //         //     if (gameMap[selected.y][selected.x].type == "Tower"){
-        //         //         gameMap[selected.y][selected.x] = ground;
-        //         //     }                        
-        //         //     break;
-        //         // }
-                    
-        //         case 4:
-        //             return 0; // Quit Sequence
-
-        //         case 5:
-        //             wave_state = true; // Start Wave
-        //             highlight = 4;
-        //             wclear(actionBox);
-        //             box(actionBox, ACS_VLINE, ACS_HLINE);
-        //             int i = 0;
-        //             int killed_enemies = 0;
-        //             while (killed_enemies < wave(wave_num).size() && health > 0 && i<100){
-        //                 spawn_enemy(path_start, i, wave(wave_num));
-        //                 printMap(mainBox, map);
-        //                 mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
-        //                 mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
-        //                 mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
-        //                 wrefresh(mainBox);
-        //                 wrefresh(actionBox);
-        //                 wrefresh(towerBox);
-        //                 wrefresh(statsBox);
-        //                 wrefresh(confirmBox);
-                        
-        //                 i++;
-        //                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        //                 // attack
-        //                 move(map, path_start, killed_enemies, health);
-        //             }
-        //             wave_num++;
-        //             wave_state = false;
-        //             break;
-
-        //     }
-        // }
         wrefresh(mainBox);
         wrefresh(actionBox);
         wrefresh(towerBox);
