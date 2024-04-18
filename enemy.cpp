@@ -8,7 +8,7 @@ void enemy::knight(int level)
     health = 6*level;
     weight = 2*level;
     money = 2*level;
-    type[0] = "Ground";
+    type[0] = "Ground"; type[1] = "";
 }
 
 void enemy::dragon(int level)
@@ -18,7 +18,7 @@ void enemy::dragon(int level)
     health = 9*level;
     weight = 4*level;
     money = 4*level;
-    type[0] = "Air";
+    type[0] = "Air"; type[1] = "";
 }
 
 void enemy::vampire(int level)
