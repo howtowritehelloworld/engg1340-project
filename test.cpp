@@ -375,14 +375,10 @@ int playscreen(WINDOW *win)
                         switch(towerChoice)
                         {
                             case KEY_UP:
-                                highlight--;
-                                if (highlight == -1)
-                                    highlight = 0;
+                                highlight = std::max(0, highlight-1);
                                 break;
                             case KEY_DOWN:
-                                highlight++;
-                                if (highlight == 4)
-                                    highlight = 3;
+                                highlight = std::min(3, highlight+1);
                                 break;
                             default:
                                 break;
