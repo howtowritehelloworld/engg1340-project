@@ -397,12 +397,13 @@ int playscreen(WINDOW *win)
                     break;
                 }
 
-                // case 1:
-                //     selected = selectSquare(mainBox); // Upgrade Tower Sequence
-                //     if (gameMap[selected.y][selected.x].type == "Tower" && gameMap[selected.y][selected.x].level < 3) {
-                //         gameMap[selected.y][selected.x].level++;
-                //     break;
-                //     }
+                case 1:
+                    selected = selectSquare(mainBox); // Upgrade Tower Sequence
+                    if (map[selected.y][selected.x].is_tower()) {
+                        money -= map[selected.y][selected.x].tower_on_top->cost;
+                        map[selected.y][selected.x].upgrade_tower(path_start);
+                    }
+                    break;
                 // case 2:
                 //     selected = selectSquare(mainBox); // Move Tower Sequence
                 //     if (gameMap[selected.y][selected.x].type == "Tower") {

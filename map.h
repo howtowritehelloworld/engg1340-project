@@ -21,6 +21,7 @@ struct tile{
 
     void set_tower_coverage(tile*& path_start);
     void create_new_tower(std::string name, int level, tile*& path_start);
+    void upgrade_tower(tile*& path_start);
     
 };
 

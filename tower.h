@@ -12,6 +12,7 @@ struct tower{
     std::string name;
     int color_id;
     char icon;
+    int level;
     int cost;
     int damage;
     int attackspeed;
@@ -20,10 +21,10 @@ struct tower{
     std::string type[5];
     std::vector<struct tile*> tiles_covered;
 
-    void mage(int level);
-    void archer(int level);
-    void sniper(int level);
-    void cannon(int level);
+    void mage(int tower_level);
+    void archer(int tower_level);
+    void sniper(int tower_level);
+    void cannon(int tower_level);
 };
 
 #endif

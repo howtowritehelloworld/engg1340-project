@@ -50,6 +50,16 @@ void tile::create_new_tower(string name, int level, tile*& path_start){
 
 }
 
+void tile::upgrade_tower(tile*& path_start){
+    if (!is_tower()){
+        return;
+    }
+    int level = tower_on_top->level;
+    string name = tower_on_top->name;
+    tower_on_top = NULL;
+    create_new_tower(name, level+1, path_start);
+}
+
 void printmap(tile map[9][16]) {
     cout << "*******************************" << endl;
     for (int row = 0; row < 9; row++) {
