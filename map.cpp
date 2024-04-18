@@ -33,16 +33,16 @@ void tile::create_new_tower(string name, int level, tile*& path_start){
         return;
     }
     tower* t = new tower;
-    if (name == "mage"){
+    if (name == "Mage"){
         t->mage(level);
     }
-    else if (name == "archer"){
+    else if (name == "Archer"){
         t->archer(level);
     }
-    else if (name == "sniper"){
+    else if (name == "Sniper"){
         t->sniper(level);
     }
-    else if (name == "cannon"){
+    else if (name == "Cannon"){
         t->cannon(level);
     }
     tower_on_top = t;

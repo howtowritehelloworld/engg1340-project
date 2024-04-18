@@ -1,9 +1,3 @@
-#include <ncurses.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <ctime>
-
 #include "chooseMap.h"
 
 using namespace std;
