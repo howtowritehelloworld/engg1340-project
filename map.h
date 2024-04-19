@@ -20,8 +20,8 @@ struct tile{
     bool is_enemy();
 
     void set_tower_coverage(tile*& path_start);
-    void create_new_tower(std::string name, int level, tile*& path_start, money);
-    void upgrade_tower(tile*& path_start, money);
+    void create_new_tower(std::string name, int level, tile*& path_start, int &money);
+    void upgrade_tower(tile*& path_start, int &money);
     
 };
 
