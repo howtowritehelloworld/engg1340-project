@@ -56,26 +56,35 @@ void tower::cannon(int tower_level)
 void tower::CalculateDamage(){
     if (type[0] == "AOE"){
         for (int i = 0; i < tiles_covered.size(); i++){
-            if (tiles_covered[i]->is_enemy() == true){
+            if (tiles_covered[i]->is_enemy()){
                 if (tiles_covered[i]->enemy_on_top->type[0] == "Air" && type[2] == ""){
                     continue;
                 }
                 else if (tiles_covered[i]->enemy_on_top->type[1] == "Camo" && type[3] == ""){
-                continue;
+                    continue;
                 }
-            tiles_covered[i]->enemy_on_top->health -= damage;
+                tiles_covered[i]->enemy_on_top->health -= damage;
             }
         }
     }
     else if (type[0] == "Single"){
-        if (tiles_covered[last]->is_enemy() == true){
-            if (tiles_covered[last]->enemy_on_top->type[0] == "Air" && type[2] == ""){
-            }
-            else if (tiles_covered[last]->enemy_on_top->type[1] == "Camo" && type[3] == ""){
-            }
-            else{
-                tiles_covered[last]->enemy_on_top->health -= damage;
+        int last;
+        bool no_enemy = true;
+        for (int i = 0; i < tiles_covered.size(); i++){
+            if (tiles_covered[i]->is_enemy()){
+                if (tiles_covered[i]->enemy_on_top->type[0] == "Air" && type[2] == ""){
+                }
+                else if (tiles_covered[i]->enemy_on_top->type[1] == "Camo" && type[3] == ""){
+                }
+                else{
+                    last = i;
+                    no_enemy = false;
+                }
             }
         }
+        if (no_enemy){
+            return;
+        }
+        tiles_covered[last]->enemy_on_top->health -= damage;
     }
 }

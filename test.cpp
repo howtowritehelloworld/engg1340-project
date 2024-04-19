@@ -376,7 +376,7 @@ int playscreen(WINDOW *win)
                     
                     i++;
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    // attack
+                    attack_all(map);
                     move(map, path_start, killed_enemies, health);
                 }
                 wave_num++;

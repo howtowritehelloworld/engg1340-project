@@ -29,6 +29,7 @@ struct tile{
 void readmap(tile map[9][16], int map_num, tile*& path_start);
 void spawn_enemy(tile*& path_start, int i, std::vector<std::string> enemies);
 void move(tile map[9][16], tile*& path_start, int& killed_enemies, int& health);
+void attack_all(tile map[9][16]);
 
 
 #endif // MAP_H

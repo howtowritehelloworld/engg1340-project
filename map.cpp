@@ -147,6 +147,16 @@ void move(tile map[9][16], tile*& path_start, int& killed_enemies, int& health) 
     }
 }
 
+void attack_all(tile map[9][16]){
+    for (int i = 0; i < 9; i++){
+        for (int j = 0; j < 16; j++){
+            if (map[i][j].is_tower()){
+                map[i][j].tower_on_top->CalculateDamage();
+            }
+        }
+    }
+}
+
 
 
 // int main(){
