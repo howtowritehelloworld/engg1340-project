@@ -203,6 +203,23 @@ int chooseOption(WINDOW *win, std::vector<std::string> choices){
     return highlight;
 }
 
+void print_enemy(WINDOW *win, tile*& path_start){
+    tile* current = path_start;
+    wclear(win);
+    box(win, ACS_VLINE, ACS_HLINE);
+    mvwprintw(win, 2, 4, "Enemies");
+    int row = 3;
+    while (current){
+        if (current->is_enemy()){
+            mvwprintw(win, row, 4, "%s : %d", current->enemy_on_top->name.c_str(), current->enemy_on_top->health);
+            row++;
+        }
+        current = current->next;
+    }
+    wrefresh(win);
+}
+
+
 int mainmenu(WINDOW *win)
 {   
     std::string title1 = " _____                        ____        __                     ";
@@ -353,6 +370,7 @@ int playscreen(WINDOW *win)
                     mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
                     mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                     mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
+                    print_enemy(towerBox, path_start);
                     wrefresh(mainBox);
                     wrefresh(statsBox);
                     
@@ -422,14 +440,14 @@ int playscreen(WINDOW *win)
                                 box(towerBox, ACS_VLINE, ACS_HLINE);
                                 break;
                             }
-                            case 1:
+                            case 1: // Sell
                             {
                                 map[selected.y][selected.x].tower_on_top = NULL;
                                 wclear(towerBox);
                                 box(towerBox, ACS_VLINE, ACS_HLINE);
                                 break;
                             }
-                            case 2:
+                            case 2: // Cancel
                             {
                                 break;
                             }
@@ -441,12 +459,6 @@ int playscreen(WINDOW *win)
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Path");
-                    
-                }
-                else {
-                    wclear(towerBox);
-                    box(towerBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(towerBox, 2, 4, "Unknown");
                 }
                 break;
             }
