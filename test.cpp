@@ -204,18 +204,18 @@ int chooseOption(WINDOW *win, std::vector<std::string> choices){
 
 void print_enemy(WINDOW *win, tile*& path_start){
     tile* current = path_start;
-    wclear(win);
-    box(win, ACS_VLINE, ACS_HLINE);
     mvwprintw(win, 2, 4, "Enemies");
     int row = 3;
-    while (current){
+    while (current && row < 19){
         if (current->is_enemy()){
             mvwprintw(win, row, 4, "%s : %d", current->enemy_on_top->name.c_str(), current->enemy_on_top->health);
             row++;
         }
         current = current->next;
     }
-    wrefresh(win);
+    for (int i = row; i < 18; i++){
+        mvwprintw(win, i, 4, "               ");
+    }
 }
 
 
@@ -418,10 +418,21 @@ int playscreen(WINDOW *win)
 
     keypad(actionBox, true);
 
-    bool wave_state = false;
-
     while(1)
     {
+
+        wclear(mainBox);
+        wclear(actionBox);
+        wclear(towerBox);
+        wclear(statsBox);
+        wclear(confirmBox);
+
+        box(mainBox, ACS_VLINE, ACS_HLINE);
+        box(actionBox, ACS_VLINE, ACS_HLINE);
+        box(towerBox, ACS_VLINE, ACS_HLINE);
+        box(statsBox, ACS_VLINE, ACS_HLINE);
+        box(confirmBox, ACS_VLINE, ACS_HLINE);
+
         //Print the Map
         printMap(mainBox, map);
         
@@ -440,7 +451,6 @@ int playscreen(WINDOW *win)
         {
             case 0: // Start Wave
             {
-                wave_state = true; 
                 wclear(actionBox);
                 box(actionBox, ACS_VLINE, ACS_HLINE);
                 int i = 0;
@@ -452,6 +462,8 @@ int playscreen(WINDOW *win)
                     mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                     mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
                     print_enemy(towerBox, path_start);
+
+                    wrefresh(towerBox);
                     wrefresh(mainBox);
                     wrefresh(statsBox);
                     
@@ -461,7 +473,6 @@ int playscreen(WINDOW *win)
                     move(map, path_start, killed_enemies, health);
                 }
                 wave_num++;
-                wave_state = false;
                 break;
             }
             case 1: // Edit
