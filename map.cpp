@@ -34,15 +34,19 @@ void tile::create_new_tower(string name, int level, tile*& path_start){
     }
     tower* t = new tower;
     if (name == "Mage"){
+        money -= 40;
         t->mage(level);
     }
     else if (name == "Archer"){
+        money -= 20;
         t->archer(level);
     }
     else if (name == "Sniper"){
+        money -= 50;
         t->sniper(level);
     }
     else if (name == "Cannon"){
+        money -= 30;
         t->cannon(level);
     }
     tower_on_top = t;
