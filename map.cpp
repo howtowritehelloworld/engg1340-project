@@ -106,13 +106,13 @@ void spawn_enemy(tile*& path_start, int i, vector<string> enemies) {
         enemy* new_enemy = new enemy;
         
         if (enemies[i][0] == 'K'){
-            new_enemy->knight((int)enemies[i][1]);
+            new_enemy->knight((int)enemies[i][1] - '0');
         }
         else if (enemies[i][0] == 'G'){
-            new_enemy->ghost((int)enemies[i][1]);
+            new_enemy->ghost((int)enemies[i][1] - '0');
         }
         else if (enemies[i][0] == 'D'){
-            new_enemy->dragon((int)enemies[i][1]);
+            new_enemy->dragon((int)enemies[i][1] - '0');
         }
 
         path_start->enemy_on_top = new_enemy;
