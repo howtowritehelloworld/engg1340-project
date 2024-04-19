@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 
+
 using namespace std;
 
 void mainscreen(int highlight = 0, int count = 1) {
@@ -75,6 +76,7 @@ void mainscreen(int highlight = 0, int count = 1) {
             // If the user chooses the main menu
             if (highlight == 0) {
                 erase();
+                mainmenu(WINDOW *);
                 
                 return;
             }
