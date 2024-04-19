@@ -28,7 +28,7 @@ void tile::set_tower_coverage(tile*& path_start){
     }
 }
 
-void tile::create_new_tower(string name, int level, tile*& path_start, int money){
+void tile::create_new_tower(string name, int level, tile*& path_start, int &money){
     if (is_path || is_tower()){
         return;
     }
@@ -54,7 +54,7 @@ void tile::create_new_tower(string name, int level, tile*& path_start, int money
 
 }
 
-void tile::upgrade_tower(tile*& path_start, int money){
+void tile::upgrade_tower(tile*& path_start, int &money){
     if (!is_tower()){
         return;
     }
