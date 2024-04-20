@@ -18,6 +18,7 @@ struct Coords{ // I didnt know pair existed and this looks nicer (to me)
     int x;
 };
 
+
 int mainmenu(WINDOW *);
 int playscreen(WINDOW *);
 int helpscreen(WINDOW *);
@@ -139,8 +140,13 @@ int main(int agrc, char **argv)
     return 0;
 }
 
-Coords selectSquare(WINDOW *win) // Allow player to control cursor to select the tile they want to interact with
+Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control cursor to select the tile they want to interact with
 {   
+    wclear(actionBox);
+    box(actionBox, ACS_VLINE, ACS_HLINE);
+    mvwprintw(actionBox, 3, 2, "Move: Arrow Keys");
+    mvwprintw(actionBox, 5, 3, "Select: Enter");
+    wrefresh(actionBox);
     keypad(win, true);
     int ch;
     Coords selected = {0, 0};
@@ -202,7 +208,7 @@ int chooseOption(WINDOW *win, std::vector<std::string> choices){
     return highlight;
 }
 
-void print_enemy(WINDOW *win, tile*& path_start){
+void print_current_enemy(WINDOW *win, tile*& path_start){
     tile* current = path_start;
     mvwprintw(win, 2, 4, "Enemies");
     int row = 3;
@@ -218,7 +224,24 @@ void print_enemy(WINDOW *win, tile*& path_start){
     }
 }
 
+void print_tower(WINDOW* win, tower* tower_on_top){
+    mvwprintw(win, 2, 4, "%s", tower_on_top->name.c_str());
+    mvwprintw(win, 4, 4, "Level: %d", tower_on_top->level);
+    mvwprintw(win, 5, 4, "Damage: %d", tower_on_top->damage);
+    mvwprintw(win, 6, 4, "Range: %d", tower_on_top->range);
+    mvwprintw(win, 7, 4, "Cost: %d", tower_on_top->cost);
+    for (int i = 0; i < 3; i++){
+        mvwprintw(win, 9+i, 4, tower_on_top->type[i].c_str());
+    }
+}
 
+void print_wave(WINDOW* win , int wave_num){
+    std::vector <std::string> next_wave = wave(wave_num);
+    mvwprintw(win, 2, 6, "Wave %d", wave_num);
+    for (int i = 0; i < next_wave.size(); i++){
+        mvwprintw(win, 4+i, 4, next_wave[i].c_str());
+    }
+}
 
 int mainmenu(WINDOW *win)
 {   
@@ -242,7 +265,7 @@ int mainmenu(WINDOW *win)
     wrefresh(menuwin);
 
     keypad(menuwin, true);
-    std::string choices[3] = {"Play", "Help", "Quit"};
+    std::vector <std::string> choices = {"Play", "Help", "Quit"};
     int choice;
     int highlight = 0;
 
@@ -274,7 +297,7 @@ int mainmenu(WINDOW *win)
             break;
     }
 
-    return highlight+1;
+    return highlight + 1;
 }
 
 int loseScreen(int highlight = 0, int count = 1) {
@@ -391,13 +414,8 @@ int playscreen(WINDOW *win)
     tile* path_start = new tile;
     readmap(map, mapnum, path_start);
     configpath(map, path_start);
-    printMap(mainBox, map);
-    
-    wrefresh(mainBox);
 
-    std::vector<std::string> options = {"Start Wave", "Edit", "Quit"};
-    int actionChoice = 0;
-    int towerChoice = 0;
+    
     int highlight = 0;
 
     int health = 3;
@@ -414,7 +432,6 @@ int playscreen(WINDOW *win)
     nodelay(confirmBox, TRUE);
 
     Coords selected;
-    Coords selected2;
 
     keypad(actionBox, true);
 
@@ -430,12 +447,13 @@ int playscreen(WINDOW *win)
         box(mainBox, ACS_VLINE, ACS_HLINE);
         box(actionBox, ACS_VLINE, ACS_HLINE);
         box(towerBox, ACS_VLINE, ACS_HLINE);
-      
         box(statsBox, ACS_VLINE, ACS_HLINE);
         box(confirmBox, ACS_VLINE, ACS_HLINE);
 
         //Print the Map
         printMap(mainBox, map);
+
+        print_wave(towerBox, wave_num);
         
         // update stats, enemies, towers, the fun stuff ig, but they dont do anything rn
         mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
@@ -446,23 +464,24 @@ int playscreen(WINDOW *win)
         wrefresh(towerBox);
         wrefresh(statsBox);
         wrefresh(confirmBox);
-
-        highlight = chooseOption(actionBox, options);
-        switch(highlight)
+        switch(chooseOption(actionBox, {"Start Wave", "Edit", "Quit"}))
         {
             case 0: // Start Wave
-            {
+            {   
+                wclear(towerBox);
                 wclear(actionBox);
+                box(towerBox, ACS_VLINE, ACS_HLINE);
                 box(actionBox, ACS_VLINE, ACS_HLINE);
+                wrefresh(actionBox);
                 int i = 0;
                 int killed_enemies = 0;
-                while (killed_enemies < wave(wave_num).size() && health > 0 && i<100){
+                while (killed_enemies < wave(wave_num).size() && health > 0){
                     spawn_enemy(path_start, i, wave(wave_num));
+
+
                     printMap(mainBox, map);
                     mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
-                    mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
-                    mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
-                    print_enemy(towerBox, path_start);
+                    print_current_enemy(towerBox, path_start);
 
                     wrefresh(towerBox);
                     wrefresh(mainBox);
@@ -470,6 +489,7 @@ int playscreen(WINDOW *win)
                     
                     i++;
                     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
                     attack_all(map);
                     move(map, path_start, killed_enemies, health);
                 }
@@ -479,32 +499,30 @@ int playscreen(WINDOW *win)
             }
             case 1: // Edit
             {
-                selected = selectSquare(mainBox);
-                if (map[selected.y][selected.x].is_empty()){
+                selected = selectSquare(mainBox, actionBox);
+                if (map[selected.y][selected.x].is_empty()){ // Empty Tile
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Empty Tile");
                     wrefresh(towerBox);
-                    std::vector<std::string> choices = {"Place Tower", "Cancel"};
-                    int choice = 0;
-                    highlight = chooseOption(actionBox, choices);
-                    switch(highlight)
+                    switch(chooseOption(actionBox, {"Place Tower", "Cancel"}))
                     {
-                        case 0:
+                        case 0: // Place Tower
                         {
                             std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon"};
-                            highlight = chooseOption(actionBox, tower_options);
+                            int tower_option = chooseOption(actionBox, tower_options);
                             
-                            map[selected.y][selected.x].create_new_tower(tower_options[highlight], 1, path_start, money);
+                            map[selected.y][selected.x].create_new_tower(tower_options[tower_option], 1, path_start, money);
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
                             printMap(mainBox, map);
+                            mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                             wrefresh(mainBox);
                             wrefresh(towerBox);
                             wrefresh(statsBox);
                             break;
                         }
-                        case 1:
+                        case 1: // Cancel
                         {  
                             break;
                         }
@@ -513,53 +531,53 @@ int playscreen(WINDOW *win)
                         
 
                 }
-                if (map[selected.y][selected.x].is_tower()){
+                if (map[selected.y][selected.x].is_tower()){ // Tower
+                    bool editing = true;
                     do 
                     {
-                        std::vector<std::string> options = {"Upgrade", "Sell", "Cancel"};
                         wclear(towerBox);
                         box(towerBox, ACS_VLINE, ACS_HLINE);
-                        mvwprintw(towerBox, 2, 4, map[selected.y][selected.x].tower_on_top->name.c_str());
-                        mvwprintw(towerBox, 4, 4, "Level: %d", map[selected.y][selected.x].tower_on_top->level);
-                        mvwprintw(towerBox, 5, 4, "Damage: %d", map[selected.y][selected.x].tower_on_top->damage);
-                        mvwprintw(towerBox, 6, 4, "Range: %d", map[selected.y][selected.x].tower_on_top->range);
-                        mvwprintw(towerBox, 7, 4, "Cost: %d", map[selected.y][selected.x].tower_on_top->cost);
+                        print_tower(towerBox, map[selected.y][selected.x].tower_on_top);
                         wrefresh(towerBox);
-                        highlight = chooseOption(actionBox, options);
-                        switch (highlight)
+                        
+
+                        switch (chooseOption(actionBox, {"Upgrade", "Sell", "Cancel"}))
                         {
                             case 0: // Upgrade
-                            {  
+                            {
                                 if (money - map[selected.y][selected.x].tower_on_top->cost < 0){
-                                  break;
+                                    break;
                                 }
                                 map[selected.y][selected.x].upgrade_tower(path_start, money);
                                 wclear(towerBox);
+                                mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                                 wrefresh(statsBox);
                                 box(towerBox, ACS_VLINE, ACS_HLINE);
                                 break;
                             }
-                          case 1: // Sell
-                          {
-                              if (map[selected.y][selected.x].tower_on_top != NULL) {
-                                  money += map[selected.y][selected.x].tower_on_top->cost;
-                                  map[selected.y][selected.x].tower_on_top = NULL;
-                                  wclear(towerBox);
-                                  box(towerBox, ACS_VLINE, ACS_HLINE);
-                                  wrefresh(towerBox);
-                                  wrefresh(statsBox);
-                              }
-                              break;
-                          }
+                            case 1: // Sell
+                            {
+                                if (map[selected.y][selected.x].tower_on_top != NULL) {
+                                    money += map[selected.y][selected.x].tower_on_top->cost/2;
+                                    map[selected.y][selected.x].tower_on_top = NULL;
+                                    wclear(towerBox);
+                                    box(towerBox, ACS_VLINE, ACS_HLINE);
+                                    wrefresh(towerBox);
+                                    wrefresh(statsBox);
+                                    editing = false;
+                                }
+                                break;
+                            }
                             case 2: // Cancel
                             {
+                                editing = false;
                                 break;
                             }
                         }
                     }
-                    while (highlight == 0);
+                    while (editing);
                 }
-                else if (map[selected.y][selected.x].is_path){
+                else if (map[selected.y][selected.x].is_path){ // Path
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Path");
