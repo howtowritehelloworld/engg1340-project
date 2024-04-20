@@ -402,7 +402,7 @@ int playscreen(WINDOW *win)
 
     int health = 3;
     int wave_num = 1;
-    int money = 500;
+    int money = 150;
 
     noecho();
     curs_set(0);
@@ -430,6 +430,7 @@ int playscreen(WINDOW *win)
         box(mainBox, ACS_VLINE, ACS_HLINE);
         box(actionBox, ACS_VLINE, ACS_HLINE);
         box(towerBox, ACS_VLINE, ACS_HLINE);
+      
         box(statsBox, ACS_VLINE, ACS_HLINE);
         box(confirmBox, ACS_VLINE, ACS_HLINE);
 
@@ -473,6 +474,7 @@ int playscreen(WINDOW *win)
                     move(map, path_start, killed_enemies, health);
                 }
                 wave_num++;
+                money += 150;
                 break;
             }
             case 1: // Edit
@@ -492,17 +494,18 @@ int playscreen(WINDOW *win)
                         {
                             std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon"};
                             highlight = chooseOption(actionBox, tower_options);
-
-                            map[selected.y][selected.x].create_new_tower(tower_options[highlight], 1, path_start);
+                            
+                            map[selected.y][selected.x].create_new_tower(tower_options[highlight], 1, path_start, money);
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
                             printMap(mainBox, map);
                             wrefresh(mainBox);
                             wrefresh(towerBox);
+                            wrefresh(statsBox);
                             break;
                         }
                         case 1:
-                        {
+                        {  
                             break;
                         }
 
@@ -526,19 +529,28 @@ int playscreen(WINDOW *win)
                         switch (highlight)
                         {
                             case 0: // Upgrade
-                            {
-                                map[selected.y][selected.x].upgrade_tower(path_start);
+                            {  
+                                if (money - map[selected.y][selected.x].tower_on_top->cost < 0){
+                                  break;
+                                }
+                                map[selected.y][selected.x].upgrade_tower(path_start, money);
                                 wclear(towerBox);
+                                wrefresh(statsBox);
                                 box(towerBox, ACS_VLINE, ACS_HLINE);
                                 break;
                             }
-                            case 1: // Sell
-                            {
-                                map[selected.y][selected.x].tower_on_top = NULL;
-                                wclear(towerBox);
-                                box(towerBox, ACS_VLINE, ACS_HLINE);
-                                break;
-                            }
+                          case 1: // Sell
+                          {
+                              if (map[selected.y][selected.x].tower_on_top != NULL) {
+                                  money += map[selected.y][selected.x].tower_on_top->cost;
+                                  map[selected.y][selected.x].tower_on_top = NULL;
+                                  wclear(towerBox);
+                                  box(towerBox, ACS_VLINE, ACS_HLINE);
+                                  wrefresh(towerBox);
+                                  wrefresh(statsBox);
+                              }
+                              break;
+                          }
                             case 2: // Cancel
                             {
                                 break;
@@ -577,3 +589,4 @@ int helpscreen(WINDOW *win)
 {
     return 0;
 }
+
