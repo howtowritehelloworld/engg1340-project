@@ -19,6 +19,7 @@ struct tower{
     int cost;
     int damage;
     int attackspeed;
+    int cd = 0;
     int range;
     std::string type[5];
 

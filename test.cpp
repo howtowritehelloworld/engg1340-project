@@ -95,6 +95,7 @@ void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) //
         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current_tower->icon).c_str());
         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current_tower->icon).c_str());
         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current_tower->icon).c_str());
+        mvwprintw(mainBox, 3*row+1+2, 5*col+1+1, getString(current_tower->cd + '0').c_str());
     }
 
     path* current = path_start;
@@ -102,22 +103,19 @@ void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) //
     {
         int row = current->coordinates.first;
         int col = current->coordinates.second;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int k = 0; k < 5; k++)
+            {
+                mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+            }
+        }
         if (current->enemy_on_top != NULL)
         {
             mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current->enemy_on_top->icon).c_str());
             mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current->enemy_on_top->icon).c_str());
             mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current->enemy_on_top->icon).c_str());
             enemies++;
-        }
-        else
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int k = 0; k < 5; k++)
-                {
-                    mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                }
-            }
         }
         current = current->next;
     }
@@ -486,6 +484,10 @@ int playscreen(WINDOW *win)
         {
             case 0: // Start Wave
             {   
+                for (int i = 0; i < towers.size(); i++) // Reset attack cooldown
+                {
+                    towers[i]->cd = 0;
+                }
                 wclear(towerBox);
                 wclear(actionBox);
                 box(towerBox, ACS_VLINE, ACS_HLINE);
@@ -506,7 +508,7 @@ int playscreen(WINDOW *win)
                     wrefresh(statsBox);
                     
                     i++;
-                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
                     attack_all(towers);
                     move(path_start, killed_enemies, health);
@@ -534,6 +536,7 @@ int playscreen(WINDOW *win)
                             t->coordinates = std::make_pair(selected.y, selected.x);
                             t->create_new_tower(tower_options[tower_option], 1, path_start, money);
                             towers.push_back(t);
+                            map[selected.y][selected.x] = towers.size()-1;
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
                             printMap(mainBox, path_start, towers);
@@ -586,6 +589,7 @@ int playscreen(WINDOW *win)
                                         }
                                     }
                                 }
+                                map[selected.y][selected.x] = -1;
 
                                 wclear(towerBox);
                                 box(towerBox, ACS_VLINE, ACS_HLINE);

@@ -54,6 +54,11 @@ void tower::cannon(int tower_level)
 }
 
 void tower::CalculateDamage(){
+    if (cd > 0){
+        cd--;
+        return;
+    }
+
     if (type[0] == "AOE"){
         for (int i = 0; i < path_covered.size(); i++){
             if (path_covered[i]-> enemy_on_top != NULL){
@@ -64,6 +69,7 @@ void tower::CalculateDamage(){
                     continue;
                 }
                 path_covered[i]->enemy_on_top->health -= damage;
+                cd = attackspeed;
             }
         }
     }
@@ -86,6 +92,7 @@ void tower::CalculateDamage(){
             return;
         }
         path_covered[last]->enemy_on_top->health -= damage;
+        cd = attackspeed;
     }
 }
 
