@@ -4,137 +4,82 @@
 #include "map.h"
 using namespace std;
 
-bool tile::is_empty(){
-    return (!is_path && tower_on_top == NULL);
-}
-
-bool tile::is_tower(){
-    return (!is_path && tower_on_top != NULL);
-}
-
-bool tile::is_enemy(){
-    return (is_path && enemy_on_top != NULL);
-}
-
-void tile::set_tower_coverage(tile*& path_start){
-    tile* current = path_start;
-    while (current != NULL){
-        int row = current->coordinates.first;
-        int col = current->coordinates.second;
-        if (abs(row - coordinates.first) <= tower_on_top->range && abs(col - coordinates.second) <= tower_on_top->range){
-            tower_on_top->tiles_covered.push_back(current);
-        }
-        current = current->next;
-    }
-}
-
-void tile::create_new_tower(string name, int level, tile*& path_start, int &money){
-    if (is_path || is_tower()){
-        return;
-    }
-    tower* t = new tower;
-    if (name == "Mage" && money >= 40){
-        money -= 40;
-        t->mage(level);
-    }
-    else if (name == "Archer" && money >= 20){
-        money -= 20;
-        t->archer(level);
-    }
-    else if (name == "Sniper" && money >= 50){
-        money -= 50;
-        t->sniper(level);
-    }
-    else if (name == "Cannon" && money >= 30){
-        money -= 30;
-        t->cannon(level);
-    }
-    tower_on_top = t;
-    set_tower_coverage(path_start);
-
-}
-
-void tile::upgrade_tower(tile*& path_start, int &money){
-    if (!is_tower()){
-        return;
-    }
-    int level = tower_on_top->level;
-    string name = tower_on_top->name;
-    tower_on_top = NULL;
-    create_new_tower(name, level+1, path_start, money);
-}
-
-void printmap(tile map[9][16]) {
-    cout << "*******************************" << endl;
-    for (int row = 0; row < 9; row++) {
-        for (int col = 0; col < 16; col++) {
-            if (map[row][col].is_enemy()){
-                cout << map[row][col].enemy_on_top->icon << " ";
-            }
-            else if (map[row][col].is_path){
-                cout << "X ";
-            }
-            else if (map[row][col].is_tower()){
-                cout << map[row][col].tower_on_top->icon << " ";
-            }
-            
-            else {
-                cout << ". ";
-            }
-            
-        }
-        cout << endl;
-    }
-    cout << "*******************************" << endl;
-}
-
-void readmap(tile map[9][16], int map_num, tile*& path_start){
+void readmap(int map[9][16], int map_num, path*& path_start){
     string filename = "map/map_" + std::to_string(map_num) + ".txt";
     ifstream inputfile(filename);
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 16; j++) {
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
             char icon;
             inputfile >> icon;
-            map[i][j].is_path = (icon == 'X' || icon == 'S' || icon == 'E');
-            map[i][j].coordinates = make_pair(i,j);
-            if (icon == 'S') {
-                path_start = &map[i][j];
+            switch (icon) 
+            {
+                case 'S':
+                {
+                    path* temp = new path;
+                    temp->coordinates = make_pair(i, j);
+                    path_start = temp;
+                    map[i][j] = -2;
+                    break;
+                }
+                case 'X':
+                {
+                    map[i][j] = -2;
+                    break;
+                }
+                case 'E':
+                {
+                    map[i][j] = -2;
+                    break;
+                }
+                case '.':
+                {
+                    map[i][j] = -1;
+                    break;
+                }
             }
         }
     }
     inputfile.close();
 }
 
-void spawn_enemy(tile*& path_start, int i, vector<string> enemies) {
-    if (i < enemies.size()) {
+void spawn_enemy(path*& path_start, int i, vector<string> enemies) {
+    if (i < enemies.size()) 
+    {
         enemy* new_enemy = new enemy;
         
-        if (enemies[i][0] == 'K'){
+        if (enemies[i][0] == 'K')
+        {
             new_enemy->knight((int)enemies[i][1] - '0');
         }
-        else if (enemies[i][0] == 'G'){
+        else if (enemies[i][0] == 'G')
+        {
             new_enemy->ghost((int)enemies[i][1] - '0');
         }
-        else if (enemies[i][0] == 'D'){
+        else if (enemies[i][0] == 'D')
+        {
             new_enemy->dragon((int)enemies[i][1] - '0');
         }
 
         path_start->enemy_on_top = new_enemy;
     }
+    else
+    {
+        path_start->enemy_on_top = NULL;
+    }
 }
 
-void move(tile map[9][16], tile*& path_start, int& killed_enemies, int& health) {
-    tile* current = path_start->next;
+void move(path*& path_start, int& killed_enemies, int& health) {
+    path* current = path_start->next;
     enemy* previous = path_start->enemy_on_top;
-    enemy* temp = NULL;
-    path_start->enemy_on_top = temp;
     while (current != NULL){
         // if (current->enemy_on_top != NULL) {
         //         cout << "enemy " << current->enemy_on_top->icon << " is at "  << current->coordinates.first << " " << current->coordinates.second << endl;
         //         cout << "health: " << current->enemy_on_top->health << endl;
         //     }
 
-        temp = current->enemy_on_top;
+        enemy* temp = current->enemy_on_top;
         if (previous != NULL && previous->health <= 0){
             current->enemy_on_top = NULL;
             killed_enemies++;
@@ -151,13 +96,9 @@ void move(tile map[9][16], tile*& path_start, int& killed_enemies, int& health) 
     }
 }
 
-void attack_all(tile map[9][16]){
-    for (int i = 0; i < 9; i++){
-        for (int j = 0; j < 16; j++){
-            if (map[i][j].is_tower()){
-                map[i][j].tower_on_top->CalculateDamage();
-            }
-        }
+void attack_all(vector<struct tower*> towers){
+    for (int i = 0; i < towers.size(); i++){
+        towers[i]->CalculateDamage();
     }
 }
 

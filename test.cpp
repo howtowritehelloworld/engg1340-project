@@ -52,7 +52,7 @@ std::string getString(char x)
     return s;   
 }
 
-void printMap(WINDOW *mainBox, tile map[9][16]) // Print the map of the game inside of the main window
+void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) // Print the map of the game inside of the main window
 {   
     // Define background colors for map
     init_pair(1, COLOR_WHITE, COLOR_GREEN);
@@ -69,40 +69,57 @@ void printMap(WINDOW *mainBox, tile map[9][16]) // Print the map of the game ins
         for (int col = 0; col < 16; col++)
         {   
             
-            if (map[row][col].is_empty()){
-                wattron(mainBox, COLOR_PAIR(1)); // Turn on the color effect
-                for (int i = 0; i < 3; i++){
-                    for (int k = 0; k < 5; k++){
-                        mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                    }
-                }
-                wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
-            }
-            else if (map[row][col].is_enemy()){
-                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(map[row][col].enemy_on_top->icon).c_str());
-                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(map[row][col].enemy_on_top->icon).c_str());
-                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(map[row][col].enemy_on_top->icon).c_str());
-            }
-            else if (map[row][col].is_path){
-                for (int i = 0; i < 3; i++){
-                    for (int k = 0; k < 5; k++){
-                        mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                    }
+            wattron(mainBox, COLOR_PAIR(1)); // Turn on the color effect
+            for (int i = 0; i < 3; i++){
+                for (int k = 0; k < 5; k++){
+                    mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
                 }
             }
-            else if (map[row][col].is_tower()){
-                wattron(mainBox, COLOR_PAIR(map[row][col].tower_on_top->color_id));
-                for (int i = 0; i < 3; i++){
-                    for (int k = 0; k < 5; k++){
-                        mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
-                    }
-                }
-                wattroff(mainBox, COLOR_PAIR(map[row][col].tower_on_top->color_id));
-                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(map[row][col].tower_on_top->icon).c_str());
-                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(map[row][col].tower_on_top->icon).c_str());
-                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(map[row][col].tower_on_top->icon).c_str());
+            wattroff(mainBox, COLOR_PAIR(1)); // Turn off the color effect
+
+        }
+    }
+
+    for (int i = 0; i < towers.size(); i++)
+    {
+        tower* current_tower = towers[i];
+        int row = current_tower->coordinates.first;
+        int col = current_tower->coordinates.second;
+        wattron(mainBox, COLOR_PAIR(current_tower->color_id));
+        for (int i = 0; i < 3; i++){
+            for (int k = 0; k < 5; k++){
+                mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
             }
         }
+        wattroff(mainBox, COLOR_PAIR(current_tower->color_id));
+        mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current_tower->icon).c_str());
+        mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current_tower->icon).c_str());
+        mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current_tower->icon).c_str());
+    }
+
+    path* current = path_start;
+    while (current)
+    {
+        int row = current->coordinates.first;
+        int col = current->coordinates.second;
+        if (current->enemy_on_top != NULL)
+        {
+            mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current->enemy_on_top->icon).c_str());
+            mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current->enemy_on_top->icon).c_str());
+            mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current->enemy_on_top->icon).c_str());
+            enemies++;
+        }
+        else
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int k = 0; k < 5; k++)
+                {
+                    mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
+                }
+            }
+        }
+        current = current->next;
     }
 }
 
@@ -208,12 +225,12 @@ int chooseOption(WINDOW *win, std::vector<std::string> choices){
     return highlight;
 }
 
-void print_current_enemy(WINDOW *win, tile*& path_start){
-    tile* current = path_start;
+void print_current_enemy(WINDOW *win, path*& path_start){
+    path* current = path_start;
     mvwprintw(win, 2, 4, "Enemies");
     int row = 3;
     while (current && row < 19){
-        if (current->is_enemy()){
+        if (current->enemy_on_top != NULL){
             mvwprintw(win, row, 4, "%s : %d", current->enemy_on_top->name.c_str(), current->enemy_on_top->health);
             row++;
         }
@@ -410,8 +427,9 @@ int playscreen(WINDOW *win)
     wrefresh(statsBox);
     wrefresh(confirmBox);
     
-    tile map[9][16];
-    tile* path_start = new tile;
+    int map[9][16];
+    path* path_start = new path;
+    std::vector<tower*> towers;
     readmap(map, mapnum, path_start);
     configpath(map, path_start);
 
@@ -451,7 +469,7 @@ int playscreen(WINDOW *win)
         box(confirmBox, ACS_VLINE, ACS_HLINE);
 
         //Print the Map
-        printMap(mainBox, map);
+        printMap(mainBox, path_start, towers);
 
         print_wave(towerBox, wave_num);
         
@@ -479,7 +497,7 @@ int playscreen(WINDOW *win)
                     spawn_enemy(path_start, i, wave(wave_num));
 
 
-                    printMap(mainBox, map);
+                    printMap(mainBox, path_start, towers);
                     mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
                     print_current_enemy(towerBox, path_start);
 
@@ -490,8 +508,8 @@ int playscreen(WINDOW *win)
                     i++;
                     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-                    attack_all(map);
-                    move(map, path_start, killed_enemies, health);
+                    attack_all(towers);
+                    move(path_start, killed_enemies, health);
                 }
                 wave_num++;
                 money += 150;
@@ -500,7 +518,7 @@ int playscreen(WINDOW *win)
             case 1: // Edit
             {
                 selected = selectSquare(mainBox, actionBox);
-                if (map[selected.y][selected.x].is_empty()){ // Empty Tile
+                if (map[selected.y][selected.x] == -1){ // Empty Tile
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Empty Tile");
@@ -512,10 +530,13 @@ int playscreen(WINDOW *win)
                             std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon"};
                             int tower_option = chooseOption(actionBox, tower_options);
                             
-                            map[selected.y][selected.x].create_new_tower(tower_options[tower_option], 1, path_start, money);
+                            tower* t = new tower;
+                            t->coordinates = std::make_pair(selected.y, selected.x);
+                            t->create_new_tower(tower_options[tower_option], 1, path_start, money);
+                            towers.push_back(t);
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
-                            printMap(mainBox, map);
+                            printMap(mainBox, path_start, towers);
                             mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                             wrefresh(mainBox);
                             wrefresh(towerBox);
@@ -526,18 +547,17 @@ int playscreen(WINDOW *win)
                         {  
                             break;
                         }
-
                     }
-                        
-
                 }
-                if (map[selected.y][selected.x].is_tower()){ // Tower
+                if (map[selected.y][selected.x] >= 0){ // Tower
                     bool editing = true;
                     do 
                     {
                         wclear(towerBox);
                         box(towerBox, ACS_VLINE, ACS_HLINE);
-                        print_tower(towerBox, map[selected.y][selected.x].tower_on_top);
+                        int index = map[selected.y][selected.x];
+                        tower* selected_tower = towers[index];
+                        print_tower(towerBox, selected_tower);
                         wrefresh(towerBox);
                         
 
@@ -545,10 +565,10 @@ int playscreen(WINDOW *win)
                         {
                             case 0: // Upgrade
                             {
-                                if (money - map[selected.y][selected.x].tower_on_top->cost < 0){
+                                if (money - selected_tower->cost < 0){
                                     break;
                                 }
-                                map[selected.y][selected.x].upgrade_tower(path_start, money);
+                                selected_tower->upgrade_tower(path_start, money);
                                 wclear(towerBox);
                                 mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                                 wrefresh(statsBox);
@@ -557,15 +577,22 @@ int playscreen(WINDOW *win)
                             }
                             case 1: // Sell
                             {
-                                if (map[selected.y][selected.x].tower_on_top != NULL) {
-                                    money += map[selected.y][selected.x].tower_on_top->cost/2;
-                                    map[selected.y][selected.x].tower_on_top = NULL;
-                                    wclear(towerBox);
-                                    box(towerBox, ACS_VLINE, ACS_HLINE);
-                                    wrefresh(towerBox);
-                                    wrefresh(statsBox);
-                                    editing = false;
+                                money += selected_tower->cost/2;
+                                towers.erase(towers.begin() + index);
+                                for (int row = 0; row < 9; row++){
+                                    for (int col = 0; col < 16; col++){
+                                        if (map[row][col] > index){
+                                            map[row][col]--;
+                                        }
+                                    }
                                 }
+
+                                wclear(towerBox);
+                                box(towerBox, ACS_VLINE, ACS_HLINE);
+                                wrefresh(towerBox);
+                                wrefresh(statsBox);
+                                editing = false;
+                                
                                 break;
                             }
                             case 2: // Cancel
@@ -577,7 +604,7 @@ int playscreen(WINDOW *win)
                     }
                     while (editing);
                 }
-                else if (map[selected.y][selected.x].is_path){ // Path
+                else if (map[selected.y][selected.x] == -2){ // Path
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Path");
