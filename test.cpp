@@ -85,9 +85,10 @@ void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) //
         tower* current_tower = towers[i];
         int row = current_tower->coordinates.first;
         int col = current_tower->coordinates.second;
+        int cooldownbar = 5* (current_tower->attackspeed - current_tower->cd) / current_tower->attackspeed;
         wattron(mainBox, COLOR_PAIR(current_tower->color_id));
         for (int i = 0; i < 3; i++){
-            for (int k = 0; k < 5; k++){
+            for (int k = 0; k < cooldownbar; k++){
                 mvwprintw(mainBox, 3*row+i+1, 5*col+k+1, " ");
             }
         }
@@ -95,7 +96,6 @@ void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) //
         mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current_tower->icon).c_str());
         mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current_tower->icon).c_str());
         mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current_tower->icon).c_str());
-        mvwprintw(mainBox, 3*row+1+2, 5*col+1+1, getString(current_tower->cd + '0').c_str());
     }
 
     path* current = path_start;
@@ -484,10 +484,7 @@ int playscreen(WINDOW *win)
         {
             case 0: // Start Wave
             {   
-                for (int i = 0; i < towers.size(); i++) // Reset attack cooldown
-                {
-                    towers[i]->cd = 0;
-                }
+                
                 wclear(towerBox);
                 wclear(actionBox);
                 box(towerBox, ACS_VLINE, ACS_HLINE);
@@ -512,6 +509,10 @@ int playscreen(WINDOW *win)
 
                     attack_all(towers);
                     move(path_start, killed_enemies, health);
+                }
+                for (int i = 0; i < towers.size(); i++) // Reset attack cooldown
+                {
+                    towers[i]->cd = 0;
                 }
                 wave_num++;
                 money += 150;
