@@ -71,13 +71,9 @@ void spawn_enemy(path*& path_start, int i, vector<string> enemies) {
 }
 
 void move(path*& path_start, int& killed_enemies, int& health) {
-    path* current = path_start->next;
-    enemy* previous = path_start->enemy_on_top;
+    path* current = path_start;
+    enemy* previous = NULL;
     while (current != NULL){
-        // if (current->enemy_on_top != NULL) {
-        //         cout << "enemy " << current->enemy_on_top->icon << " is at "  << current->coordinates.first << " " << current->coordinates.second << endl;
-        //         cout << "health: " << current->enemy_on_top->health << endl;
-        //     }
 
         enemy* temp = current->enemy_on_top;
         if (previous != NULL && previous->health <= 0){

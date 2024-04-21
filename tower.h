@@ -31,6 +31,7 @@ struct tower{
 
     void CalculateDamage();
     void set_tower_coverage(struct path*& path_start);
+    void sample_tower(std::string tower_name);
     void create_new_tower(std::string name, int level, path*& path_start, int &money);
     void upgrade_tower(path*& path_start, int &money);
 };

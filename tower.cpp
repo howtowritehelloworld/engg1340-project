@@ -108,6 +108,25 @@ void tower::set_tower_coverage(path*& path_start){
     }
 }
 
+void tower::sample_tower(string tower_name){
+    if (tower_name == "Mage")
+    {
+        mage(1);
+    }
+    else if (tower_name == "Archer")
+    {
+        archer(1);
+    }
+    else if (tower_name == "Sniper")
+    {
+        sniper(1);
+    }
+    else if (tower_name == "Cannon")
+    {
+        cannon(1);
+    }
+}
+
 void tower::create_new_tower(string name, int level, path*& path_start, int &money){
     if (name == "Mage" && money >= 40)
     {

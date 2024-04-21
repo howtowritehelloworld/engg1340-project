@@ -42,7 +42,7 @@ std::vector<std::string> wave(int wave_num)
         {"K3", "K3", "K3", "D3", "D3", "D3"},
         {"K3", "K3", "D3", "D3", "G3", "G3", "V3", "V3"},
     };
-    return wave[wave_num];
+    return wave[wave_num-1];
 }
 
 std::string getString(char x)
@@ -193,6 +193,20 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
     return selected;
 }
 
+void print_tower(WINDOW* win, tower* tower_on_top){
+    for (int i = 2; i < 12; i++){
+        mvwprintw(win, i, 4, "               ");
+    }
+    mvwprintw(win, 2, 4, "%s", tower_on_top->name.c_str());
+    mvwprintw(win, 4, 4, "Level: %d", tower_on_top->level);
+    mvwprintw(win, 5, 4, "Damage: %d", tower_on_top->damage);
+    mvwprintw(win, 6, 4, "Range: %d", tower_on_top->range);
+    mvwprintw(win, 7, 4, "Cost: %d", tower_on_top->cost);
+    for (int i = 0; i < 3; i++){
+        mvwprintw(win, 9+i, 4, tower_on_top->type[i].c_str());
+    }
+}
+
 int chooseOption(WINDOW *win, std::vector<std::string> choices){
     keypad(win, true);
     wclear(win);
@@ -208,6 +222,43 @@ int chooseOption(WINDOW *win, std::vector<std::string> choices){
             wattroff(win, A_REVERSE);
         }
         keyboard_input = wgetch(win);
+        switch(keyboard_input)
+        {
+            case KEY_UP:
+                highlight = std::max(0, highlight-1);
+                break;
+            case KEY_DOWN:
+                highlight = std::min(num_of_choices-1, highlight+1);
+                break;
+            default:
+                break;
+        }
+    }
+    return highlight;
+}
+
+int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::string> tower_options){
+    keypad(actionBox, true);
+    wclear(actionBox);
+    box(actionBox, ACS_VLINE, ACS_HLINE);
+    int highlight = 0;
+    int keyboard_input = 0;
+    int num_of_choices = tower_options.size();
+    while (keyboard_input != 10){
+        for (int i = 0; i < num_of_choices; i++){
+            if (i == highlight){
+                wattron(actionBox, A_REVERSE);
+                tower* temp_tower = new tower;
+                temp_tower->sample_tower(tower_options[i]);
+                print_tower(towerBox, temp_tower);
+                wrefresh(towerBox);
+                delete temp_tower;
+            }
+            mvwprintw(actionBox, i+2, 4, tower_options[i].c_str());
+            wattroff(actionBox, A_REVERSE);
+            
+        }
+        keyboard_input = wgetch(actionBox);
         switch(keyboard_input)
         {
             case KEY_UP:
@@ -239,16 +290,7 @@ void print_current_enemy(WINDOW *win, path*& path_start){
     }
 }
 
-void print_tower(WINDOW* win, tower* tower_on_top){
-    mvwprintw(win, 2, 4, "%s", tower_on_top->name.c_str());
-    mvwprintw(win, 4, 4, "Level: %d", tower_on_top->level);
-    mvwprintw(win, 5, 4, "Damage: %d", tower_on_top->damage);
-    mvwprintw(win, 6, 4, "Range: %d", tower_on_top->range);
-    mvwprintw(win, 7, 4, "Cost: %d", tower_on_top->cost);
-    for (int i = 0; i < 3; i++){
-        mvwprintw(win, 9+i, 4, tower_on_top->type[i].c_str());
-    }
-}
+
 
 void print_wave(WINDOW* win , int wave_num){
     std::vector <std::string> next_wave = wave(wave_num);
@@ -531,7 +573,7 @@ int playscreen(WINDOW *win)
                         case 0: // Place Tower
                         {
                             std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon"};
-                            int tower_option = chooseOption(actionBox, tower_options);
+                            int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
                             
                             tower* t = new tower;
                             t->coordinates = std::make_pair(selected.y, selected.x);
@@ -608,11 +650,6 @@ int playscreen(WINDOW *win)
                         }
                     }
                     while (editing);
-                }
-                else if (map[selected.y][selected.x] == -2){ // Path
-                    wclear(towerBox);
-                    box(towerBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(towerBox, 2, 4, "Path");
                 }
                 break;
             }
