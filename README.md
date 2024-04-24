@@ -6,9 +6,9 @@
 -   [Introduction](#introduction)
 -   [Controls](#controls)
 -   [Gameplay](#gameplay)
-    -   [1. Gameflow](#1-gameflow)
-    -   [2. Towers](#2-towers)
-    -   [3. Enemies](#3-towers)
+    -   [1. Gameflow](#gameflow)
+    -   [2. Towers](#towers)
+    -   [3. Enemies](#enemies)
 -   [How to play](#how-to-play)
 -   [Project Requirements](#project-requirements)
     -   [1. Generation of random game elements](#generation-of-random-game-elements)
@@ -19,7 +19,7 @@
     -   [6. Proper Indentation and naming styles](#external-libraries)
     -   [7. In-code documentation](#in-code-documentation)
 
- ## Group members
+ ## Group members <a name="group-members"></a>
 
 1. Zheng Andy 3036222642
 2. Jason Ip Tsz Shun 3036226222
@@ -27,11 +27,11 @@
 4. Cyric (full name) (uid)
 5. Donald Leung Kit Yiu 3036226557
 
-## Introduction
+## Introduction <a name="introduction"></a>
 
 Kingdom of Eldoria is a tower defence simulator where the primary objective is to waves of incoming enemies from approaching the end of the map. The player must strategically place defensive towers, along predetermined paths or routes which enemies follow. These towers have unique abilities which make them suitable for different situations. With a limited amount of resources (money and health), players must carefully evaluate their positions and come up with the best defensive plan to stop the waves of incoming enemies.
 
-## Controls
+## Controls <a name="controls"></a>
 
 Upon the start of the game, players can select the map they want to play on with arrow keys. Players can even choose to play on a random map by choosing the map with a question mark on it.
 
@@ -51,9 +51,9 @@ If the tile is a tower, the player can choose to upgrade or sell the tower, allo
 
 "quit" will return the user to the main menu.
 
-## Gameplay
+## Gameplay <a name="gameplay"></a>
 
-### 1. Gameflow
+### 1. Gameflow <a name="gameflow"></a>
 
 Each time an enemy is killed, the player will be rewarded with money to further enhance their defence.
 
@@ -61,7 +61,7 @@ If the player runs out of health, a game over screen will pop up and they will h
 
 Upon reaching the last wave, the player will be rewarded with a win screen.
 
-### 2. Towers
+### 2. Towers <a name="towers"></a>
 
 #### Mage
 
@@ -119,7 +119,7 @@ Range: 1
 
 Notes: Multiple targets, Can only attack ground enemies, Unable to detect Camo enemies.
 
-### 3. Enemies
+### 3. Enemies <a name="enemies"></a>
 
 #### Knight
 
@@ -153,10 +153,10 @@ Money given after defeat: 4 per level
 
 Type: Air, Camo
 
-## How to play
+## How to play <a name="how-to-play"></a>
 Run make && ./test into the terminal after downloading all the files and putting them into the same directory.
 
-## Project requirements
+## Project requirements <a name="project-requirements"></a>
 
 ### Generation of random game elements
 The game provides an option for the player to choose the map randomly.
