@@ -478,7 +478,7 @@ int playscreen(WINDOW *win)
 
     int health = 3;
     int wave_num = 1;
-    int money = 150;
+    int money = 100;
 
     noecho();
     curs_set(0);
@@ -557,7 +557,7 @@ int playscreen(WINDOW *win)
                     towers[i]->cd = 0;
                 }
                 wave_num++;
-                money += 150;
+                money += 10*wave_num;
                 break;
             }
             case 1: // Edit
@@ -674,6 +674,7 @@ int playscreen(WINDOW *win)
 
 int helpscreen(WINDOW *win)
 {
+    
     return 0;
 }
 
