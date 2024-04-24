@@ -172,7 +172,6 @@ int main(int agrc, char **argv)
     }
     
 
-    getch();
     endwin();
 
     return 0;
