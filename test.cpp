@@ -920,7 +920,7 @@ int helpscreen(WINDOW *win)
 
     wclear(statsBox);
     box(statsBox, ACS_VLINE, ACS_HLINE);
-    mvwprintw(statsBox, 1, 1, "On the action menu at the top left corner");
+    mvwprintw(statsBox, 1, 1, "On the action menu at the top right corner");
     mvwprintw(statsBox, 2, 1, "Click Build to start placing towers");
     wrefresh(statsBox);
 
