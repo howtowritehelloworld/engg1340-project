@@ -160,6 +160,7 @@ Run make && ./test into the terminal after downloading all the files and putting
 
 ### Generation of random game elements
 The game provides an option for the player to choose the map randomly.
+
 The game features an "Infinite Mode" option, where players can engage in an endless gameplay experience. In this mode, random enemies are dynamically generated based on the wave number, ensuring that the difficulty scales as the player progresses.
 
 ### Data structures for storing game status
