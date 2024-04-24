@@ -67,12 +67,14 @@ std::string getString(char x)
 void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) // Print the map of the game inside of the main window
 {   
     // Define background colors for map
+    use_default_colors();
     init_pair(1, COLOR_WHITE, COLOR_GREEN);
     init_pair(2, COLOR_WHITE, COLOR_CYAN);
     init_pair(3, COLOR_WHITE, COLOR_BLUE);
     init_pair(4, COLOR_WHITE, COLOR_MAGENTA);
     init_pair(5, COLOR_WHITE, COLOR_YELLOW);
     init_pair(6, COLOR_WHITE, COLOR_RED);
+    init_pair(7, COLOR_GREEN, -1);
 
     int enemies = 0;
     // Looping each square to print the map
@@ -123,11 +125,20 @@ void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) //
             }
         }
         if (current->enemy_on_top != NULL)
-        {
-            mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current->enemy_on_top->icon).c_str());
-            mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current->enemy_on_top->icon).c_str());
-            mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current->enemy_on_top->icon).c_str());
+        {   
+            if (current->enemy_on_top->type[1] == "Camo")
+                wattron(mainBox, COLOR_PAIR(7));
+            if (current->enemy_on_top->type[0] == "Air") {
+                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "^");
+                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current->enemy_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "^");
+            } else {
+                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current->enemy_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current->enemy_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current->enemy_on_top->icon).c_str());
+            }
             enemies++;
+            wattroff(mainBox, COLOR_PAIR(7));
         }
         current = current->next;
     }
@@ -173,6 +184,7 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
     box(actionBox, ACS_VLINE, ACS_HLINE);
     mvwprintw(actionBox, 3, 2, "Move: Arrow Keys");
     mvwprintw(actionBox, 5, 3, "Select: Enter");
+    mvwprintw(actionBox, 7, 1, "Cancel: Backspace");
     wrefresh(actionBox);
     keypad(win, true);
     int ch;
@@ -195,6 +207,9 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
             case KEY_RIGHT:
                 selected.x = std::min(15, selected.x+1);
                 break;
+            case KEY_BACKSPACE:
+                curs_set(0);
+                return {-1, -1};
         }
         wmove(win, 3*selected.y+2, 5*selected.x+4);
         wrefresh(win);
@@ -206,7 +221,7 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
 }
 
 void print_tower(WINDOW* win, tower* tower_on_top){
-    for (int i = 2; i < 12; i++){
+    for (int i = 2; i < 13; i++){
         mvwprintw(win, i, 4, "               ");
     }
     mvwprintw(win, 2, 4, "%s", tower_on_top->name.c_str());
@@ -450,6 +465,87 @@ int loseScreen(int highlight = 0, int count = 1) {
     }
 }
 
+int winScreen(int highlight = 0, int count = 1) {
+    int yMax, xMax;
+    getmaxyx(stdscr, yMax, xMax);
+
+    std::string title1 = "__   _____  _   _  __        _____ _   _ ";
+    std::string title2 = "\\ \\ / / _ \\| | | | \\ \\      / /_ _| \\ | |";
+    std::string title3 = " \\ V / | | | | | |  \\ \\ /\\ / / | ||  \\| |";
+    std::string title4 = "  | || |_| | |_| |   \\ V  V /  | || |\\  |";
+    std::string title5 = "  |_| \\___/ \\___/     \\_/\\_/  |___|_| \\_|";
+    // std::string title6 = "  |   |  |       ||       |  |       ||       | _____| ||   |___ ";
+    // std::string title7 = "  |___|  |_______||_______|  |_______||_______||_______||_______|";
+
+    int titleX = (xMax - title1.length()) / 2 - 3;
+
+    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
+    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
+    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
+    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
+    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
+    // mvprintw(yMax / 2 - 2, titleX, title6.c_str());
+    // mvprintw(yMax / 2 - 1, titleX, title7.c_str());
+
+    refresh();
+
+    WINDOW* menuwin = newwin(7, xMax - 12, yMax - 10, 5);
+    box(menuwin, 0, 0);
+
+
+    keypad(menuwin, true);
+
+    std::string choices[2] = {"Main Menu", "Quit"};
+    int choice;
+
+    while (1) {
+  
+        for (int i = 0; i < 2; i++) {
+            if (i == highlight)
+                wattron(menuwin, A_REVERSE);
+            mvwprintw(menuwin, i + 2, (xMax - 17) / 2, choices[i].c_str());
+            wattroff(menuwin, A_REVERSE);
+        }
+
+
+        wrefresh(menuwin);
+
+
+        choice = wgetch(menuwin);
+
+        switch (choice) {
+            case KEY_UP:
+                highlight--;
+                if (highlight == -1) {
+                    highlight = 0;
+                }
+                break;
+            case KEY_DOWN:
+                highlight++;
+                if (highlight == 2) {
+                    highlight = 1;
+                }
+                break;
+            default:
+                break;
+        }
+
+        // When pressing Enter
+        if (choice == 10) {
+            // If the user chooses the main menu
+            if (highlight == 0) {
+                erase();
+                return 0;
+            }
+            // If the user chooses to quit
+            else if (highlight == 1) {
+                erase();
+                return 3;
+            }
+        }
+    }
+}
+
 int playscreen(WINDOW *win)
 {   
     int mid_x = win->_maxx / 2;
@@ -534,7 +630,7 @@ int playscreen(WINDOW *win)
         wrefresh(towerBox);
         wrefresh(statsBox);
         wrefresh(confirmBox);
-        switch(chooseOption(actionBox, {"Start Wave", "Edit", "Quit"}))
+        switch(chooseOption(actionBox, {"Start Wave", "Build", "Quit"}))
         {
             case 0: // Start Wave
             {   
@@ -575,7 +671,7 @@ int playscreen(WINDOW *win)
             case 1: // Edit
             {
                 selected = selectSquare(mainBox, actionBox);
-                if (map[selected.y][selected.x] == -1){ // Empty Tile
+                if (map[selected.y][selected.x] == -1 && selected.x != -1){ // Empty Tile
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Empty Tile");
@@ -607,7 +703,7 @@ int playscreen(WINDOW *win)
                         }
                     }
                 }
-                if (map[selected.y][selected.x] >= 0){ // Tower
+                if (map[selected.y][selected.x] >= 0 && selected.x != -1){ // Tower
                     bool editing = true;
                     do 
                     {
