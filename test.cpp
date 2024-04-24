@@ -209,7 +209,7 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
 }
 
 void print_tower(WINDOW* win, tower* tower_on_top){
-    for (int i = 2; i < 12; i++){
+    for (int i = 2; i < 13; i++){
         mvwprintw(win, i, 4, "               ");
     }
     mvwprintw(win, 2, 4, "%s", tower_on_top->name.c_str());
@@ -217,7 +217,7 @@ void print_tower(WINDOW* win, tower* tower_on_top){
     mvwprintw(win, 5, 4, "Damage: %d", tower_on_top->damage);
     mvwprintw(win, 6, 4, "Range: %d", tower_on_top->range);
     mvwprintw(win, 7, 4, "Cost: %d", tower_on_top->cost);
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 4; i++){
         mvwprintw(win, 9+i, 4, tower_on_top->type[i].c_str());
     }
 }
@@ -453,6 +453,87 @@ int loseScreen(int highlight = 0, int count = 1) {
     }
 }
 
+int winScreen(int highlight = 0, int count = 1) {
+    int yMax, xMax;
+    getmaxyx(stdscr, yMax, xMax);
+
+    std::string title1 = "__   _____  _   _  __        _____ _   _ ";
+    std::string title2 = "\\ \\ / / _ \\| | | | \\ \\      / /_ _| \\ | |";
+    std::string title3 = " \\ V / | | | | | |  \\ \\ /\\ / / | ||  \\| |";
+    std::string title4 = "  | || |_| | |_| |   \\ V  V /  | || |\\  |";
+    std::string title5 = "  |_| \\___/ \\___/     \\_/\\_/  |___|_| \\_|";
+    // std::string title6 = "  |   |  |       ||       |  |       ||       | _____| ||   |___ ";
+    // std::string title7 = "  |___|  |_______||_______|  |_______||_______||_______||_______|";
+
+    int titleX = (xMax - title1.length()) / 2 - 3;
+
+    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
+    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
+    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
+    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
+    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
+    // mvprintw(yMax / 2 - 2, titleX, title6.c_str());
+    // mvprintw(yMax / 2 - 1, titleX, title7.c_str());
+
+    refresh();
+
+    WINDOW* menuwin = newwin(7, xMax - 12, yMax - 10, 5);
+    box(menuwin, 0, 0);
+
+
+    keypad(menuwin, true);
+
+    std::string choices[2] = {"Main Menu", "Quit"};
+    int choice;
+
+    while (1) {
+  
+        for (int i = 0; i < 2; i++) {
+            if (i == highlight)
+                wattron(menuwin, A_REVERSE);
+            mvwprintw(menuwin, i + 2, (xMax - 17) / 2, choices[i].c_str());
+            wattroff(menuwin, A_REVERSE);
+        }
+
+
+        wrefresh(menuwin);
+
+
+        choice = wgetch(menuwin);
+
+        switch (choice) {
+            case KEY_UP:
+                highlight--;
+                if (highlight == -1) {
+                    highlight = 0;
+                }
+                break;
+            case KEY_DOWN:
+                highlight++;
+                if (highlight == 2) {
+                    highlight = 1;
+                }
+                break;
+            default:
+                break;
+        }
+
+        // When pressing Enter
+        if (choice == 10) {
+            // If the user chooses the main menu
+            if (highlight == 0) {
+                erase();
+                return 0;
+            }
+            // If the user chooses to quit
+            else if (highlight == 1) {
+                erase();
+                return 3;
+            }
+        }
+    }
+}
+
 int playscreen(WINDOW *win)
 {   
     int mid_x = win->_maxx / 2;
@@ -537,7 +618,7 @@ int playscreen(WINDOW *win)
         wrefresh(towerBox);
         wrefresh(statsBox);
         wrefresh(confirmBox);
-        switch(chooseOption(actionBox, {"Start Wave", "Edit", "Quit"}))
+        switch(chooseOption(actionBox, {"Start Wave", "Build", "Quit"}))
         {
             case 0: // Start Wave
             {   
