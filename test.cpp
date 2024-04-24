@@ -55,12 +55,14 @@ std::string getString(char x)
 void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) // Print the map of the game inside of the main window
 {   
     // Define background colors for map
+    use_default_colors();
     init_pair(1, COLOR_WHITE, COLOR_GREEN);
     init_pair(2, COLOR_WHITE, COLOR_CYAN);
     init_pair(3, COLOR_WHITE, COLOR_BLUE);
     init_pair(4, COLOR_WHITE, COLOR_MAGENTA);
     init_pair(5, COLOR_WHITE, COLOR_YELLOW);
     init_pair(6, COLOR_WHITE, COLOR_RED);
+    init_pair(7, COLOR_GREEN, -1);
 
     int enemies = 0;
     // Looping each square to print the map
@@ -111,11 +113,20 @@ void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) //
             }
         }
         if (current->enemy_on_top != NULL)
-        {
-            mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current->enemy_on_top->icon).c_str());
-            mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current->enemy_on_top->icon).c_str());
-            mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current->enemy_on_top->icon).c_str());
+        {   
+            if (current->enemy_on_top->type[1] == "Camo")
+                wattron(mainBox, COLOR_PAIR(7));
+            if (current->enemy_on_top->type[0] == "Air") {
+                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, "^");
+                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current->enemy_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, "^");
+            } else {
+                mvwprintw(mainBox, 3*row+1+1, 5*col+1+1, getString(current->enemy_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+2+1, getString(current->enemy_on_top->icon).c_str());
+                mvwprintw(mainBox, 3*row+1+1, 5*col+3+1, getString(current->enemy_on_top->icon).c_str());
+            }
             enemies++;
+            wattroff(mainBox, COLOR_PAIR(7));
         }
         current = current->next;
     }
