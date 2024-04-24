@@ -303,6 +303,9 @@ int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::st
 
 void print_current_enemy(WINDOW *win, path*& path_start){
     path* current = path_start;
+    for (int i = 2; i < 18; i++){
+        mvwprintw(win, i, 4, "               ");
+    }
     mvwprintw(win, 2, 4, "Enemies");
     int row = 3;
     while (current && row < 19){
@@ -311,9 +314,6 @@ void print_current_enemy(WINDOW *win, path*& path_start){
             row++;
         }
         current = current->next;
-    }
-    for (int i = row; i < 18; i++){
-        mvwprintw(win, i, 4, "               ");
     }
 }
 
