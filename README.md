@@ -32,7 +32,7 @@
 
 Kingdom of Eldoria is a tower defence simulator where the primary objective is to waves of incoming enemies from approaching the end of the map. The player must strategically place defensive towers, along predetermined paths or routes which enemies follow. These towers have unique abilities which make them suitable for different situations. With a limited amount of resources (money and health), players must carefully evaluate their positions and come up with the best defensive plan to stop the waves of incoming enemies.
 
-We recommend playing the tutorial of the game before playing the main game. The tutorial is located at the help button on the main screen.
+We recommend playing the tutorial of the game before playing the main game. The tutorial is located at the help button on the main screen. A short story will also be included.
 
 ## Features <a name = "features"></a> 
 
@@ -73,7 +73,23 @@ If the player runs out of health, a game over screen will pop up and they will h
 
 Upon reaching the last wave, the player will be rewarded with a win screen.
 
+To start playing, choose New Game or Help to play the main game or tutorial level respectively. Again we recommend you try out the tutorial level first. It's short and can help you grasp the core gameplay mechanics and controls quickly.
+
+If you have played the game before, click load game to get back your progress.
+
+Upon entering, you will be prompted to place towers or start the wave.
+
+Once you complete a wave, money will be granted to you based on the wave number. Moreover killing enemies also grant you a specific amount of money based on enemy type and their level.
+
+Upon completing wave 15, you have won the required stages of the game and can continue by pressing the infinite waves option.
+
 ### 2. Towers <a name="towers"></a>
+
+There are a total of 4 types of towers in the game (Mage, Archer, Sniper, Cannon). Each of these towers have different stats that make them useful in different situations.
+
+You can place, sell and upgrade towers in between waves.
+
+There is no limit on the level of the towers you can upgrade to.
 
 #### Mage
 
@@ -132,6 +148,14 @@ Range: 1
 Notes: Multiple targets, Can only attack ground enemies, Unable to detect Camo enemies.
 
 ### 3. Enemies <a name="enemies"></a>
+
+Like towers, there are also 4 types of enemies (Knight, Dragon, Ghost and Vampire).
+
+They each have unqiue types and health so the player need to be careful with their choice of towers. For example if you place all cannons then you cannot hit air enemies.
+
+Flying enemies (Air) will be marked with wings on the side. (Example: ^D^)
+
+Camoflauged enemies (Camo) will be of color green. (Example: <p style="color:green;">GGG</p>)
 
 #### Knight
 
