@@ -161,6 +161,7 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
     box(actionBox, ACS_VLINE, ACS_HLINE);
     mvwprintw(actionBox, 3, 2, "Move: Arrow Keys");
     mvwprintw(actionBox, 5, 3, "Select: Enter");
+    mvwprintw(actionBox, 7, 1, "Cancel: Backspace");
     wrefresh(actionBox);
     keypad(win, true);
     int ch;
@@ -183,6 +184,9 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
             case KEY_RIGHT:
                 selected.x = std::min(15, selected.x+1);
                 break;
+            case KEY_BACKSPACE:
+                curs_set(0);
+                return {-1, -1};
         }
         wmove(win, 3*selected.y+2, 5*selected.x+4);
         wrefresh(win);
@@ -563,7 +567,7 @@ int playscreen(WINDOW *win)
             case 1: // Edit
             {
                 selected = selectSquare(mainBox, actionBox);
-                if (map[selected.y][selected.x] == -1){ // Empty Tile
+                if (map[selected.y][selected.x] == -1 && selected.x != -1){ // Empty Tile
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Empty Tile");
@@ -595,7 +599,7 @@ int playscreen(WINDOW *win)
                         }
                     }
                 }
-                if (map[selected.y][selected.x] >= 0){ // Tower
+                if (map[selected.y][selected.x] >= 0 && selected.x != -1){ // Tower
                     bool editing = true;
                     do 
                     {
