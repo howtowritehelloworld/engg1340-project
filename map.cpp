@@ -61,6 +61,10 @@ void spawn_enemy(path*& path_start, int i, vector<string> enemies) {
         {
             new_enemy->dragon((int)enemies[i][1] - '0');
         }
+        else if (enemies[i][0] == 'V')
+        {
+            new_enemy->vampire((int)enemies[i][1] - '0');
+        }
 
         path_start->enemy_on_top = new_enemy;
     }
