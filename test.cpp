@@ -362,10 +362,9 @@ void print_current_enemy(WINDOW *win, path*& path_start){
 
 
 
-void print_wave(WINDOW* win , int wave_num){
-    std::vector <std::string> next_wave = wave(wave_num);
-    mvwprintw(win, 2, 6, "Wave %d", wave_num);
-    for (int i = 0; i < next_wave.size(); i++){
+void print_wave(WINDOW* win, int wave_num, std::vector<std::string> next_wave){
+    mvwprintw(win, 2, 6, "Wave %d", wave_num); 
+    for (int i = 0; i < 19 && i < next_wave.size(); i++){
         mvwprintw(win, 4+i, 4, next_wave[i].c_str());
     }
 }
@@ -662,6 +661,7 @@ int playscreen(WINDOW *win, bool load = false)
 
     while(1)
     {
+        std::vector<std::string> current_wave = wave(wave_num);
 
         wclear(mainBox);
         wclear(actionBox);
@@ -675,8 +675,8 @@ int playscreen(WINDOW *win, bool load = false)
 
         //Print the Map
         printMap(mainBox, path_start, towers);
-
-        print_wave(towerBox, wave_num);
+        
+        print_wave(towerBox, wave_num, current_wave);
         
         // update stats, enemies, towers, the fun stuff ig, but they dont do anything rn
         mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
@@ -698,8 +698,8 @@ int playscreen(WINDOW *win, bool load = false)
                 wrefresh(actionBox);
                 int i = 0;
                 int killed_enemies = 0;
-                while (killed_enemies < wave(wave_num).size() && health > 0){
-                    spawn_enemy(path_start, i, wave(wave_num));
+                while (killed_enemies < current_wave.size() && health > 0){
+                    spawn_enemy(path_start, i, current_wave);
 
 
                     printMap(mainBox, path_start, towers);
