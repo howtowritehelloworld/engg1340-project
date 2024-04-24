@@ -33,11 +33,11 @@ Kingdom of Eldoria is a tower defence simulator where the primary objective is t
 
 ## Controls
 
-Upon the start of the game, players can select the map they want to play on.
+Upon the start of the game, players can select the map they want to play on with arrow keys. Players can even choose to play on a random map by choosing the map with a question mark on it.
 
 After loading the map, players can press "start wave", "build" or "quit" at the action menu.
 
-"start wave" will immediately begin to walk along the path and attempt to reach the end.
+"start wave" will immediately spawn enemies that walk along the path and attempt to reach the end. 1 Health will be reduced per enemy that reaches the end.
 
 Please note that you will not be able to place down towers once the wave has started, so you should make sure you have sufficient defensive towers before starting each wave.
 
@@ -159,7 +159,9 @@ Run make && ./test into the terminal after downloading all the files and putting
 ## Project requirements
 
 ### Generation of random game elements
-The game provides an option for the player to choose the map randomly
+The game provides an option for the player to choose the map randomly.
+
+The game features an "Infinite Mode" option, where players can engage in an endless gameplay experience. In this mode, random enemies are dynamically generated based on the wave number, ensuring that the difficulty scales as the player progresses.
 
 ### Data structures for storing game status
 The game creates numerous structures for tiles on maps and enemies.
