@@ -536,7 +536,7 @@ int winScreen(int highlight = 0, int count = 1) {
 
     keypad(menuwin, true);
 
-    std::string choices[3] = {"Main Menu", "Quit", "Continue (infinite waves)"};
+    std::string choices[3] = {"Continue (infinite waves)", "Main Menu", "Quit"};
     int choice;
 
     while (1) {
@@ -573,17 +573,18 @@ int winScreen(int highlight = 0, int count = 1) {
 
         // When pressing Enter
         if (choice == 10) {
-            // If the user chooses the main menu
-            if (highlight == 0) {
+            // main menu
+            if (highlight == 1) {
                 erase();
                 return 0;
             }
-            // If the user chooses to quit
-            else if (highlight == 1) {
+            // quit
+            else if (highlight == 2) {
                 erase();
                 return 3;
             }
-            else if (highlight == 2){
+            // continue
+            else if (highlight == 0){
                 erase();
                 clear();
                 refresh();
@@ -686,7 +687,7 @@ int playscreen(WINDOW *win, bool load = false)
         wrefresh(actionBox);
         wrefresh(towerBox);
         wrefresh(statsBox);
-        switch(chooseOption(actionBox, {"Start Wave", "Build", "Quit"}))
+        switch(chooseOption(actionBox, {"Start Wave", "Build/Edit", "Quit"}))
         {
             case 0: // Start Wave
             {   
