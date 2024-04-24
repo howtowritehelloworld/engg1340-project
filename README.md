@@ -21,7 +21,7 @@
 
  ## Group members
 
-1. Andy (full name) (uid)
+1. Zheng Andy 3036222642
 2. Jason Ip Tsz Shun 3036226222
 3. Owen (full name) (uid)
 4. Cyric (full name) (uid)
