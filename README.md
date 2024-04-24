@@ -79,11 +79,15 @@ Notes: Single target, Can attack both ground and air enemies, Can detect Camo en
 
 #### Cannon
 
-Cost: 40 -> 80 -> 120 -> 160 -> ... (level * 40)
-Damage: 2 -> 4 -> 6 -> 8 -> ... (level * 2)
-Attack speed: 1 (fast)
+Cost: 40 -> 80 -> 120 -> 160 -> ... (level * 30)
+
+Damage: 2 -> 4 -> 6 -> 8 -> ... (level * 4)
+
+Attack speed: 3 (slow)
+
 Range: 1
-Notes: Multiple targets, Can attack both ground and air enemies, Can detect Camo enemies.
+
+Notes: Multiple targets, Can only attack ground enemies, Unable to detect Camo enemies.
 
 ### 3. Enemies
 
