@@ -15,7 +15,7 @@
     -   [1. Generation of random game elements](#random)
     -   [2. Data structures for storing game status](#data-structures)
     -   [3. Dynamic Memory Management](#dynamic-memory)
-    -   [4. File input/output (e.g., for loading/saving game status)](file-inputoutput)
+    -   [4. File input/output (e.g., for loading/saving game status)](#file-inputoutput)
     -   [5. Program codes in multiple files](#multiple-files)
     -   [6. Proper Indentation and naming styles](#external-libraries)
     -   [7. In-code documentation](#documentation)
