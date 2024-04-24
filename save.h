@@ -9,7 +9,7 @@
 #include "path.h"
 #include "map.h"
 
-void saveGame();
-void loadGame();
+void saveGame(int health, int wave_num, int money, int map_num, std::vector<tower*> towers);
+void loadGame(int &health, int &wave_num , int &money, int& map_num, std::vector<tower*> &towers);
 
 #endif
