@@ -7,6 +7,8 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
+#include <cstdlib>
+#include <time.h>
 #include "map.h"
 #include "path.h"
 #include "tower.h"
@@ -22,6 +24,7 @@ struct Coords{ // I didnt know pair existed and this looks nicer (to me)
 int mainmenu(WINDOW *);
 int playscreen(WINDOW *);
 int helpscreen(WINDOW *);
+int storyscreen(WINDOW *);
 
 std::vector<std::string> tutor_wave(int wave_num)
 {
@@ -55,6 +58,39 @@ std::vector<std::string> wave(int wave_num)
         {"K3", "K3", "D3", "D3", "G3", "G3", "V3", "V3"},
     };
     return wave[wave_num-1];
+}
+
+std::vector<std::string> random_enemyforwave(int wave_num)
+{
+    srand(time(0)); 
+    int max_weight = wave_num*(wave_num%10+5);
+    int total_weight = 0;
+    std::vector<std::string> enemy_lst= {};
+    while (total_weight <= max_weight)
+    { 
+        int enemytype = rand()%4;
+        int lev = rand()%3 + 1;
+        switch(enemytype)
+        {
+            case(0):
+                enemy_lst.push_back("K"+std::to_string(lev));
+                total_weight +=  2*lev;
+                break;
+            case(1):
+                enemy_lst.push_back("D"+std::to_string(lev));
+                total_weight +=  3*lev;
+                break;
+            case(2):
+                enemy_lst.push_back("G"+std::to_string(lev));
+                total_weight +=  3*lev;
+                break;
+            case(3):
+                enemy_lst.push_back("V"+std::to_string(lev));
+                total_weight +=  4*lev;
+                break;
+        }
+    }
+    return enemy_lst;
 }
 
 std::string getString(char x)
@@ -151,7 +187,7 @@ int main(int agrc, char **argv)
     start_color();
     int screenchoice = 0;
 
-    while (screenchoice != 3)
+    while (screenchoice != 4)
     {   
         switch (screenchoice)
         {
@@ -161,10 +197,10 @@ int main(int agrc, char **argv)
             case 1: // play screen
                 screenchoice = playscreen(stdscr);
                 break;
-            case 2: // help screen
-                screenchoice = helpscreen(stdscr);
+            case 3: // help screen
+                screenchoice = storyscreen(stdscr);
                 break;
-            case 3:
+            case 4:
                 // quit W
                 break;
         }
@@ -342,13 +378,12 @@ int mainmenu(WINDOW *win)
     mvwprintw(win, mid_y - 7, (mid_x - title4.length() / 2), title4.c_str());
     mvwprintw(win, mid_y - 6, (mid_x - title5.length() / 2), title5.c_str());
 
-    WINDOW * menuwin= newwin(5, 16, mid_y, mid_x - 8);
-    box(menuwin, 0, 0);
+    WINDOW * menuwin= newwin(6, 16, mid_y, mid_x - 8);
     refresh();
     wrefresh(menuwin);
 
     keypad(menuwin, true);
-    std::vector <std::string> choices = {"Play", "Help", "Quit"};
+    std::vector <std::string> choices = {"New Game", "Load Game", "Help", "Quit"};
     int choice;
     int highlight = 0;
 
@@ -357,7 +392,7 @@ int mainmenu(WINDOW *win)
 
     while(1)
     {   
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 4; i++)
         {
             if (i == highlight)
                 wattron(menuwin, A_REVERSE);
@@ -371,7 +406,7 @@ int mainmenu(WINDOW *win)
                 highlight = std::max(0, highlight-1);
                 break;
             case KEY_DOWN:
-                highlight = std::min(2, highlight+1);
+                highlight = std::min(3, highlight+1);
                 break;
             default:
                 break;
@@ -775,6 +810,48 @@ int playscreen(WINDOW *win)
     }
     return loseScreen();
 }
+
+
+void storydisplay(WINDOW* storywin, int count) {
+    wclear(storywin);
+    std::ifstream storyfile("Story/Story_" + std::to_string(count) + ".txt");
+    std::string line;
+    int y = 0;
+    while (getline(storyfile, line)) {
+        mvwprintw(storywin, y, 0, line.c_str());
+        y++;
+    }
+    storyfile.close();
+}
+
+int storyscreen(WINDOW *win){
+  int count = 1;
+  int mid_x = win->_maxx / 2;
+  int mid_y = win->_maxy / 2;
+  WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
+  WINDOW * storywin = newwin(6, 76, mid_y - 6, mid_x - 37 - 5);
+  box(mainBox, ACS_VLINE, ACS_HLINE);
+  wrefresh(mainBox);
+  storydisplay(storywin, count);
+  wrefresh(storywin);
+  while (true){
+  int choice = wgetch(mainBox);
+  if (choice == 10){
+    if (count < 6){
+    count++;
+    storydisplay(storywin, count);
+    wrefresh(storywin);
+    }
+    else{
+      helpscreen(stdscr);
+    }
+  }
+  }
+  return 0;
+}
+
+
+
 
 int helpscreen(WINDOW *win)
 {
