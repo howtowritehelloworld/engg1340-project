@@ -211,7 +211,7 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
                 curs_set(0);
                 return {-1, -1};
         }
-        wmove(win, 3*selected.y+2, 5*selected.x+4);
+        wmove(win, 3*selected.y+2, 5*selected.x+3);
         wrefresh(win);
         if (ch == 10)
             break;
@@ -552,9 +552,8 @@ int playscreen(WINDOW *win)
     int mid_y = win->_maxy / 2;
     WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
     WINDOW * actionBox = newwin(10, 20, 0, mid_x + 41 - 5);
-    WINDOW * towerBox = newwin(19, 20, 10, mid_x + 41 - 5);
+    WINDOW * towerBox = newwin(24, 20, 10, mid_x + 41 - 5);
     WINDOW * statsBox = newwin(5, 82, 29, mid_x - 41 - 5);
-    WINDOW * confirmBox = newwin(5, 20, 29, mid_x + 41 - 5);
     
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
@@ -567,13 +566,11 @@ int playscreen(WINDOW *win)
     box(actionBox, ACS_VLINE, ACS_HLINE);
     box(towerBox, ACS_VLINE, ACS_HLINE);
     box(statsBox, ACS_VLINE, ACS_HLINE);
-    box(confirmBox, ACS_VLINE, ACS_HLINE);
     refresh();
     wrefresh(mainBox);
     wrefresh(actionBox);
     wrefresh(towerBox);
     wrefresh(statsBox);
-    wrefresh(confirmBox);
     
     int map[9][16];
     path* path_start = new path;
@@ -595,7 +592,6 @@ int playscreen(WINDOW *win)
     nodelay(actionBox, TRUE);
     nodelay(towerBox, TRUE);
     nodelay(statsBox, TRUE);
-    nodelay(confirmBox, TRUE);
 
     Coords selected;
 
@@ -608,13 +604,11 @@ int playscreen(WINDOW *win)
         wclear(actionBox);
         wclear(towerBox);
         wclear(statsBox);
-        wclear(confirmBox);
 
         box(mainBox, ACS_VLINE, ACS_HLINE);
         box(actionBox, ACS_VLINE, ACS_HLINE);
         box(towerBox, ACS_VLINE, ACS_HLINE);
         box(statsBox, ACS_VLINE, ACS_HLINE);
-        box(confirmBox, ACS_VLINE, ACS_HLINE);
 
         //Print the Map
         printMap(mainBox, path_start, towers);
@@ -629,7 +623,6 @@ int playscreen(WINDOW *win)
         wrefresh(actionBox);
         wrefresh(towerBox);
         wrefresh(statsBox);
-        wrefresh(confirmBox);
         switch(chooseOption(actionBox, {"Start Wave", "Build", "Quit"}))
         {
             case 0: // Start Wave
@@ -770,7 +763,6 @@ int playscreen(WINDOW *win)
         wrefresh(actionBox);
         wrefresh(towerBox);
         wrefresh(statsBox);
-        wrefresh(confirmBox);
         if (health <= 0){
             clear();
             refresh();
@@ -786,9 +778,65 @@ int helpscreen(WINDOW *win)
     int mid_y = win->_maxy / 2;
     WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
     WINDOW * actionBox = newwin(10, 20, 0, mid_x + 41 - 5);
-    WINDOW * towerBox = newwin(19, 20, 10, mid_x + 41 - 5);
+    WINDOW * towerBox = newwin(24, 20, 10, mid_x + 41 - 5);
     WINDOW * statsBox = newwin(5, 82, 29, mid_x - 41 - 5);
-    WINDOW * confirmBox = newwin(5, 20, 29, mid_x + 41 - 5);
+    
+    int yMax, xMax;
+    getmaxyx(stdscr, yMax, xMax);
+
+    box(mainBox, ACS_VLINE, ACS_HLINE);
+    box(actionBox, ACS_VLINE, ACS_HLINE);
+    box(towerBox, ACS_VLINE, ACS_HLINE);
+    box(statsBox, ACS_VLINE, ACS_HLINE);
+    refresh();
+    wrefresh(mainBox);
+    wrefresh(actionBox);
+    wrefresh(towerBox);
+    wrefresh(statsBox);
+    
+    int map[9][16];
+    path* path_start = new path;
+    std::vector<tower*> towers;
+    readmap(map, 7, path_start);
+    configpath(map, path_start);
+    
+    int highlight = 0;
+
+    int health = 99999999;
+    int wave_num = 1;
+    int money = 10000000;
+
+    noecho();
+    curs_set(0);
+
+    nodelay(mainBox, TRUE);
+    nodelay(actionBox, TRUE);
+    nodelay(towerBox, TRUE);
+    nodelay(statsBox, TRUE);
+
+    Coords selected;
+
+    keypad(actionBox, true);
+
+    while (1){
+
+        box(mainBox, ACS_VLINE, ACS_HLINE);
+        box(actionBox, ACS_VLINE, ACS_HLINE);
+        box(towerBox, ACS_VLINE, ACS_HLINE);
+        box(statsBox, ACS_VLINE, ACS_HLINE);
+
+        printMap(mainBox, path_start, towers);
+        wrefresh(mainBox);
+        wrefresh(actionBox);
+        wrefresh(towerBox);
+        wrefresh(statsBox);
+
+        // loaded map
+        // to do list:
+        // welcome
+        // build tutorial
+
+    }
+
     return 0;
 }
-
