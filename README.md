@@ -37,7 +37,7 @@ Upon the start of the game, players can select the map they want to play on with
 
 After loading the map, players can press "start wave", "build" or "quit" at the action menu.
 
-"start wave" will immediately spawn enemies that walk along the path and attempt to reach the end. 1 Health will be reduced per enemy that reaches to the end.
+"start wave" will immediately spawn enemies that walk along the path and attempt to reach the end. 1 Health will be reduced per enemy that reaches the end.
 
 Please note that you will not be able to place down towers once the wave has started, so you should make sure you have sufficient defensive towers before starting each wave.
 
