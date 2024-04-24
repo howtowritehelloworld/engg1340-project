@@ -151,7 +151,7 @@ int main(int agrc, char **argv)
     start_color();
     int screenchoice = 0;
 
-    while (screenchoice != 3)
+    while (screenchoice != 4)
     {   
         switch (screenchoice)
         {
@@ -161,10 +161,10 @@ int main(int agrc, char **argv)
             case 1: // play screen
                 screenchoice = playscreen(stdscr);
                 break;
-            case 2: // help screen
+            case 3: // help screen
                 screenchoice = helpscreen(stdscr);
                 break;
-            case 3:
+            case 4:
                 // quit W
                 break;
         }
@@ -342,13 +342,12 @@ int mainmenu(WINDOW *win)
     mvwprintw(win, mid_y - 7, (mid_x - title4.length() / 2), title4.c_str());
     mvwprintw(win, mid_y - 6, (mid_x - title5.length() / 2), title5.c_str());
 
-    WINDOW * menuwin= newwin(5, 16, mid_y, mid_x - 8);
-    box(menuwin, 0, 0);
+    WINDOW * menuwin= newwin(6, 16, mid_y, mid_x - 8);
     refresh();
     wrefresh(menuwin);
 
     keypad(menuwin, true);
-    std::vector <std::string> choices = {"Play", "Help", "Quit"};
+    std::vector <std::string> choices = {"New Game", "Load Game", "Help", "Quit"};
     int choice;
     int highlight = 0;
 
@@ -357,7 +356,7 @@ int mainmenu(WINDOW *win)
 
     while(1)
     {   
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 4; i++)
         {
             if (i == highlight)
                 wattron(menuwin, A_REVERSE);
@@ -371,7 +370,7 @@ int mainmenu(WINDOW *win)
                 highlight = std::max(0, highlight-1);
                 break;
             case KEY_DOWN:
-                highlight = std::min(2, highlight+1);
+                highlight = std::min(3, highlight+1);
                 break;
             default:
                 break;
