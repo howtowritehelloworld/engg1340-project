@@ -65,13 +65,14 @@ std::vector<std::string> wave(int wave_num)
     else
     {
         srand(time(0)); 
-        int max_weight = wave_num*(wave_num%10+5);
+        int stage = wave_num/10;
+        int max_weight = wave_num*(stage+5);
         int total_weight = 0;
         std::vector<std::string> enemy_lst= {};
         while (total_weight <= max_weight)
         { 
             int enemytype = rand()%4;
-            int lev = rand()%3 + 1;
+            int lev = rand()%(stage+2) + 1;
             switch(enemytype)
             {
                 case(0):
@@ -536,12 +537,12 @@ int winScreen(int highlight = 0, int count = 1) {
 
     keypad(menuwin, true);
 
-    std::string choices[2] = {"Main Menu", "Quit"};
+    std::string choices[3] = {"Main Menu", "Quit", "Continue (infinite waves)"};
     int choice;
 
     while (1) {
   
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             if (i == highlight)
                 wattron(menuwin, A_REVERSE);
             mvwprintw(menuwin, i + 2, (xMax - 17) / 2, choices[i].c_str());
@@ -563,8 +564,8 @@ int winScreen(int highlight = 0, int count = 1) {
                 break;
             case KEY_DOWN:
                 highlight++;
-                if (highlight == 2) {
-                    highlight = 1;
+                if (highlight == 3) {
+                    highlight = 2;
                 }
                 break;
             default:
@@ -582,6 +583,12 @@ int winScreen(int highlight = 0, int count = 1) {
             else if (highlight == 1) {
                 erase();
                 return 3;
+            }
+            else if (highlight == 2){
+                erase();
+                clear();
+                refresh();
+                return 4;
             }
         }
     }
@@ -827,7 +834,15 @@ int playscreen(WINDOW *win, bool load = false)
         if (wave_num == 15){
             clear();
             refresh();
-            return winScreen();
+            int choise = winScreen();
+            if (choise == 0 || choise == 3)
+            {
+                return choise;
+            }
+            else
+            {
+                continue;
+            }
         }
         saveGame(health, wave_num, money, mapnum, towers);
     }
