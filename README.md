@@ -11,13 +11,13 @@
     -   [3. Enemies](#enemies)
 -   [How to play](#how-to-play)
 -   [Project Requirements](#project-requirements)
-    -   [1. Generation of random game elements](#generation-of-random-game-elements)
-    -   [2. Data structures for storing game status](#data-structures-for-storing-game-status)
-    -   [3. Dynamic Memory Management](#dynamic-memory-management)
-    -   [4. File input/output (e.g., for loading/saving game status)](file-inputoutput-eg-for-loadingsaving-game-status)
-    -   [5. Program codes in multiple files](#program-codes-in-multiple-files)
+    -   [1. Generation of random game elements](#random)
+    -   [2. Data structures for storing game status](#data-structures)
+    -   [3. Dynamic Memory Management](#dynamic-memory)
+    -   [4. File input/output (e.g., for loading/saving game status)](file-inputoutput)
+    -   [5. Program codes in multiple files](#multiple-files)
     -   [6. Proper Indentation and naming styles](#external-libraries)
-    -   [7. In-code documentation](#in-code-documentation)
+    -   [7. In-code documentation](#documentation)
 
  ## Group members <a name="group-members"></a>
 
@@ -158,26 +158,26 @@ Run make && ./test into the terminal after downloading all the files and putting
 
 ## Project requirements <a name="project-requirements"></a>
 
-### Generation of random game elements
+### Generation of random game elements <a name="random"></a>
 The game provides an option for the player to choose the map randomly.
 
 The game features an "Infinite Mode" option, where players can engage in an endless gameplay experience. In this mode, random enemies are dynamically generated based on the wave number, ensuring that the difficulty scales as the player progresses.
 
-### Data structures for storing game status
+### Data structures for storing game status <a name="data-structures"></a>
 The game creates numerous structures for tiles on maps and enemies.
 The game implements a 2D vector to store the map elements, 
 
-### Dynamic Memory Management
+### Dynamic Memory Management <a name="dyanmic-memory"></a>
 The game uses vectors and linked lists.
 
-### File input/output (e.g., for loading/saving game status)
+### File input/output (e.g., for loading/saving game status) <a name="file-inputoutput"></a>
 The game saves the maps as text files and then reads and prints them out accordingly.
 
-### Program codes in multiple files
+### Program codes in multiple files <a name="multiple-files"></a>
 In total, the program includes X C++ files, X header files, X txt files and one Makefile.
 
-### Proper Indentation and naming styles
-Each control structures provide an indentation and all the variables have meaningful names.
+### Proper Indentation and naming styles <a name="external-libraries"></a>
+Each control structures provide an indentati on and all the variables have meaningful names.
 
-### In-code documentation
+### In-code documentation <a name="documentation"></a>
 Easy-to-understand documentation is included in the code.
