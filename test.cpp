@@ -41,7 +41,7 @@ std::vector<std::string> tutor_wave(int wave_num)
 
 std::vector<std::string> wave(int wave_num)
 {
-    if (wave_num >= 14)
+    if (wave_num <= 14)
     {
         std::vector<std::vector<std::string>> wave = 
         {
