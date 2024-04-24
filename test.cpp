@@ -793,6 +793,7 @@ int helpscreen(WINDOW *win)
     box(actionBox, ACS_VLINE, ACS_HLINE);
     box(towerBox, ACS_VLINE, ACS_HLINE);
     box(statsBox, ACS_VLINE, ACS_HLINE);
+    
     refresh();
     wrefresh(mainBox);
     wrefresh(actionBox);
@@ -804,7 +805,14 @@ int helpscreen(WINDOW *win)
     std::vector<tower*> towers;
     readmap(map, 7, path_start);
     configpath(map, path_start);
-    
+
+    printMap(mainBox, path_start, towers);
+
+    wrefresh(mainBox);
+    wrefresh(actionBox);
+    wrefresh(towerBox);
+    wrefresh(statsBox);
+
     int highlight = 0;
 
     int health = 99999999;
@@ -817,11 +825,20 @@ int helpscreen(WINDOW *win)
     nodelay(mainBox, TRUE);
     nodelay(actionBox, TRUE);
     nodelay(towerBox, TRUE);
-    nodelay(statsBox, TRUE);
+    nodelay(statsBox, FALSE);
 
     Coords selected;
 
     keypad(actionBox, true);
+
+    mvwprintw(statsBox, 1, 1, "Welcome to the tutorial of our game");
+    mvwprintw(statsBox, 2, 1, "Press Enter to continue");
+    wrefresh(statsBox);
+
+    wgetch(statsBox);
+    wclear(statsBox);
+    mvwprintw(statsBox, 2, 1, "Thanks let's first build a tower");
+    wrefresh(statsBox);
 
     while (1){
 
