@@ -4,12 +4,12 @@
 
 -   [Group members](#group-members)
 -   [Introduction](#introduction)
--   [Features](#features)
--   [Controls](#controls)
 -   [Gameplay](#gameplay)
-    -   [1. Gameflow](#gameflow)
-    -   [2. Towers](#towers)
-    -   [3. Enemies](#enemies)
+    -   [1. Features](#features)
+    -   [2. Gameflow](#gameflow)
+    -   [3. Controls](#controls)
+    -   [4. Towers](#towers)
+    -   [5. Enemies](#enemies)
 -   [Installation](#installation)
 -   [Project Requirements](#project-requirements)
     -   [1. Generation of random game elements](#random)
@@ -34,7 +34,10 @@ Kingdom of Eldoria is a tower defence simulator where the primary objective is t
 
 We recommend playing the tutorial of the game before playing the main game. The tutorial is located at the help button on the main screen. A short story will also be included.
 
-## Features <a name = "features"></a> 
+
+## Gameplay <a name="gameplay"></a>
+
+### 1. Features <a name = "features"></a> 
 
 Our game includes: 
 - Colorful GUI
@@ -43,7 +46,25 @@ Our game includes:
 - Diverse towers and enemies
 - Saving and loading
 
-## Controls <a name="controls"></a>
+### 2. Gameflow <a name="gameflow"></a>
+
+Each time an enemy is killed, the player will be rewarded with money to further enhance their defence.
+
+If the player runs out of health, a game over screen will pop up and they will have to play again.
+
+Upon reaching the last wave, the player will be rewarded with a win screen.
+
+To start playing, choose New Game or Help to play the main game or tutorial level respectively. Again we recommend you try out the tutorial level first. It's short and can help you grasp the core gameplay mechanics and controls quickly.
+
+If you have played the game before, click load game to get back your progress.
+
+Upon entering, you will be prompted to place towers or start the wave.
+
+Once you complete a wave, money will be granted to you based on the wave number. Moreover killing enemies also grant you a specific amount of money based on enemy type and their level.
+
+Upon completing wave 15, you have won the required stages of the game and can continue by pressing the infinite waves option.
+
+### 3. Controls <a name="controls"></a>
 
 Upon the start of the game, players can select the map they want to play on with arrow keys. Players can even choose to play on a random map by choosing the map with a question mark on it.
 
@@ -63,27 +84,7 @@ If the tile is a tower, the player can choose to upgrade or sell the tower, allo
 
 "quit" will return the user to the main menu.
 
-## Gameplay <a name="gameplay"></a>
-
-### 1. Gameflow <a name="gameflow"></a>
-
-Each time an enemy is killed, the player will be rewarded with money to further enhance their defence.
-
-If the player runs out of health, a game over screen will pop up and they will have to play again.
-
-Upon reaching the last wave, the player will be rewarded with a win screen.
-
-To start playing, choose New Game or Help to play the main game or tutorial level respectively. Again we recommend you try out the tutorial level first. It's short and can help you grasp the core gameplay mechanics and controls quickly.
-
-If you have played the game before, click load game to get back your progress.
-
-Upon entering, you will be prompted to place towers or start the wave.
-
-Once you complete a wave, money will be granted to you based on the wave number. Moreover killing enemies also grant you a specific amount of money based on enemy type and their level.
-
-Upon completing wave 15, you have won the required stages of the game and can continue by pressing the infinite waves option.
-
-### 2. Towers <a name="towers"></a>
+### 4. Towers <a name="towers"></a>
 
 There are a total of 4 types of towers in the game (Mage, Archer, Sniper, Cannon). Each of these towers have different stats that make them useful in different situations.
 
@@ -147,7 +148,7 @@ Range: 1
 
 Notes: Multiple targets, Can only attack ground enemies, Unable to detect Camo enemies.
 
-### 3. Enemies <a name="enemies"></a>
+### 5. Enemies <a name="enemies"></a>
 
 Like towers, there are also 4 types of enemies (Knight, Dragon, Ghost and Vampire).
 
