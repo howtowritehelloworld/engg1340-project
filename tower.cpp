@@ -60,17 +60,26 @@ void tower::CalculateDamage(){
     }
 
     if (type[0] == "AOE"){
+        bool attacked = false;
         for (int i = 0; i < path_covered.size(); i++){
             if (path_covered[i]-> enemy_on_top != NULL){
-                if (path_covered[i]->enemy_on_top->type[0] == "Air" && type[2] == ""){
+                if (path_covered[i]->enemy_on_top->type[0] == "Air" && type[2] == "")
+                {
                     continue;
                 }
-                else if (path_covered[i]->enemy_on_top->type[1] == "Camo" && type[3] == ""){
+                else if (path_covered[i]->enemy_on_top->type[1] == "Camo" && type[3] == "")
+                {
                     continue;
                 }
-                path_covered[i]->enemy_on_top->health -= damage;
-                cd = attackspeed;
+                else
+                {
+                    path_covered[i]->enemy_on_top->health -= damage;
+                    attacked = true;
+                }
             }
+        }
+        if (attacked){
+            cd = attackspeed;
         }
     }
     else if (type[0] == "Single"){
@@ -97,6 +106,7 @@ void tower::CalculateDamage(){
 }
 
 void tower::set_tower_coverage(path*& path_start){
+    path_covered.clear();
     path* current = path_start;
     while (current != NULL){
         int row = current->coordinates.first;
