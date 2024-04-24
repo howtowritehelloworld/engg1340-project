@@ -23,6 +23,18 @@ int mainmenu(WINDOW *);
 int playscreen(WINDOW *);
 int helpscreen(WINDOW *);
 
+std::vector<std::string> tutor_wave(int wave_num)
+{
+    std::vector<std::vector<std::string>> tutor_wave = 
+    {
+        {"K1"},
+        {"D1"},
+        {"G1"},
+        {"V1"},
+    };
+    return tutor_wave[wave_num-1];
+}
+
 std::vector<std::string> wave(int wave_num)
 {
     std::vector<std::vector<std::string>> wave = 
@@ -202,7 +214,7 @@ void print_tower(WINDOW* win, tower* tower_on_top){
     mvwprintw(win, 5, 4, "Damage: %d", tower_on_top->damage);
     mvwprintw(win, 6, 4, "Range: %d", tower_on_top->range);
     mvwprintw(win, 7, 4, "Cost: %d", tower_on_top->cost);
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 4; i++){
         mvwprintw(win, 9+i, 4, tower_on_top->type[i].c_str());
     }
 }
@@ -674,7 +686,13 @@ int playscreen(WINDOW *win)
 
 int helpscreen(WINDOW *win)
 {
-    
+    int mid_x = win->_maxx / 2;
+    int mid_y = win->_maxy / 2;
+    WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
+    WINDOW * actionBox = newwin(10, 20, 0, mid_x + 41 - 5);
+    WINDOW * towerBox = newwin(19, 20, 10, mid_x + 41 - 5);
+    WINDOW * statsBox = newwin(5, 82, 29, mid_x - 41 - 5);
+    WINDOW * confirmBox = newwin(5, 20, 29, mid_x + 41 - 5);
     return 0;
 }
 
