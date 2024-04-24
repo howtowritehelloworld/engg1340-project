@@ -10,7 +10,7 @@
     -   [2. Towers](#2-towers)
     -   [3. Enemies](#3-towers)
 -   [How to play](#how-to-play)
--   [Project Requirements](#program-requirements)
+-   [Project Requirements](#project-requirements)
     -   [1. Generation of random game elements](#1-generation-of-random-game-elements)
     -   [2. Data structures for storing game status](#2-data-structures-for-storing-game-status)
     -   [3. Dynamic Memory Management](#3-dynamic-memory-management)
