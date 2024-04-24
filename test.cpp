@@ -768,6 +768,11 @@ int playscreen(WINDOW *win)
             refresh();
             break;
         }
+        if (wave_num == 15){
+            clear();
+            refresh();
+            return winScreen();
+        }
     }
     return loseScreen();
 }
