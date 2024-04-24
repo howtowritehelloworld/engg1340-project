@@ -166,7 +166,7 @@ The game creates numerous structures for tiles on maps and enemies.
 The game implements a 2D vector to store the map elements, 
 
 ### Dynamic Memory Management
-The game uses vector and linked list
+The game uses vectors and linked lists.
 
 ### File input/output (e.g., for loading/saving game status)
 The game saves the maps as text files and then reads and prints them out accordingly.
