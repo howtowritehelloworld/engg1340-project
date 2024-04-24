@@ -24,6 +24,7 @@ struct Coords{ // I didnt know pair existed and this looks nicer (to me)
 int mainmenu(WINDOW *);
 int playscreen(WINDOW *);
 int helpscreen(WINDOW *);
+int storyscreen(WINDOW *);
 
 std::vector<std::string> tutor_wave(int wave_num)
 {
@@ -197,7 +198,7 @@ int main(int agrc, char **argv)
                 screenchoice = playscreen(stdscr);
                 break;
             case 3: // help screen
-                screenchoice = helpscreen(stdscr);
+                screenchoice = storyscreen(stdscr);
                 break;
             case 4:
                 // quit W
@@ -809,6 +810,48 @@ int playscreen(WINDOW *win)
     }
     return loseScreen();
 }
+
+
+void storydisplay(WINDOW* storywin, int count) {
+    wclear(storywin);
+    std::ifstream storyfile("Story/Story_" + std::to_string(count) + ".txt");
+    std::string line;
+    int y = 0;
+    while (getline(storyfile, line)) {
+        mvwprintw(storywin, y, 0, line.c_str());
+        y++;
+    }
+    storyfile.close();
+}
+
+int storyscreen(WINDOW *win){
+  int count = 1;
+  int mid_x = win->_maxx / 2;
+  int mid_y = win->_maxy / 2;
+  WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
+  WINDOW * storywin = newwin(6, 76, mid_y - 6, mid_x - 37 - 5);
+  box(mainBox, ACS_VLINE, ACS_HLINE);
+  wrefresh(mainBox);
+  storydisplay(storywin, count);
+  wrefresh(storywin);
+  while (true){
+  int choice = wgetch(mainBox);
+  if (choice == 10){
+    if (count < 6){
+    count++;
+    storydisplay(storywin, count);
+    wrefresh(storywin);
+    }
+    else{
+      helpscreen(stdscr);
+    }
+  }
+  }
+  return 0;
+}
+
+
+
 
 int helpscreen(WINDOW *win)
 {
