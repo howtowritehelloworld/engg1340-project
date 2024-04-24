@@ -155,7 +155,7 @@ They each have unqiue types and health so the player need to be careful with the
 
 Flying enemies (Air) will be marked with wings on the side. (Example: ^D^)
 
-Camoflauged enemies (Camo) will be of color green. (Example: <p style="color:green;">GGG</p>)
+Camoflauged enemies (Camo) will be of color green.
 
 #### Knight
 
