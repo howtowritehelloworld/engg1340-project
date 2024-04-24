@@ -11,13 +11,13 @@
     -   [3. Enemies](#3-towers)
 -   [How to play](#how-to-play)
 -   [Project Requirements](#project-requirements)
-    -   [1. Generation of random game elements](#1-generation-of-random-game-elements)
-    -   [2. Data structures for storing game status](#2-data-structures-for-storing-game-status)
-    -   [3. Dynamic Memory Management](#3-dynamic-memory-management)
-    -   [4. File input/output (e.g., for loading/saving game status)](#4-file-inputoutput-eg-for-loadingsaving-game-status)
-    -   [5. Program codes in multiple files](#5-program-codes-in-multiple-files)
-    -   [6. Proper Indentation and naming styles](#6-external-libraries)
-    -   [7. In-code documentation](#7-in-code-documentation)
+    -   [1. Generation of random game elements](#generation-of-random-game-elements)
+    -   [2. Data structures for storing game status](#data-structures-for-storing-game-status)
+    -   [3. Dynamic Memory Management](#dynamic-memory-management)
+    -   [4. File input/output (e.g., for loading/saving game status)](file-inputoutput-eg-for-loadingsaving-game-status)
+    -   [5. Program codes in multiple files](#program-codes-in-multiple-files)
+    -   [6. Proper Indentation and naming styles](#external-libraries)
+    -   [7. In-code documentation](#in-code-documentation)
 
  ## Group members
 
