@@ -40,8 +40,11 @@ After loading the map, players can press "start wave", "build" or "quit" at the 
 Please note that you will not be able to place down towers once the wave has started, so you should make sure you have sufficient defensive towers before starting each wave.
 
 "build" will first allow the player to select a tile with a white cursor.
+
 If the tile is empty, the player will be prompted to select a tower to place from the tower menu. If there is sufficient money, the tower will be placed at the location.
+
 If the tile is a path, the player will return to the action menu.
+
 If the tile is a tower, the player can choose to upgrade or sell the tower, allowing for higher damage output.
 
 "quit" will return the user to the main menu.
@@ -50,7 +53,9 @@ If the tile is a tower, the player can choose to upgrade or sell the tower, allo
 
 ### 1. Gameflow
 Each time a wave is passed, the player will be rewarded with money to further enhance their defence.
+
 If the player runs out of health, a game over screen will pop up and they will have to play again.
+
 Upon reaching the last wave, the player will be rewarded with a win screen.
 
 ### 2. Towers
@@ -58,23 +63,35 @@ Upon reaching the last wave, the player will be rewarded with a win screen.
 <i>In the realm of Eldoria, the Mage emerges from the Order of Arcanum, gifted with mastery over all sorts of elements. Trained in defensive magic, the Mage casts devastating spells to protect the realm from evilness. The Mage's reputation as a formidable defender grows, inspiring hope and safeguarding Eldoria from chaos.</i>
 
 Cost: 40 -> 80 -> 120 -> 160 -> ... (level * 40)
+
 Damage: 2 -> 4 -> 6 -> 8 -> ... (level * 2)
+
 Attack speed: 1 (fast)
+
 Range: 1
+
 Notes: Multiple targets, Can attack both ground and air enemies, Can detect Camo enemies.
 
 #### Archer
 Cost: 20 -> 40 -> 60 -> 80 -> ... (level * 20)
+
 Damage: 3 -> 6 -> 9 -> 12 -> ... (level * 3)
+
 Attack speed: 1 (fast)
+
 Range: 1
+
 Notes: Single target, Can attack both ground and air enemies, Unable to detect Camo enemies.
 
 #### Sniper
 Cost: 50 -> 100 -> 150 -> 200 -> ... (level * 50)
+
 Damage: 6 -> 12 -> 18 -> 24 -> ... (level * 6)
+
 Attack speed: 3 (slow)
+
 Range: 2
+
 Notes: Single target, Can attack both ground and air enemies, Can detect Camo enemies.
 
 #### Cannon
