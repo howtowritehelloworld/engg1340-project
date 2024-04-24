@@ -7,6 +7,8 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
+#include <cstdlib>
+#include <time.h>
 #include "map.h"
 #include "path.h"
 #include "tower.h"
@@ -55,6 +57,39 @@ std::vector<std::string> wave(int wave_num)
         {"K3", "K3", "D3", "D3", "G3", "G3", "V3", "V3"},
     };
     return wave[wave_num-1];
+}
+
+std::vector<std::string> random_enemyforwave(int wave_num)
+{
+    srand(time(0)); 
+    int max_weight = wave_num*6;
+    int total_weight = 0;
+    std::vector<std::string> enemy_lst= {};
+    while (total_weight <= max_weight)
+    { 
+        int enemytype = rand()%4;
+        int lev = rand()%3 + 1;
+        switch(enemytype)
+        {
+            case(0):
+                enemy_lst.push_back("K"+std::to_string(lev));
+                total_weight +=  2*lev;
+                break;
+            case(1):
+                enemy_lst.push_back("D"+std::to_string(lev));
+                total_weight +=  3*lev;
+                break;
+            case(2):
+                enemy_lst.push_back("G"+std::to_string(lev));
+                total_weight +=  3*lev;
+                break;
+            case(3):
+                enemy_lst.push_back("V"+std::to_string(lev));
+                total_weight +=  4*lev;
+                break;
+        }
+    }
+    return enemy_lst;
 }
 
 std::string getString(char x)
