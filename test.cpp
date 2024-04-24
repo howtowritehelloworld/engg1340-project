@@ -209,7 +209,7 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
 }
 
 void print_tower(WINDOW* win, tower* tower_on_top){
-    for (int i = 2; i < 12; i++){
+    for (int i = 2; i < 13; i++){
         mvwprintw(win, i, 4, "               ");
     }
     mvwprintw(win, 2, 4, "%s", tower_on_top->name.c_str());
