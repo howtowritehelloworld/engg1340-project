@@ -4,12 +4,13 @@
 
 -   [Group members](#group-members)
 -   [Introduction](#introduction)
+-   [Features](#features)
 -   [Controls](#controls)
 -   [Gameplay](#gameplay)
     -   [1. Gameflow](#gameflow)
     -   [2. Towers](#towers)
     -   [3. Enemies](#enemies)
--   [How to play](#how-to-play)
+-   [Installation](#installation)
 -   [Project Requirements](#project-requirements)
     -   [1. Generation of random game elements](#random)
     -   [2. Data structures for storing game status](#data-structures)
@@ -30,6 +31,17 @@
 ## Introduction <a name="introduction"></a>
 
 Kingdom of Eldoria is a tower defence simulator where the primary objective is to waves of incoming enemies from approaching the end of the map. The player must strategically place defensive towers, along predetermined paths or routes which enemies follow. These towers have unique abilities which make them suitable for different situations. With a limited amount of resources (money and health), players must carefully evaluate their positions and come up with the best defensive plan to stop the waves of incoming enemies.
+
+We recommend playing the tutorial of the game before playing the main game. The tutorial is located at the help button on the main screen.
+
+## Features <a name = "features"></a> 
+
+Our game includes: 
+- Colorful GUI
+- Easy to use controls
+- A wide variety of maps, even custom maps can be made
+- Diverse towers and enemies
+- Saving and loading
 
 ## Controls <a name="controls"></a>
 
@@ -153,31 +165,46 @@ Money given after defeat: 4 per level
 
 Type: Air, Camo
 
-## How to play <a name="how-to-play"></a>
+## Installation <a name="installation"></a>
+
 Run make && ./test into the terminal after downloading all the files and putting them into the same directory.
+
+Make sure your terminal is large enough so that the whole game can be presented.
+
+Also our game uses ncurses's color feature so there's a very slim chance that colors cannot be shown on you terminal due to your terminal is incapable of showing colors. However from our testing with vscode the color works fine.
 
 ## Project requirements <a name="project-requirements"></a>
 
 ### Generation of random game elements <a name="random"></a>
+
 The game provides an option for the player to choose the map randomly.
 
-The game features an "Infinite Mode" option, where players can engage in an endless gameplay experience. In this mode, random enemies are dynamically generated based on the wave number, ensuring that the difficulty scales as the player progresses.
+The game features an "Infinite Mode" option, where players can engage in an endless gameplay experience. In this mode, random enemies are dynamically generated based on the wave number, ensuring that the difficulty scales as the player progresses through the waves.
 
 ### Data structures for storing game status <a name="data-structures"></a>
+
 The game creates numerous structures for tiles on maps and enemies.
+
 The game implements a 2D vector to store the map elements, 
 
 ### Dynamic Memory Management <a name="dyanmic-memory"></a>
-The game uses vectors and linked lists.
+
+The game heaveily uses vectors and linked lists.
 
 ### File input/output (e.g., for loading/saving game status) <a name="file-inputoutput"></a>
+
 The game saves the maps as text files and then reads and prints them out accordingly.
 
+Additionally, the game automatically saves the game every time you pass a wave inside a text file, so if you ever accidentally quit or want to continue playing another time, you can maintain all your progress.
+
 ### Program codes in multiple files <a name="multiple-files"></a>
+
 In total, the program includes X C++ files, X header files, X txt files and one Makefile.
 
 ### Proper Indentation and naming styles <a name="external-libraries"></a>
+
 Each control structures provide an indentati on and all the variables have meaningful names.
 
 ### In-code documentation <a name="documentation"></a>
+
 Easy-to-understand documentation is included in the code.
