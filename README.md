@@ -1,4 +1,4 @@
-# engg1340-project
+# Kingdom of Eldoria (Tower Defense Game) ENGG1340 Project
 
 ## Table of contents
 
