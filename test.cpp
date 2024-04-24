@@ -12,6 +12,7 @@
 #include "tower.h"
 #include "enemy.h"
 #include "chooseMap.h"
+#include "save.h"
 
 struct Coords{ // I didnt know pair existed and this looks nicer (to me)
     int y;
@@ -20,7 +21,7 @@ struct Coords{ // I didnt know pair existed and this looks nicer (to me)
 
 
 int mainmenu(WINDOW *);
-int playscreen(WINDOW *);
+int playscreen(WINDOW *, bool load);
 int helpscreen(WINDOW *);
 
 std::vector<std::string> tutor_wave(int wave_num)
@@ -158,8 +159,11 @@ int main(int agrc, char **argv)
             case 0: // mainmenu
                 screenchoice = mainmenu(stdscr);
                 break;
-            case 1: // play screen
-                screenchoice = playscreen(stdscr);
+            case 1: // new game
+                screenchoice = playscreen(stdscr, false);
+                break;
+            case 2: // load game
+                screenchoice = playscreen(stdscr, true);
                 break;
             case 3: // help screen
                 screenchoice = helpscreen(stdscr);
@@ -544,7 +548,7 @@ int winScreen(int highlight = 0, int count = 1) {
     }
 }
 
-int playscreen(WINDOW *win)
+int playscreen(WINDOW *win, bool load = false)
 {   
     int mid_x = win->_maxx / 2;
     int mid_y = win->_maxy / 2;
@@ -556,9 +560,35 @@ int playscreen(WINDOW *win)
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-    WINDOW* titlewin = newwin(8, xMax - 12, 1, 5);
-    refresh();
-    int mapnum = mainscreen(titlewin);
+    int health, wave_num, money, mapnum;
+    int map[9][16];
+    std::vector<tower*> towers;
+    path* path_start = new path;
+    if (!load){
+        WINDOW* titlewin = newwin(8, xMax - 12, 1, 5);
+        refresh();
+        mapnum = mainscreen(titlewin);
+        health = 3;
+        wave_num = 1;
+        money = 100;
+        readmap(map, mapnum, path_start);
+        configpath(map, path_start);
+
+    }
+    else {
+        loadGame(health, wave_num, money, mapnum, towers);
+        int tempmoney = 99999999;
+        readmap(map, mapnum, path_start);
+        configpath(map, path_start);
+        for (int i = 0; i < towers.size(); i++){
+            map[towers[i]->coordinates.first][towers[i]->coordinates.second] = i;
+            tower* t = new tower;
+            t = towers[i];
+            t->create_new_tower(t->name, t->level, path_start, tempmoney);
+        }
+    }
+    
+    int highlight = 0;
 
     box(mainBox, ACS_VLINE, ACS_HLINE);
     box(actionBox, ACS_VLINE, ACS_HLINE);
@@ -570,18 +600,7 @@ int playscreen(WINDOW *win)
     wrefresh(towerBox);
     wrefresh(statsBox);
     
-    int map[9][16];
-    path* path_start = new path;
-    std::vector<tower*> towers;
-    readmap(map, mapnum, path_start);
-    configpath(map, path_start);
-
     
-    int highlight = 0;
-
-    int health = 3;
-    int wave_num = 1;
-    int money = 100;
 
     noecho();
     curs_set(0);
@@ -771,6 +790,7 @@ int playscreen(WINDOW *win)
             refresh();
             return winScreen();
         }
+        saveGame(health, wave_num, money, mapnum, towers);
     }
     return loseScreen();
 }
