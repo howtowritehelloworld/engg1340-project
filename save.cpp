@@ -1,27 +1,30 @@
 #include "save.h"
-#include <iostream>
-#include <fstream>
+using namespace std;
 
-
-void saveGame(const std::vector &map) {
-    std::ofstream savefile("save.txt");
+void saveGame(int health, int wave_num, int money, int map_num, vector<tower*> towers) {
+    ofstream savefile("save.txt");
     if (savefile.is_open()) { 
-        for (int row = 0; row < map.size(); row++) {
-            for (int col = 0; col < map[row].size(); col++) {
-                if (is_tower) {
-                    savefile <<; 
-                } else {
-                    savefile <<; 
-                }
+        savefile << health << endl;
+        savefile << wave_num << endl;
+        savefile << money << endl;
+        savefile << map_num << endl;
+        for (int i = 0; i<towers.size(); i++) {
+            savefile << towers[i]->name << " "<< towers[i]->level <<" "<< towers[i]->coordinates.first << " " <<towers[i]->coordinates.second;
+            savefile << endl;
             }
-            outputFile << "\n"; // Move to the next line after each row
-        }
 
-        outputFile.close();
+        savefile.close();
         
     }
 }
 
-void loadGame() {
-    
+void loadGame(int &health, int &wave_num , int &money, int& map_num, vector<tower*> &towers ) {
+    ifstream loadfile("save.txt");
+    loadfile >> health >> wave_num >> money>> map_num;
+    int i = 0;
+    while (!loadfile.eof()){
+        tower* t = new tower;
+        loadfile >> t->name >> t-> level >> t-> coordinates.first >> t -> coordinates.second;
+        towers.push_back(t);
+    }
 }
