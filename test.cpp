@@ -63,7 +63,7 @@ std::vector<std::string> wave(int wave_num)
 std::vector<std::string> random_enemyforwave(int wave_num)
 {
     srand(time(0)); 
-    int max_weight = wave_num*6;
+    int max_weight = wave_num*(wave_num%10+5);
     int total_weight = 0;
     std::vector<std::string> enemy_lst= {};
     while (total_weight <= max_weight)
