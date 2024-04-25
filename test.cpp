@@ -215,9 +215,7 @@ int main(int agrc, char **argv)
         }
         clear();
     }
-
-    endscreen();
-
+    endwin();
     return 0;
 }
 
@@ -627,45 +625,6 @@ int winScreen(int highlight = 0, int count = 1) {
             }
         }
     }
-}
-
-int endscreen(){
-
-	initscr();
-	cbreak();
-	noecho();
-
-    int yMax, xMax;
-    getmaxyx(stdscr, yMax, xMax);
-
-	std::string title1 = "  _____             __     __                                _          _ ";
-	std::string title2 = " / ____|            \\ \\   / /               /\\              (_)        | |";
-	std::string title3 = "| (___   ___  ___    \\ \\_/ /__  _   _      /  \\   __ _  __ _ _ _ __    | |";
-	std::string title4 = " \\___ \\ / _ \\/ _ \\    \\   / _ \\| | | |    / /\\ \\ / _` |/ _` | | '_ \\   | |";
-	std::string title5 = " ____) |  __/  __/     | | (_) | |_| |   / ____ \\ (_| | (_| | | | | |  |_|";
-	std::string title6 = "|_____/ \\___|\\___|     |_|\\___/ \\__,_|  /_/    \\_\\__, |\\__,_|_|_| |_|  (_)";
-	std::string title7 = "                                                   __/ |                   ";
-	std::string title8 = "                                                  |___/                    ";
-
-    int titleX = (xMax - title1.length()) / 2 - 3;
-
-    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
-    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
-    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
-    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
-    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
-    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
-    mvprintw(yMax / 2 - 1, titleX, title7.c_str());
-    mvprintw(yMax / 2    , titleX, title8.c_str());
-	mvprintw(yMax / 2 - 15, titleX, "Press any key to exit...");
-
-	// Wait for user input
-	getch();
-
-	// End ncurses
-	endwin();
-
-	return 0;
 }
 
 int playscreen(WINDOW *win, bool load = false)
