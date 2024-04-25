@@ -98,7 +98,7 @@ There is no limit on the level of the towers you can upgrade to.
 
 #### Mage
 
-<i>In the realm of Eldoria, the Mage emerges from the Order of Arcanum, gifted with mastery over all sorts of elements. Trained in defensive magic, the Mage casts devastating spells to protect the realm from evilness. The Mage's reputation as a formidable defender grows, inspiring hope and safeguarding Eldoria from chaos.</i>
+<i>The Mages, masters of arcane arts, unleash devastating spells, engulfing the enemy in flames. Their power is unmatched, and their knowledge of the mystical arts is a force to be reckoned with.</i>
 
 Cost: 40 -> 80 -> 120 -> 160 -> ... (level * 40)
 
@@ -112,7 +112,7 @@ Notes: Multiple targets, Can attack both ground and air enemies, Can detect Camo
 
 #### Archer
 
-<i>In the enchanted realm of Eldoria, a skilled archer from the Woodland Brotherhood defends the land with her unparalleled marksmanship. Guided by nature's forces, her arrows strike true, imbued with elemental power. The archer's unwavering dedication ensures the realm's harmony remains preserved.</i>
+<i>Archers, agile and swift, move with grace and dexterity across the battlefield. Their bows are extensions of their very beings, and their arrows find their mark with unerring accuracy.</i>
 
 Cost: 20 -> 40 -> 60 -> 80 -> ... (level * 20)
 
@@ -126,7 +126,7 @@ Notes: Single target, Can attack both ground and air enemies, Unable to detect C
 
 #### Sniper
 
-<i>The legendary sniper from Eldoria's Silent Vanguard, strikes fear with lethal precision. Known as the Phantom Sniper, he safely eliminates his targets from a long distance, safeguarding Eldoria's peace from the shadows.</i>
+<i>Snipers, sharp-eyed and patient, take their positions atop towers and vantage points, armed with long-range rifles. Their steady aim and  precision shots can pick off enemies from afar, eliminating key targets before they can breach the kingdom's defenses.</i>
 
 Cost: 50 -> 100 -> 150 -> 200 -> ... (level * 50)
 
@@ -140,7 +140,7 @@ Notes: Single target, Can attack both ground and air enemies, Can detect Camo en
 
 #### Cannon
 
-<i>Built by the best engineer in Eldoria, the cannon is capable of shooting the most powerful bomb at enemies and creating catastrophic explosions. Destined to protect its homeland, the cannon tries its best to obey its commander.</i>
+<i>Cannoneers, masters of explosive firepower, wield massive cannons capable of unleashing devastation upon the enemy. Their booming blasts send shockwaves through the ranks, tearing apart adversaries and creating chaos amidst the horde.</i>
 
 Cost: 40 -> 80 -> 120 -> 160 -> ... (level * 30)
 
