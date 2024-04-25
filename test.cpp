@@ -500,7 +500,7 @@ int loseScreen(int highlight = 0, int count = 1) {
             // If the user chooses to quit
             else if (highlight == 1) {
                 erase();
-                return 3;
+                return 4;
             }
         }
     }
@@ -712,7 +712,7 @@ int playscreen(WINDOW *win, bool load = false)
                     wrefresh(statsBox);
                     
                     i++;
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(700));
 
                     attack_all(towers);
                     move(path_start, killed_enemies, health);
@@ -1210,7 +1210,7 @@ int helpscreen(WINDOW *win)
                     // wrefresh(statsBox);
                     
                     i++;
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(700));
 
                     attack_all(towers);
                     move(path_start, killed_enemies, health);
