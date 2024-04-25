@@ -26,6 +26,7 @@ int mainmenu(WINDOW *);
 int playscreen(WINDOW *, bool load);
 int helpscreen(WINDOW *);
 int storyscreen(WINDOW *);
+int endscreen();
 
 std::vector<std::string> tutor_wave(int wave_num)
 {
@@ -214,13 +215,8 @@ int main(int agrc, char **argv)
         }
         clear();
     }
-<<<<<<< HEAD
-    endwin();
-=======
-    
-    endscreen();
 
->>>>>>> 3f861a9f18f376372a7ff6db6c126ef8a087c0ad
+    endscreen();
     return 0;
 }
 
