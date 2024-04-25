@@ -634,7 +634,7 @@ int prizescreen(int dollars)
 	
 	mvprintw(middleRow, middleCol, "You got %d dollars", dollars);
 
-	mvprintw(middleRow + 15, middleCol + 10, "Press any key to continue");
+	mvprintw(middleRow + 6, middleCol + 8, "Press any key to continue...");
 
 	refresh();
     noecho();
