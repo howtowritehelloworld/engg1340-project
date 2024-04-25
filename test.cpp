@@ -390,7 +390,7 @@ int mainmenu(WINDOW *win)
     wrefresh(menuwin);
 
     keypad(menuwin, true);
-    std::vector <std::string> choices = {"New Game", "Load Game", "Help", "Quit"};
+    std::vector <std::string> choices = {"New Game", "Load Game", "Tutorial", "Quit"};
     int choice;
     int highlight = 0;
 
@@ -864,12 +864,14 @@ void storydisplay(WINDOW* storywin, int count) {
 }
 
 int storyscreen(WINDOW *win){
+    clear();
     int count = 1;
     int mid_x = win->_maxx / 2;
     int mid_y = win->_maxy / 2;
     WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
     WINDOW * storywin = newwin(6, 76, mid_y - 6, mid_x - 37 - 5);
     box(mainBox, ACS_VLINE, ACS_HLINE);
+    refresh();
     wrefresh(mainBox);
     storydisplay(storywin, count);
     wrefresh(storywin);
