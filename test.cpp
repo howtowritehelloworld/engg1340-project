@@ -1033,12 +1033,6 @@ int playscreen(WINDOW *win, bool load = false)
                 continue;
             }
         }
-        if (wave_num % 6 == 0)
-        {
-            clear();
-            refresh();
-            chestscreen();
-        }
         saveGame(health, wave_num, money, mapnum, towers);
     }
     return loseScreen();
