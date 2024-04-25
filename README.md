@@ -22,11 +22,15 @@
 
  ## Group members <a name="group-members"></a>
 
-1. Zheng Andy 3036222642
-2. Jason Ip Tsz Shun 3036226222
-3. Owen (full name) (uid)
-4. Cyric (full name) (uid)
-5. Donald Leung Kit Yiu 3036226557
+There is a known problem where some commits doesn't count towards the person's contribution statistics. Hence the contribution percentages and numbers are inaccurate. To avoid being labelled as a "free rider", all the functions and features each of us has worked on will be written down here.
+
+| Group Member | uid | Work done |
+|---------|---------|---------|
+| Zheng Andy | 3036222642 | stuff |
+| Jason Ip Tsz Shun | 3036226222 | stuff |
+| Owen (full name) | uid | stuff |
+| Cyric (full name) | uid | stuff |
+| Donald Leung Kit Yiu | 3036226557 | stuff |
 
 ## Introduction <a name="introduction"></a>
 
