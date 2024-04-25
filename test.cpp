@@ -899,8 +899,8 @@ int playscreen(WINDOW *win, bool load = false)
                     towers[i]->cd = 0;
                 }
                 wave_num++;
-                money += 10*wave_num;
-                if (wave_num % 4 == 0 && health > 0)
+                money += 8*wave_num;
+                if ((wave_num-1) % 3 == 0 && health > 0)
                 {
                     srand(time(0));
                     int chest_content[3] = {(rand()%wave_num)*10+rand()%wave_num, (rand()%wave_num)*10+rand()%wave_num, (rand()%wave_num)*10+rand()%wave_num};
