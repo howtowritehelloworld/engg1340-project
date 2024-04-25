@@ -525,7 +525,16 @@ int chestscreen(int highlight = 0, int count = 1)
     std::string title5 = " | |__| | |    | |____| |\\  |    / ____ \\    | |____| |  | | |____ ____) |  | |   ";
     std::string title6 = "  \\____/|_|    |______|_| \\_|   /_/    \\_\\    \\_____|_|  |_|______|_____/   |_|   ";
 
+    std::string chest1 = "       ____________          ____________          ____________       ";
+	std::string chest2 = "      /            \\        /            \\        /            \\     ";
+	std::string chest3 = "     /______________\\      /______________\\      /______________\\    ";
+	std::string chest4 = "     |     ___      |      |     ___      |      |     ___      |     ";
+	std::string chest5 = "     |____| 1 |_____|      |____| 2 |_____|      |____| 3 |_____|     ";
+	std::string chest6 = "     |    |___|     |      |    |___|     |      |    |___|     |     ";
+	std::string chest7 = "     |______________|      |______________|      |______________|     ";
+
     int titleX = (xMax - title1.length()) / 2 - 3;
+    int chestX = ((xMax - chest1.length()) / 2 - 3);
 
     mvprintw(yMax / 2 - 10, titleX, title1.c_str());
     mvprintw(yMax / 2 - 9, titleX, title2.c_str());
@@ -534,9 +543,104 @@ int chestscreen(int highlight = 0, int count = 1)
     mvprintw(yMax / 2 - 6, titleX, title5.c_str());
     mvprintw(yMax / 2 - 5, titleX, title6.c_str());
 
+    mvprintw(yMax / 2 - 3, chestX, chest1.c_str());
+    mvprintw(yMax / 2 - 2, chestX, chest2.c_str());
+    mvprintw(yMax / 2 - 1, chestX, chest3.c_str());
+    mvprintw(yMax / 2 - 0, chestX, chest4.c_str());
+    mvprintw(yMax / 2 + 1, chestX, chest5.c_str());
+    mvprintw(yMax / 2 + 2, chestX, chest6.c_str());
+    mvprintw(yMax / 2 + 3, chestX, chest7.c_str());
+
     refresh();
 
+    WINDOW* menuwin = newwin(7, xMax - 12, yMax - 10, 5);
+    box(menuwin, 0, 0);
 
+
+    keypad(menuwin, true);
+
+    std::string choices[3] = {"CHEST 1", "CHEST 2", "CHEST 3"};
+    int choice;
+
+    while (1)
+    {
+  
+        for (int i = 0; i < 3; i++) {
+            if (i == highlight)
+                wattron(menuwin, A_REVERSE);
+            mvwprintw(menuwin, i + 2, (xMax - 17) / 2, choices[i].c_str());
+            wattroff(menuwin, A_REVERSE);
+        }
+
+
+        wrefresh(menuwin);
+
+
+        choice = wgetch(menuwin);
+
+        switch (choice) {
+            case KEY_UP:
+                highlight--;
+                if (highlight == -1) {
+                    highlight = 0;
+                }
+                break;
+            case KEY_DOWN:
+                highlight++;
+                if (highlight == 3) {
+                    highlight = 2;
+                }
+                break;
+            default:
+                break;
+        }
+
+        // When pressing Enter
+        if (choice == 10) {
+
+            if (highlight == 0) {
+                erase();
+                clear();
+                refresh();
+                return 0;
+            }
+
+            else if (highlight == 1) {
+                erase();
+                clear();
+                refresh();
+                return 1;
+            }
+
+            else if (highlight == 2){
+                erase();
+                clear();
+                refresh();
+                return 2;
+            }
+        }
+    }
+}
+
+int prizescreen(int dollars) 
+{
+	initscr();
+	int rows, cols;
+	getmaxyx(stdscr, rows, cols); 
+
+	int middleRow = rows / 2;
+	int middleCol = (cols - 16) / 2; 
+
+	
+	mvprintw(middleRow, middleCol, "You got %d dollars", dollars);
+
+	mvprintw(middleRow + 20, middleCol + 15, "Press any key to continue");
+
+	refresh();
+    noecho();
+	getch(); 
+	clear();
+    refresh();
     return 0;
 }
 
@@ -796,6 +900,16 @@ int playscreen(WINDOW *win, bool load = false)
                 }
                 wave_num++;
                 money += 10*wave_num;
+                if (wave_num % 4 == 0 && health > 0)
+                {
+                    srand(time(0));
+                    int chest_content[3] = {(rand()%wave_num)*10+rand()%wave_num, (rand()%wave_num)*10+rand()%wave_num, (rand()%wave_num)*10+rand()%wave_num};
+                    clear();
+                    refresh();
+                    int choice = chestscreen();
+                    money += chest_content[choice];
+                    prizescreen(chest_content[choice]);
+                }
                 break;
             }
             case 1: // Edit
