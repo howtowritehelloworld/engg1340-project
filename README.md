@@ -28,7 +28,7 @@ There is a known problem where some commits doesn't count towards the person's c
 |---------|---------|---------|
 | Zheng Andy | 3036222642 | stuff |
 | Jason Ip Tsz Shun | 3036226222 | stuff |
-| Owen (full name) | uid | stuff |
+| Owen Wen Sze Hoi | 3036226583 | stuff |
 | Cyric (full name) | uid | stuff |
 | Donald Leung Kit Yiu | 3036226557 | stuff |
 
