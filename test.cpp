@@ -398,7 +398,7 @@ std::string title8 = "              |___/                                       
     wrefresh(menuwin);
 
     keypad(menuwin, true);
-    std::vector <std::string> choices = {"New Game", "Load Game", "Help", "Quit"};
+    std::vector <std::string> choices = {"New Game", "Load Game", "Tutorial", "Quit"};
     int choice;
     int highlight = 0;
 
@@ -508,7 +508,7 @@ int loseScreen(int highlight = 0, int count = 1) {
             // If the user chooses to quit
             else if (highlight == 1) {
                 erase();
-                return 3;
+                return 4;
             }
         }
     }
@@ -745,7 +745,7 @@ int playscreen(WINDOW *win, bool load = false)
                     wrefresh(statsBox);
                     
                     i++;
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(700));
 
                     attack_all(towers);
                     move(path_start, killed_enemies, health);
@@ -903,27 +903,28 @@ void storydisplay(WINDOW* storywin, int count) {
 }
 
 int storyscreen(WINDOW *win){
-  int count = 1;
-  int mid_x = win->_maxx / 2;
-  int mid_y = win->_maxy / 2;
-  WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
-  WINDOW * storywin = newwin(6, 76, mid_y - 6, mid_x - 37 - 5);
-  box(mainBox, ACS_VLINE, ACS_HLINE);
-  wrefresh(mainBox);
-  storydisplay(storywin, count);
-  wrefresh(storywin);
-  while (true){
-  int choice = wgetch(mainBox);
-  if (choice == 10){
-    if (count < 6){
-    count++;
+    clear();
+    int count = 1;
+    int mid_x = win->_maxx / 2;
+    int mid_y = win->_maxy / 2;
+    WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
+    WINDOW * storywin = newwin(6, 76, mid_y - 6, mid_x - 37 - 5);
+    box(mainBox, ACS_VLINE, ACS_HLINE);
+    refresh();
+    wrefresh(mainBox);
     storydisplay(storywin, count);
     wrefresh(storywin);
+    while (true){
+    int choice = wgetch(mainBox);
+    if (choice == 10){
+        if (count < 6){
+            count++;
+            storydisplay(storywin, count);
+            wrefresh(storywin);
+        } else {
+            return helpscreen(stdscr);
+        }
     }
-    else{
-      helpscreen(stdscr);
-    }
-  }
   }
   return 0;
 }
@@ -1157,6 +1158,8 @@ int helpscreen(WINDOW *win)
     mvwprintw(statsBox, 2, 1, "You can go ahead and start the wave or place more towers!");
     wrefresh(statsBox);
 
+    bool finishTutorial = false;
+
     while(1)
     {
 
@@ -1246,7 +1249,7 @@ int helpscreen(WINDOW *win)
                     // wrefresh(statsBox);
                     
                     i++;
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(700));
 
                     attack_all(towers);
                     move(path_start, killed_enemies, health);
@@ -1256,6 +1259,9 @@ int helpscreen(WINDOW *win)
                     towers[i]->cd = 0;
                 }
                 wave_num++;
+                if (wave_num == 5) {
+                    finishTutorial = true;
+                }
                 money += 10*wave_num;
                 break;
             }
@@ -1362,13 +1368,28 @@ int helpscreen(WINDOW *win)
         wrefresh(towerBox);
         wrefresh(statsBox);
 
-        if (wave_num == 5){
+        if (finishTutorial){
+            wclear(mainBox);
+            wclear(actionBox);
+            wclear(towerBox);
             wclear(statsBox);
+
+            box(mainBox, ACS_VLINE, ACS_HLINE);
+            box(actionBox, ACS_VLINE, ACS_HLINE);
+            box(towerBox, ACS_VLINE, ACS_HLINE);
+            box(statsBox, ACS_VLINE, ACS_HLINE);
+
+            printMap(mainBox, path_start, towers);
+
+            wrefresh(mainBox);
+            wrefresh(actionBox);
+            wrefresh(towerBox);
             box(statsBox, ACS_VLINE, ACS_HLINE);
             mvwprintw(statsBox, 1, 1, "Well done! You've finshed the tutorial!");
             mvwprintw(statsBox, 2, 1, "You now know all the things you need to play! >>");
             wrefresh(statsBox);
             wgetch(statsBox);
+            clear();
             return 0;
         }
     }
