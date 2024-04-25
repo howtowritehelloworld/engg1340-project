@@ -371,11 +371,16 @@ void print_wave(WINDOW* win, int wave_num, std::vector<std::string> next_wave){
 
 int mainmenu(WINDOW *win)
 {   
-    std::string title1 = " _____                        ____        __                     ";
-    std::string title2 = "|_   _|____      _____ _ __  |  _ \\  ___ / _| ___ _ __  ___  ___ ";
-    std::string title3 = "  | |/ _ \\ \\ /\\ / / _ \\ '__| | | | |/ _ \\ |_ / _ \\ '_ \\/ __|/ _ \\";
-    std::string title4 = "  | | (_) \\ V  V /  __/ |    | |_| |  __/  _|  __/ | | \\__ \\  __/";
-    std::string title5 = "  |_|\\___/ \\_/\\_/ \\___|_|    |____/ \\___|_|  \\___|_| |_|___/\\___|";
+std::string title1 = " _  ___                 _                          __   ______ _     _            _       ";
+std::string title2 = "| |/ (_)               | |                        / _| |  ____| |   | |          (_)      ";
+std::string title3 = "| ' / _ _ __   __ _  __| | ___  _ __ ___     ___ | |_  | |__  | | __| | ___  _ __ _  __ _ ";
+std::string title4 = "|  < | | '_ \\ / _` |/ _` |/ _ \\| '_ ` _ \\   / _ \\|  _| |  __| | |/ _` |/ _ \\| '__| |/ _` |";
+std::string title5 = "| . \\| | | | | (_| | (_| | (_) | | | | | | | (_) | |   | |____| | (_| | (_) | |  | | (_| |";
+std::string title6 = "|_|\\_\\_|_| |_|\\__, |\\__,_|\\___/|_| |_| |_|  \\___/|_|   |______|_|\\__,_|\\___/|_|  |_|\\__,_|";
+std::string title7 = "               __/ |                                                                      ";
+std::string title8 = "              |___/                                                                       ";
+
+ 
     int mid_x = win->_maxx / 2;
     int mid_y = win->_maxy / 2;
 
@@ -384,6 +389,9 @@ int mainmenu(WINDOW *win)
     mvwprintw(win, mid_y - 8, (mid_x - title3.length() / 2), title3.c_str());
     mvwprintw(win, mid_y - 7, (mid_x - title4.length() / 2), title4.c_str());
     mvwprintw(win, mid_y - 6, (mid_x - title5.length() / 2), title5.c_str());
+    mvwprintw(win, mid_y - 5, (mid_x - title6.length() / 2), title6.c_str());
+    mvwprintw(win, mid_y - 4, (mid_x - title7.length() / 2), title7.c_str());
+    mvwprintw(win, mid_y - 3, (mid_x - title8.length() / 2), title8.c_str());
 
     WINDOW * menuwin= newwin(6, 16, mid_y, mid_x - 8);
     refresh();
@@ -592,6 +600,31 @@ int winScreen(int highlight = 0, int count = 1) {
             }
         }
     }
+}
+
+int chestscreen(int highlight = 0, int count = 1)
+{
+    int yMax, xMax;
+    getmaxyx(stdscr, yMax, xMax);
+
+    std::string title1 = "   ____  _____  ______ _   _                   _____ _    _ ______  _____ _______ ";
+    std::string title2 = "  / __ \\|  __ \\|  ____| \\ | |       /\\        / ____| |  | |  ____|/ ____|__   __|";
+    std::string title3 = " | |  | | |__) | |__  |  \\| |      /  \\      | |    | |__| | |__  | (___    | |   ";
+    std::string title4 = " | |  | |  ___/|  __| | . ` |     / /\\ \\     | |    |  __  |  __|  \\___ \\   | |   ";
+    std::string title5 = " | |__| | |    | |____| |\\  |    / ____ \\    | |____| |  | | |____ ____) |  | |   ";
+    std::string title6 = "  \\____/|_|    |______|_| \\_|   /_/    \\_\\    \\_____|_|  |_|______|_____/   |_|   ";
+
+    int titleX = (xMax - title1.length()) / 2 - 3;
+
+    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
+    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
+    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
+    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
+    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
+    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
+
+    refresh();
+    return 0;
 }
 
 int playscreen(WINDOW *win, bool load = false)
@@ -844,6 +877,12 @@ int playscreen(WINDOW *win, bool load = false)
             {
                 continue;
             }
+        if (wave_num % 6 == 0)
+        {
+            clear;
+            refresh;
+            chestscreen();
+        }
         }
         saveGame(health, wave_num, money, mapnum, towers);
     }
