@@ -602,31 +602,6 @@ int winScreen(int highlight = 0, int count = 1) {
     }
 }
 
-int chestscreen(int highlight = 0, int count = 1)
-{
-    int yMax, xMax;
-    getmaxyx(stdscr, yMax, xMax);
-
-    std::string title1 = "   ____  _____  ______ _   _                   _____ _    _ ______  _____ _______ ";
-    std::string title2 = "  / __ \\|  __ \\|  ____| \\ | |       /\\        / ____| |  | |  ____|/ ____|__   __|";
-    std::string title3 = " | |  | | |__) | |__  |  \\| |      /  \\      | |    | |__| | |__  | (___    | |   ";
-    std::string title4 = " | |  | |  ___/|  __| | . ` |     / /\\ \\     | |    |  __  |  __|  \\___ \\   | |   ";
-    std::string title5 = " | |__| | |    | |____| |\\  |    / ____ \\    | |____| |  | | |____ ____) |  | |   ";
-    std::string title6 = "  \\____/|_|    |______|_| \\_|   /_/    \\_\\    \\_____|_|  |_|______|_____/   |_|   ";
-
-    int titleX = (xMax - title1.length()) / 2 - 3;
-
-    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
-    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
-    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
-    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
-    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
-    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
-
-    refresh();
-    return 0;
-}
-
 int playscreen(WINDOW *win, bool load = false)
 {   
     int mid_x = win->_maxx / 2;
