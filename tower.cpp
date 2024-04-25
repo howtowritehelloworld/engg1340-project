@@ -118,3 +118,49 @@ void tower::set_tower_coverage(path*& path_start){
     }
 }
 
+void tower::sample_tower(string tower_name){
+    if (tower_name == "Mage")
+    {
+        mage(1);
+    }
+    else if (tower_name == "Archer")
+    {
+        archer(1);
+    }
+    else if (tower_name == "Sniper")
+    {
+        sniper(1);
+    }
+    else if (tower_name == "Cannon")
+    {
+        cannon(1);
+    }
+}
+
+void tower::create_new_tower(string name, int level, path*& path_start, int &money){
+    if (name == "Mage" && money >= 40)
+    {
+        money -= 40;
+        mage(level);
+    }
+    else if (name == "Archer" && money >= 20)
+    {
+        money -= 20;
+        archer(level);
+    }
+    else if (name == "Sniper" && money >= 50)
+    {
+        money -= 50;
+        sniper(level);
+    }
+    else if (name == "Cannon" && money >= 30)
+    {
+        money -= 30;
+        cannon(level);
+    }
+    set_tower_coverage(path_start);
+}
+
+void tower::upgrade_tower(path*& path_start, int &money){
+    create_new_tower(name, level+1, path_start, money);
+}
