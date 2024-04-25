@@ -28,7 +28,7 @@ There is a known problem where some commits doesn't count towards the person's c
 |---------|---------|---------|
 | Zheng Andy | 3036222642 | Pathfinding, wave display, gameplay mechanics |
 | Jason Ip Tsz Shun | 3036226222 | GUI, damage calculation, tutorial mode |
-| Owen Wen Sze Hoi | 3036226583 | Towers, enemies, infinite waves generation, balancing |
+| Owen Wen Sze Hoi | 3036226583 | Towers, enemies, infinite waves generation, balancing, chest |
 | Cyric Wong Chun Sun | 3036222965 | Map design, save and load game, gametitle |
 | Donald Leung Kit Yiu | 3036226557 | GUI, tutorial mode, map display |
 
