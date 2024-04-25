@@ -634,8 +634,8 @@ int endscreen()
 	cbreak();
 	noecho();
 
-    	int yMax, xMax;
-    	getmaxyx(stdscr, yMax, xMax);
+    int yMax, xMax;
+    getmaxyx(stdscr, yMax, xMax);
 
 	std::string title1 = "  _____             __     __                                _          _ ";
 	std::string title2 = " / ____|            \\ \\   / /               /\\              (_)        | |";
@@ -648,13 +648,13 @@ int endscreen()
 
     	int titleX = (xMax - title1.length()) / 2 - 3;
 
-    	mvprintw(yMax / 2 - 7, titleX, title1.c_str());
-    	mvprintw(yMax / 2 - 6, titleX, title2.c_str());
-    	mvprintw(yMax / 2 - 5, titleX, title3.c_str());
-    	mvprintw(yMax / 2 - 4, titleX, title4.c_str());
-    	mvprintw(yMax / 2 - 3, titleX, title5.c_str());
-    	mvprintw(yMax / 2 - 2, titleX, title6.c_str());
-    	mvprintw(yMax / 2 - 1, titleX, title7.c_str());
+    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
+    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
+    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
+    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
+    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
+    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
+    mvprintw(yMax / 2 - 1, titleX, title7.c_str());
 	mvprintw(yMax / 2    , titleX, title8.c_str());
 	mvprintw(yMax / 2 - 15, titleX, "Press any key to exit...");
 
