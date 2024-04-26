@@ -1,6 +1,8 @@
 #ifndef PRINTGAMETITLE_H
 #define PRINTGAMETITLE_H
 
-void printgametitle();
+#include <string>
+
+void printgametitle(std::string name);
 
 #endif
