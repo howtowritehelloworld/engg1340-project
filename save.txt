@@ -1,10 +1,5 @@
-1
-23
-908
 2
-Archer 10 6 6
-Sniper 8 4 3
-Mage 10 3 3
-Sniper 8 3 12
-Cannon 10 4 7
-Archer 6 6 8
+3
+20
+1
+Archer 3 3 3

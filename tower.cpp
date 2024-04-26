@@ -138,22 +138,22 @@ void tower::sample_tower(string tower_name){
 }
 
 void tower::create_new_tower(string name, int level, path*& path_start, int &money){
-    if (name == "Mage" && money >= 40)
+    if (name == "Mage" && money >= 40*level*(level/5 + 1))
     {
         money -= 40*level*(level/5 + 1);
         mage(level);
     }
-    else if (name == "Archer" && money >= 20)
+    else if (name == "Archer" && money >= 20*level*(level/5 + 1))
     {
         money -= 20*level*(level/5 + 1);
         archer(level);
     }
-    else if (name == "Sniper" && money >= 50)
+    else if (name == "Sniper" && money >= 50*level*(level/5 + 1))
     {
         money -= 50*level*(level/5 + 1);
         sniper(level);
     }
-    else if (name == "Cannon" && money >= 30)
+    else if (name == "Cannon" && money >= 30*level*(level/5 + 1))
     {
         money -= 30*level*(level/5 + 1);
         cannon(level);

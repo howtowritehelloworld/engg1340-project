@@ -963,7 +963,7 @@ int playscreen(WINDOW *win, bool load = false)
                         {
                             case 0: // Upgrade
                             {
-                                if (money - selected_tower->cost < 0){
+                                if ( money - selected_tower->cost < 0){
                                     break;
                                 }
                                 selected_tower->upgrade_tower(path_start, money);
