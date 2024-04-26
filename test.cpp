@@ -966,7 +966,7 @@ int playscreen(WINDOW *win, bool load = false)
                                 if ( money - selected_tower->cost < 0){
                                     break;
                                 }
-                                selected_tower->upgrade_tower(path_start, money);
+                                selected_tower->upgrade_tower(selected_tower->name, selected_tower->level, path_start, money);
                                 wclear(towerBox);
                                 mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                                 wrefresh(statsBox);
@@ -1253,7 +1253,7 @@ int helpscreen(WINDOW *win)
                                 if (money - selected_tower->cost < 0){
                                     break;
                                 }
-                                selected_tower->upgrade_tower(path_start, money);
+                                selected_tower->upgrade_tower(selected_tower->name, selected_tower->level, path_start, money);
                                 wclear(towerBox);
                                 mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                                 wrefresh(statsBox);
@@ -1468,7 +1468,7 @@ int helpscreen(WINDOW *win)
                                 if (money - selected_tower->cost < 0){
                                     break;
                                 }
-                                selected_tower->upgrade_tower(path_start, money);
+                                selected_tower->upgrade_tower(selected_tower->name, selected_tower->level, path_start, money);
                                 wclear(towerBox);
                                 mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                                 wrefresh(statsBox);
