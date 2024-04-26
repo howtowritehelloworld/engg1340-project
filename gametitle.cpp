@@ -4,9 +4,9 @@
 
 using namespace std;
 
-void printgametitle() {
+void printgametitle(string name) {
 
-    ifstream inputfile("gametitle.txt");
+    ifstream inputfile(name+".txt");
 
     string line;
     while (getline(inputfile, line)) {
