@@ -6,7 +6,7 @@ using namespace std;
 
 void printgametitle(string name) {
 
-    ifstream inputfile(name+".txt");
+    ifstream inputfile(name + ".txt");
 
     string line;
     while (getline(inputfile, line)) {
