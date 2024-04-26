@@ -66,14 +66,14 @@ std::vector<std::string> wave(int wave_num)
     else
     {
         srand(time(0)); 
-        int stage = wave_num/10;
-        int max_weight = wave_num*(stage+5);
+        int stage = wave_num/5;
+        int max_weight = wave_num*(stage+4);
         int total_weight = 0;
         std::vector<std::string> enemy_lst= {};
         while (total_weight <= max_weight)
         { 
             int enemytype = rand()%4;
-            int lev = rand()%(stage+2) + 1;
+            int lev = rand()%(2)+stage;
             switch(enemytype)
             {
                 case(0):
