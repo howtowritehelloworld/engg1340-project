@@ -7,7 +7,7 @@ void tower::mage(int tower_level)
     color_id = 3;
     icon = 'M';
     level = tower_level;
-    cost = 40*level;
+    cost = 40*level*(level/5 + 1);
     damage = 2*tower_level;
     attackspeed = 2;
     range = 1;
@@ -20,7 +20,7 @@ void tower::archer(int tower_level)
     color_id = 4;
     icon = 'A';
     level = tower_level;
-    cost = 20*level;
+    cost = 20*level*(level/5 + 1);
     damage = 3*tower_level;
     attackspeed = 1;
     range = 1;
@@ -33,7 +33,7 @@ void tower::sniper(int tower_level)
     color_id = 5;
     icon = 's';
     level = tower_level;
-    cost = 50*level;
+    cost = 50*level*(level/5 + 1);
     damage = 6*tower_level;
     attackspeed = 3;
     range = 2;
@@ -46,7 +46,7 @@ void tower::cannon(int tower_level)
     color_id = 6;
     icon = 'C';
     level = tower_level;
-    cost = 30*level;
+    cost = 30*level*(level/5 + 1);
     damage = 4*tower_level;
     attackspeed = 3;
     range = 1;
