@@ -13,7 +13,6 @@
 #include "path.h"
 #include "tower.h"
 #include "enemy.h"
-#include "chooseMap.h"
 #include "save.h"
 
 struct Coords{ // I didnt know pair existed and this looks nicer (to me)
@@ -27,7 +26,8 @@ int playscreen(WINDOW *, bool load);
 int helpscreen(WINDOW *);
 int storyscreen(WINDOW *);
 int endscreen();
-
+int mainscreen(WINDOW* titlewin, int highlight = 0, int count = 1);
+void mapdisplay(WINDOW* mapwin, int count);
 std::vector<std::string> tutor_wave(int wave_num)
 {
     std::vector<std::vector<std::string>> tutor_wave = 
