@@ -47,7 +47,7 @@ void tower::cannon(int tower_level)
     icon = 'C';
     level = tower_level;
     cost = 30*level*(level/5 + 1);
-    damage = 4*tower_level;
+    damage = 5*tower_level;
     attackspeed = 3;
     range = 1;
     type[0] = "AOE"; type[1] = "Ground"; type[2] = ""; type[3] = "";
