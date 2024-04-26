@@ -930,8 +930,10 @@ int playscreen(WINDOW *win, bool load = false)
                             tower* t = new tower;
                             t->coordinates = std::make_pair(selected.y, selected.x);
                             t->create_new_tower(tower_options[tower_option], 1, path_start, money);
-                            towers.push_back(t);
-                            map[selected.y][selected.x] = towers.size()-1;
+                            if (t->name != ""){
+                                towers.push_back(t);
+                                map[selected.y][selected.x] = towers.size()-1;
+                            }
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
                             printMap(mainBox, path_start, towers);
