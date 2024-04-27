@@ -144,7 +144,7 @@ Notes: Single target, Can attack both ground and air enemies, Can detect Camo en
 
 Cost: 40 -> 80 -> 120 -> 160 -> ... (level * 30)
 
-Damage: 2 -> 4 -> 6 -> 8 -> ... (level * 4)
+Damage: 5 -> 10 -> 15 -> 20 -> ... (level * 5)
 
 Attack speed: 3 (slow)
 
