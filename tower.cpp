@@ -7,7 +7,7 @@ void tower::mage(int tower_level)
     color_id = 3;
     icon = 'M';
     level = tower_level;
-    cost = 40*level*(level/5 + 1);
+    cost = 40*level;
     damage = 2*tower_level;
     attackspeed = 2;
     range = 1;
@@ -20,7 +20,7 @@ void tower::archer(int tower_level)
     color_id = 4;
     icon = 'A';
     level = tower_level;
-    cost = 20*level*(level/5 + 1);
+    cost = 20*level;
     damage = 3*tower_level;
     attackspeed = 1;
     range = 1;
@@ -33,7 +33,7 @@ void tower::sniper(int tower_level)
     color_id = 5;
     icon = 's';
     level = tower_level;
-    cost = 50*level*(level/5 + 1);
+    cost = 50*level;
     damage = 6*tower_level;
     attackspeed = 3;
     range = 2;
@@ -46,7 +46,7 @@ void tower::cannon(int tower_level)
     color_id = 6;
     icon = 'C';
     level = tower_level;
-    cost = 30*level*(level/5 + 1);
+    cost = 30*level;
     damage = 5*tower_level;
     attackspeed = 3;
     range = 1;
@@ -138,48 +138,48 @@ void tower::sample_tower(string tower_name){
 }
 
 void tower::create_new_tower(string name, int level, path*& path_start, int &money){
-    if (name == "Mage" && money >= 40*level*(level/5 + 1))
+    if (name == "Mage" && money >= 40*level)
     {
-        money -= 40*level*(level/5 + 1);
+        money -= 40*level;
         mage(level);
     }
-    else if (name == "Archer" && money >= 20*level*(level/5 + 1))
+    else if (name == "Archer" && money >= 20*level)
     {
-        money -= 20*level*(level/5 + 1);
+        money -= 20*level;
         archer(level);
     }
-    else if (name == "Sniper" && money >= 50*level*(level/5 + 1))
+    else if (name == "Sniper" && money >= 50*level)
     {
-        money -= 50*level*(level/5 + 1);
+        money -= 50*level;
         sniper(level);
     }
-    else if (name == "Cannon" && money >= 30*level*(level/5 + 1))
+    else if (name == "Cannon" && money >= 30*level)
     {
-        money -= 30*level*(level/5 + 1);
+        money -= 30*level;
         cannon(level);
     }
     set_tower_coverage(path_start);
 }
 
 void tower::upgrade_tower(std::string name, int level, path*& path_start, int &money){
-    if (name == "Mage" && money >= 40*level*(level/5 + 1))
+    if (name == "Mage" && money >= 40*level)
     {
-        money -= 40*level*(level/5 + 1);
+        money -= 40*level;
         mage(level+1);
     }
-    else if (name == "Archer" && money >= 20*level*(level/5 + 1))
+    else if (name == "Archer" && money >= 20*level)
     {
-        money -= 20*level*(level/5 + 1);
+        money -= 20*level;
         archer(level+1);
     }
-    else if (name == "Sniper" && money >= 50*level*(level/5 + 1))
+    else if (name == "Sniper" && money >= 50*level)
     {
-        money -= 50*level*(level/5 + 1);
+        money -= 50*level;
         sniper(level+1);
     }
-    else if (name == "Cannon" && money >= 30*level*(level/5 + 1))
+    else if (name == "Cannon" && money >= 30*level)
     {
-        money -= 30*level*(level/5 + 1);
+        money -= 30*level;
         cannon(level+1);
     }
     set_tower_coverage(path_start);  
