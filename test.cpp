@@ -774,13 +774,12 @@ int winScreen(int highlight = 0, int count = 1) {
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-    std::string title1 = "__   _____  _   _  __        _____ _   _ ";
-    std::string title2 = "\\ \\ / / _ \\| | | | \\ \\      / /_ _| \\ | |";
-    std::string title3 = " \\ V / | | | | | |  \\ \\ /\\ / / | ||  \\| |";
-    std::string title4 = "  | || |_| | |_| |   \\ V  V /  | || |\\  |";
-    std::string title5 = "  |_| \\___/ \\___/     \\_/\\_/  |___|_| \\_|";
-    // std::string title6 = "  |   |  |       ||       |  |       ||       | _____| ||   |___ ";
-    // std::string title7 = "  |___|  |_______||_______|  |_______||_______||_______||_______|";
+	std::string title1 = "__     ______  _    _   __          _______ _   _     _";
+	std::string title2 = "\\ \\   / / __ \\| |  | |  \\ \\        / /_   _| \\ | |   | |";
+	std::string title3 = " \\ \\_/ / |  | | |  | |   \\ \\  /\\  / /  | | |  \\| |   | |";
+	std::string title4 = "  \\   /| |  | | |  | |    \\ \\/  \\/ /   | | | . ` |   | |";
+	std::string title5 = "   | | | |__| | |__| |     \\  /\\  /   _| |_| |\\  |   |_|";
+	std::string title6 = "   |_|  \\____/ \\____/       \\/  \\/   |_____|_| \\_|   (_)";
 
     int titleX = (xMax - title1.length()) / 2 - 3;
 
@@ -789,8 +788,7 @@ int winScreen(int highlight = 0, int count = 1) {
     mvprintw(yMax / 2 - 5, titleX, title3.c_str());
     mvprintw(yMax / 2 - 4, titleX, title4.c_str());
     mvprintw(yMax / 2 - 3, titleX, title5.c_str());
-    // mvprintw(yMax / 2 - 2, titleX, title6.c_str());
-    // mvprintw(yMax / 2 - 1, titleX, title7.c_str());
+    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
 
     refresh();
 
