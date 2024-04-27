@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void printgametitle(string name) {
+void printgametitle(WINDOW* titlewin, string name) {
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
     ifstream inputfile(name + ".txt");
@@ -15,15 +15,15 @@ void printgametitle(string name) {
     while (getline(inputfile, line)) {
         lines.push_back(line);
     }
-    WINDOW* win = newwin
+
+    int titleX = (xMax - lines[0].length()) / 2 - 3;
     int y=1;
     for (const auto& line : lines) {
-        mvwprintw(win, y, 1, line.c_str());
+        mvwprintw(titlewin, y, titleX, line.c_str());
         y++;
     }
-    getch();
-    delwin(win);
-    endwin();
+    // Refresh the title window
+    wrefresh(titlewin);
 
     inputfile.close();
 }
