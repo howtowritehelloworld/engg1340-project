@@ -8,7 +8,7 @@ void tower::mage(int tower_level)
     icon = 'M';
     level = tower_level;
     cost = 40*level;
-    damage = 2*tower_level;
+    damage = 3*tower_level;
     attackspeed = 2;
     range = 1;
     type[0] = "AOE"; type[1] = "Ground"; type[2] = "Air"; type[3] = "Camo";
