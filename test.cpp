@@ -731,16 +731,36 @@ int chestscreen(int highlight = 0, int count = 1)
 int prizescreen(int dollars) 
 {
 	initscr();
-	int rows, cols;
-	getmaxyx(stdscr, rows, cols); 
+    int yMax, xMax;
+    getmaxyx(stdscr, yMax, xMax);
 
-	int middleRow = rows / 2;
-	int middleCol = (cols - 16) / 2; 
+	int middleCol = (xMax - 16) / 2;
+
+    std::string title1 = "      __________";
+	std::string title2 = "     /\\____;;___\\";
+	std::string title3 = "    | /         /";
+	std::string title4 = "    `. ())oo() .";
+	std::string title5 = "     |\\(%()*^^()^\\";
+	std::string title6 = "     | |---------|";
+	std::string title7 = "     \\ |         |";
+	std::string title8 = "      \\|_________|"; 
+
+    int titleX = (xMax - title1.length()) / 2 - 3;
+
+    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
+    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
+    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
+    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
+    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
+    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
+    mvprintw(yMax / 2 - 1, titleX, title7.c_str());
+	mvprintw(yMax / 2    , titleX, title8.c_str());    
+
 
 	
-	mvprintw(middleRow, middleCol, "You got %d dollars", dollars);
+	mvprintw(yMax / 2 + 4, middleCol, "You got %d dollars!", dollars);
 
-	mvprintw(middleRow + 6, middleCol + 8, "Press any key to continue...");
+	mvprintw(yMax / 2 + 8, middleCol + 12, "Press any key to continue...");
 
 	refresh();
     noecho();
