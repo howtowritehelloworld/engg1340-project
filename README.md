@@ -104,7 +104,7 @@ Cost: 40 -> 80 -> 120 -> 160 -> ... (level * 40)
 
 Damage: 2 -> 4 -> 6 -> 8 -> ... (level * 2)
 
-Attack speed: 1 (fast)
+Attack speed: 2 (medium)
 
 Range: 1
 
