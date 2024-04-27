@@ -142,7 +142,7 @@ Notes: Single target, Can attack both ground and air enemies, Can detect Camo en
 
 <i>Cannoneers, masters of explosive firepower, wield massive cannons capable of unleashing devastation upon the enemy. Their booming blasts send shockwaves through the ranks, tearing apart adversaries and creating chaos amidst the horde.</i>
 
-Cost: 40 -> 80 -> 120 -> 160 -> ... (level * 30)
+Cost: 30 -> 60 -> 90 -> 120 -> ... (level * 30)
 
 Damage: 5 -> 10 -> 15 -> 20 -> ... (level * 5)
 
