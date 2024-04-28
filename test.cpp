@@ -275,7 +275,7 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
 }
 
 void print_tower(WINDOW* win, tower* tower_on_top){
-    for (int i = 2; i < 13; i++){
+    for (int i = 2; i < 18; i++){
         mvwprintw(win, i, 4, "               ");
     }
     mvwprintw(win, 2, 4, "%s", tower_on_top->name.c_str());
@@ -443,11 +443,18 @@ int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::st
         for (int i = 0; i < num_of_choices; i++){
             if (i == highlight){
                 wattron(actionBox, A_REVERSE);
-                tower* temp_tower = new tower;
-                temp_tower->sample_tower(tower_options[i]);
-                print_tower(towerBox, temp_tower);
+                if (i != num_of_choices-1){
+                    tower* temp_tower = new tower;
+                    temp_tower->sample_tower(tower_options[i]);
+                    print_tower(towerBox, temp_tower);
+                    delete temp_tower;
+                }
+                else {
+                    for (int i = 2; i < 18; i++){
+                        mvwprintw(towerBox, i, 4, "               ");
+                    }
+                }
                 wrefresh(towerBox);
-                delete temp_tower;
             }
             mvwprintw(actionBox, i + 2, 4, tower_options[i].c_str());
             wattroff(actionBox, A_REVERSE);
@@ -788,7 +795,7 @@ int playscreen(WINDOW *win, bool load = false)
                     {
                         case 0: // Place Tower
                         {
-                            std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon"};
+                            std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon", "Cancel"};
                             int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
                             
                             tower* t = new tower;
