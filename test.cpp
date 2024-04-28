@@ -14,7 +14,6 @@
 #include "tower.h"
 #include "enemy.h"
 #include "save.h"
-#include "gametitle.h"
 
 struct Coords{ // I didnt know pair existed and this looks nicer (to me)
     int y;
@@ -105,6 +104,18 @@ std::string getString(char x)
     std::string s(1, x);
  
     return s;   
+}
+
+void printgametitle(WINDOW* titlewin, std::string name, int row) {
+    int yMax, xMax;
+    getmaxyx(titlewin, yMax, xMax);
+    std::ifstream inputfile("art/" + name + ".txt");
+    std::string line;
+    while (std::getline(inputfile, line)) {
+        mvwprintw(titlewin, row, (xMax - line.length()) / 2, line.c_str());
+        row++;
+    }
+    inputfile.close();
 }
 
 void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) // Print the map of the game inside of the main window
