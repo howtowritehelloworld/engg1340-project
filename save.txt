@@ -1,9 +1,5 @@
 3
-16
-3813
+3
+40
 1
-Mage 999 2 1
-Sniper 999 2 4
-Sniper 4 2 3
-Sniper 5 3 3
-Sniper 12 3 4
+Sniper 2 2 4

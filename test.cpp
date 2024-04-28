@@ -283,8 +283,10 @@ void print_tower(WINDOW* win, tower* tower_on_top){
     mvwprintw(win, 5, 4, "Damage: %d", tower_on_top->damage);
     mvwprintw(win, 6, 4, "Range: %d", tower_on_top->range);
     mvwprintw(win, 7, 4, "Cost: %d", tower_on_top->cost);
+    std::string speeds[3] = {"Fast", "Medium", "Slow"};
+    mvwprintw(win, 8, 4, "Speed: %s", speeds[tower_on_top->attackspeed-1].c_str());
     for (int i = 0; i < 4; i++){
-        mvwprintw(win, 9+i, 4, tower_on_top->type[i].c_str());
+        mvwprintw(win, 10+i, 4, tower_on_top->type[i].c_str());
     }
 }
 
