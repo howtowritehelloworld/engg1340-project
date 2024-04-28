@@ -26,7 +26,7 @@ int playscreen(WINDOW *, bool load);
 int helpscreen(WINDOW *);
 int storyscreen(WINDOW *);
 int endscreen();
-int mainscreen(WINDOW* titlewin, int highlight = 0, int count = 1);
+int mapscreen(WINDOW* titlewin);
 void mapdisplay(WINDOW* mapwin, int count);
 std::vector<std::string> tutor_wave(int wave_num)
 {
@@ -300,19 +300,19 @@ void mapdisplay(WINDOW* mapwin, int count) {
     mapfile.close();
 }
 
-int mainscreen(WINDOW* titlewin, int highlight, int count) {
+int mapscreen(WINDOW* titlewin) {
     // Print "Choose a map" title
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-    printgametitle(titlewin, "choosemap", 0);
+    printgametitle(titlewin, "choosemap", 1);
 
     // Refresh the title window
     wrefresh(titlewin);
 
     // Create a window for the map display
     WINDOW* mapwin = newwin(11, 32, 8, xMax/2 - 16);
-    mapdisplay(mapwin, count);
+    mapdisplay(mapwin, 0);
     wrefresh(mapwin);
 
     // Create a window for the menu
@@ -323,7 +323,7 @@ int mainscreen(WINDOW* titlewin, int highlight, int count) {
     keypad(menuwin, true);
 
     int choice;
-
+    int count = 1;
     while (1) {
 
         mapdisplay(mapwin, count);
@@ -514,7 +514,7 @@ int mainmenu(WINDOW *win)
     return chooseOption(menuwin, choices, false) + 1;
 }
 
-int loseScreen(int highlight = 0, int count = 1) {
+int loseScreen() {
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
@@ -543,7 +543,7 @@ int loseScreen(int highlight = 0, int count = 1) {
     return 4;
 }
 
-int chestscreen(int highlight = 0, int count = 1)
+int chestscreen()
 {
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
@@ -590,7 +590,7 @@ int prizescreen(int dollars)
     return 0;
 }
 
-int winScreen(int highlight = 0, int count = 1) {
+int winScreen() {
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
@@ -652,7 +652,7 @@ int playscreen(WINDOW *win, bool load = false)
     if (!load){
         WINDOW* titlewin = newwin(8, xMax - 12, 1, 5);
         refresh();
-        mapnum = mainscreen(titlewin);
+        mapnum = mapscreen(titlewin);
         health = 3;
         wave_num = 1;
         money = 100;
