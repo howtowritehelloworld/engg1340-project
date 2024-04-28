@@ -7,7 +7,12 @@ void saveGame(int health, int wave_num, int money, int map_num, vector<tower*> t
         savefile << health << endl;
         savefile << wave_num << endl;
         savefile << money << endl;
-        savefile << map_num << endl;
+        savefile << map_num;
+        if (towers.size() == 0) {
+            savefile.close();
+            return;
+        }
+        savefile << endl;
         for (int i = 0; i<towers.size()-1; i++) {
             savefile << towers[i]->name << " "<< towers[i]->level <<" "<< towers[i]->coordinates.first << " " <<towers[i]->coordinates.second;
             savefile << endl;

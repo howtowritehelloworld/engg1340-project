@@ -14,6 +14,7 @@
 #include "tower.h"
 #include "enemy.h"
 #include "save.h"
+#include "gametitle.h"
 
 struct Coords{ // I didnt know pair existed and this looks nicer (to me)
     int y;
@@ -293,21 +294,7 @@ int mainscreen(WINDOW* titlewin, int highlight, int count) {
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-    std::string title1 = "    ___ _                              _                         ";
-    std::string title2 = "   / __\\ |__   ___   ___  ___  ___    /_\\     /\\/\\   __ _ _ __   ";
-    std::string title3 = "  / /  | '_ \\ / _ \\ / _ \\/ __|/ _ \\  //_\\\\   /    \\ / _` | '_ \\  ";
-    std::string title4 = " / /___| | | | (_) | (_) \\__ \\  __/ /  _  \\ / /\\/\\ \\ (_| | |_) | ";
-    std::string title5 = " \\____/|_| |_|\\___/ \\___/|___/\\___| \\_/ \\_/ \\/    \\/\\__,_| .__/  ";
-    std::string title6 = "                                                         |_|     ";
-
-    int titleX = (xMax - title1.length()) / 2 - 3;
-
-    mvwprintw(titlewin, 0, titleX, title1.c_str());
-    mvwprintw(titlewin, 1, titleX, title2.c_str());
-    mvwprintw(titlewin, 2, titleX, title3.c_str());
-    mvwprintw(titlewin, 3, titleX, title4.c_str());
-    mvwprintw(titlewin, 4, titleX, title5.c_str());
-    mvwprintw(titlewin, 5, titleX, title6.c_str());
+    printgametitle(titlewin, "choosemap", 0);
 
     // Refresh the title window
     wrefresh(titlewin);
@@ -382,18 +369,35 @@ int mainscreen(WINDOW* titlewin, int highlight, int count) {
     return count;     
 }
 
-int chooseOption(WINDOW *win, std::vector<std::string> choices){
+int chooseOption(WINDOW *win, std::vector<std::string> choices, bool box_on = true){
     keypad(win, true);
     wclear(win);
-    box(win, ACS_VLINE, ACS_HLINE);
+    if (box_on){
+        box(win, ACS_VLINE, ACS_HLINE);
+    }
+    
     int highlight = 0;
     int keyboard_input = 0;
     int num_of_choices = choices.size();
+
+    int yMax, xMax;
+    getmaxyx(win, yMax, xMax);
+    int x, y;
+    int maxLen = 0;
+    for (int i = 0; i < num_of_choices; i++){
+        if (choices[i].length() > maxLen){
+            maxLen = choices[i].length();
+        }
+    }
+    x = (xMax - maxLen)/2;
+    y = (yMax-num_of_choices)/2;
+
     while (keyboard_input != 10){
         for (int i = 0; i < num_of_choices; i++){
-            if (i == highlight)
+            if (i == highlight) {
                 wattron(win, A_REVERSE);
-            mvwprintw(win, i+2, 4, choices[i].c_str());
+            }
+            mvwprintw(win, i + y, x, choices[i].c_str());
             wattroff(win, A_REVERSE);
         }
         keyboard_input = wgetch(win);
@@ -419,6 +423,9 @@ int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::st
     int highlight = 0;
     int keyboard_input = 0;
     int num_of_choices = tower_options.size();
+
+    
+
     while (keyboard_input != 10){
         for (int i = 0; i < num_of_choices; i++){
             if (i == highlight){
@@ -429,9 +436,8 @@ int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::st
                 wrefresh(towerBox);
                 delete temp_tower;
             }
-            mvwprintw(actionBox, i+2, 4, tower_options[i].c_str());
+            mvwprintw(actionBox, i + 2, 4, tower_options[i].c_str());
             wattroff(actionBox, A_REVERSE);
-            
         }
         keyboard_input = wgetch(actionBox);
         switch(keyboard_input)
@@ -476,27 +482,11 @@ void print_wave(WINDOW* win, int wave_num, std::vector<std::string> next_wave){
 
 int mainmenu(WINDOW *win)
 {   
-std::string title1 = " _  ___                 _                          __   ______ _     _            _       ";
-std::string title2 = "| |/ (_)               | |                        / _| |  ____| |   | |          (_)      ";
-std::string title3 = "| ' / _ _ __   __ _  __| | ___  _ __ ___     ___ | |_  | |__  | | __| | ___  _ __ _  __ _ ";
-std::string title4 = "|  < | | '_ \\ / _` |/ _` |/ _ \\| '_ ` _ \\   / _ \\|  _| |  __| | |/ _` |/ _ \\| '__| |/ _` |";
-std::string title5 = "| . \\| | | | | (_| | (_| | (_) | | | | | | | (_) | |   | |____| | (_| | (_) | |  | | (_| |";
-std::string title6 = "|_|\\_\\_|_| |_|\\__, |\\__,_|\\___/|_| |_| |_|  \\___/|_|   |______|_|\\__,_|\\___/|_|  |_|\\__,_|";
-std::string title7 = "               __/ |                                                                      ";
-std::string title8 = "              |___/                                                                       ";
-
  
     int mid_x = win->_maxx / 2;
     int mid_y = win->_maxy / 2;
 
-    mvwprintw(win, mid_y - 10, (mid_x - title1.length() / 2), title1.c_str());
-    mvwprintw(win, mid_y - 9, (mid_x - title2.length() / 2), title2.c_str());
-    mvwprintw(win, mid_y - 8, (mid_x - title3.length() / 2), title3.c_str());
-    mvwprintw(win, mid_y - 7, (mid_x - title4.length() / 2), title4.c_str());
-    mvwprintw(win, mid_y - 6, (mid_x - title5.length() / 2), title5.c_str());
-    mvwprintw(win, mid_y - 5, (mid_x - title6.length() / 2), title6.c_str());
-    mvwprintw(win, mid_y - 4, (mid_x - title7.length() / 2), title7.c_str());
-    mvwprintw(win, mid_y - 3, (mid_x - title8.length() / 2), title8.c_str());
+    printgametitle(win, "gametitle", mid_y - 10);
 
     WINDOW * menuwin= newwin(6, 16, mid_y, mid_x - 8);
     refresh();
@@ -510,55 +500,14 @@ std::string title8 = "              |___/                                       
     noecho();
     curs_set(0);
 
-    while(1)
-    {   
-        for(int i = 0; i < 4; i++)
-        {
-            if (i == highlight)
-                wattron(menuwin, A_REVERSE);
-            mvwprintw(menuwin, i+1, 6, choices[i].c_str());
-            wattroff(menuwin, A_REVERSE);
-        }
-        choice = wgetch(menuwin);
-        switch(choice)
-        {
-            case KEY_UP:
-                highlight = std::max(0, highlight-1);
-                break;
-            case KEY_DOWN:
-                highlight = std::min(3, highlight+1);
-                break;
-            default:
-                break;
-        }
-        if (choice == 10) 
-            break;
-    }
-
-    return highlight + 1;
+    return chooseOption(menuwin, choices, false) + 1;
 }
 
 int loseScreen(int highlight = 0, int count = 1) {
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-    std::string title1 = " __   __  _______  __   __    ___      _______  _______  _______ ";
-    std::string title2 = "|  | |  ||       ||  | |  |  |   |    |       ||       ||       |";
-    std::string title3 = "|  |_|  ||   _   ||  | |  |  |   |    |   _   ||  _____||    ___|";
-    std::string title4 = "|       ||  | |  ||  |_|  |  |   |    |  | |  || |_____ |   |___ ";
-    std::string title5 = "|_     _||  |_|  ||       |  |   |___ |  |_|  ||_____  ||    ___|";
-    std::string title6 = "  |   |  |       ||       |  |       ||       | _____| ||   |___ ";
-    std::string title7 = "  |___|  |_______||_______|  |_______||_______||_______||_______|";
-
-    int titleX = (xMax - title1.length()) / 2 - 3;
-
-    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
-    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
-    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
-    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
-    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
-    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
-    mvprintw(yMax / 2 - 1, titleX, title7.c_str());
+    printgametitle(stdscr, "youlose", yMax / 2 - 7);
 
     refresh();
 
@@ -568,55 +517,19 @@ int loseScreen(int highlight = 0, int count = 1) {
 
     keypad(menuwin, true);
 
-    std::string choices[2] = {"Main Menu", "Quit"};
-    int choice;
-
-    while (1) {
-  
-        for (int i = 0; i < 2; i++) {
-            if (i == highlight)
-                wattron(menuwin, A_REVERSE);
-            mvwprintw(menuwin, i + 2, (xMax - 17) / 2, choices[i].c_str());
-            wattroff(menuwin, A_REVERSE);
-        }
-
-
-        wrefresh(menuwin);
-
-
-        choice = wgetch(menuwin);
-
-        switch (choice) {
-            case KEY_UP:
-                highlight--;
-                if (highlight == -1) {
-                    highlight = 0;
-                }
-                break;
-            case KEY_DOWN:
-                highlight++;
-                if (highlight == 2) {
-                    highlight = 1;
-                }
-                break;
-            default:
-                break;
-        }
-
-        // When pressing Enter
-        if (choice == 10) {
-            // If the user chooses the main menu
-            if (highlight == 0) {
-                erase();
-                return 0;
-            }
-            // If the user chooses to quit
-            else if (highlight == 1) {
-                erase();
-                return 4;
-            }
-        }
+    std::vector<std::string> choices = {"Main Menu", "Quit"};
+    int choice = chooseOption(menuwin, choices, false);
+    
+    // If the user chooses the main menu
+    erase();
+    if (choice == 0) {
+        return 0;
     }
+    // If the user chooses to quit
+    else if (choice == 1) {
+        return 4;
+    }
+    return 4;
 }
 
 int chestscreen(int highlight = 0, int count = 1)
@@ -624,38 +537,8 @@ int chestscreen(int highlight = 0, int count = 1)
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-    std::string title1 = "   ____  _____  ______ _   _                   _____ _    _ ______  _____ _______ ";
-    std::string title2 = "  / __ \\|  __ \\|  ____| \\ | |       /\\        / ____| |  | |  ____|/ ____|__   __|";
-    std::string title3 = " | |  | | |__) | |__  |  \\| |      /  \\      | |    | |__| | |__  | (___    | |   ";
-    std::string title4 = " | |  | |  ___/|  __| | . ` |     / /\\ \\     | |    |  __  |  __|  \\___ \\   | |   ";
-    std::string title5 = " | |__| | |    | |____| |\\  |    / ____ \\    | |____| |  | | |____ ____) |  | |   ";
-    std::string title6 = "  \\____/|_|    |______|_| \\_|   /_/    \\_\\    \\_____|_|  |_|______|_____/   |_|   ";
-
-    std::string chest1 = "       ____________          ____________          ____________       ";
-	std::string chest2 = "      /            \\        /            \\        /            \\     ";
-	std::string chest3 = "     /______________\\      /______________\\      /______________\\    ";
-	std::string chest4 = "     |     ___      |      |     ___      |      |     ___      |     ";
-	std::string chest5 = "     |____| 1 |_____|      |____| 2 |_____|      |____| 3 |_____|     ";
-	std::string chest6 = "     |    |___|     |      |    |___|     |      |    |___|     |     ";
-	std::string chest7 = "     |______________|      |______________|      |______________|     ";
-
-    int titleX = (xMax - title1.length()) / 2 - 3;
-    int chestX = ((xMax - chest1.length()) / 2 - 3);
-
-    mvprintw(yMax / 2 - 10, titleX, title1.c_str());
-    mvprintw(yMax / 2 - 9, titleX, title2.c_str());
-    mvprintw(yMax / 2 - 8, titleX, title3.c_str());
-    mvprintw(yMax / 2 - 7, titleX, title4.c_str());
-    mvprintw(yMax / 2 - 6, titleX, title5.c_str());
-    mvprintw(yMax / 2 - 5, titleX, title6.c_str());
-
-    mvprintw(yMax / 2 - 3, chestX, chest1.c_str());
-    mvprintw(yMax / 2 - 2, chestX, chest2.c_str());
-    mvprintw(yMax / 2 - 1, chestX, chest3.c_str());
-    mvprintw(yMax / 2 - 0, chestX, chest4.c_str());
-    mvprintw(yMax / 2 + 1, chestX, chest5.c_str());
-    mvprintw(yMax / 2 + 2, chestX, chest6.c_str());
-    mvprintw(yMax / 2 + 3, chestX, chest7.c_str());
+    printgametitle(stdscr, "openachest", yMax/2 - 10);
+    printgametitle(stdscr, "chest", yMax/2 - 3);
 
     refresh();
 
@@ -665,67 +548,13 @@ int chestscreen(int highlight = 0, int count = 1)
 
     keypad(menuwin, true);
 
-    std::string choices[3] = {"CHEST 1", "CHEST 2", "CHEST 3"};
-    int choice;
+    std::vector<std::string> choices = {"CHEST 1", "CHEST 2", "CHEST 3"};
+    int choice = chooseOption(menuwin, choices, false);
 
-    while (1)
-    {
-  
-        for (int i = 0; i < 3; i++) {
-            if (i == highlight)
-                wattron(menuwin, A_REVERSE);
-            mvwprintw(menuwin, i + 2, (xMax - 17) / 2, choices[i].c_str());
-            wattroff(menuwin, A_REVERSE);
-        }
-
-
-        wrefresh(menuwin);
-
-
-        choice = wgetch(menuwin);
-
-        switch (choice) {
-            case KEY_UP:
-                highlight--;
-                if (highlight == -1) {
-                    highlight = 0;
-                }
-                break;
-            case KEY_DOWN:
-                highlight++;
-                if (highlight == 3) {
-                    highlight = 2;
-                }
-                break;
-            default:
-                break;
-        }
-
-        // When pressing Enter
-        if (choice == 10) {
-
-            if (highlight == 0) {
-                erase();
-                clear();
-                refresh();
-                return 0;
-            }
-
-            else if (highlight == 1) {
-                erase();
-                clear();
-                refresh();
-                return 1;
-            }
-
-            else if (highlight == 2){
-                erase();
-                clear();
-                refresh();
-                return 2;
-            }
-        }
-    }
+    erase();
+    clear();
+    refresh();
+    return choice;
 }
 
 int prizescreen(int dollars) 
@@ -734,29 +563,9 @@ int prizescreen(int dollars)
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-	int middleCol = (xMax - 16) / 2;
+	int middleCol = (xMax - 18) / 2;
 
-    std::string title1 = "      __________";
-	std::string title2 = "     /\\____;;___\\";
-	std::string title3 = "    | /         /";
-	std::string title4 = "    `. ())oo() .";
-	std::string title5 = "     |\\(%()*^^()^\\";
-	std::string title6 = "     | |---------|";
-	std::string title7 = "     \\ |         |";
-	std::string title8 = "      \\|_________|"; 
-
-    int titleX = (xMax - title1.length()) / 2 - 3;
-
-    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
-    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
-    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
-    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
-    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
-    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
-    mvprintw(yMax / 2 - 1, titleX, title7.c_str());
-	mvprintw(yMax / 2    , titleX, title8.c_str());    
-
-
+    printgametitle(stdscr, "prizescreen", yMax / 2 - 7);
 	
 	mvprintw(yMax / 2 + 4, middleCol, "You got %d dollars!", dollars);
 
@@ -774,21 +583,7 @@ int winScreen(int highlight = 0, int count = 1) {
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-	std::string title1 = "__     ______  _    _   __          _______ _   _     _";
-	std::string title2 = "\\ \\   / / __ \\| |  | |  \\ \\        / /_   _| \\ | |   | |";
-	std::string title3 = " \\ \\_/ / |  | | |  | |   \\ \\  /\\  / /  | | |  \\| |   | |";
-	std::string title4 = "  \\   /| |  | | |  | |    \\ \\/  \\/ /   | | | . ` |   | |";
-	std::string title5 = "   | | | |__| | |__| |     \\  /\\  /   _| |_| |\\  |   |_|";
-	std::string title6 = "   |_|  \\____/ \\____/       \\/  \\/   |_____|_| \\_|   (_)";
-
-    int titleX = (xMax - title1.length()) / 2 - 3;
-
-    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
-    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
-    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
-    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
-    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
-    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
+    printgametitle(stdscr, "youwin", yMax / 2 - 7);
 
     refresh();
 
@@ -798,62 +593,12 @@ int winScreen(int highlight = 0, int count = 1) {
 
     keypad(menuwin, true);
 
-    std::string choices[3] = {"Continue (infinite waves)", "Main Menu", "Quit"};
-    int choice;
-
-    while (1) {
-  
-        for (int i = 0; i < 3; i++) {
-            if (i == highlight)
-                wattron(menuwin, A_REVERSE);
-            mvwprintw(menuwin, i + 2, (xMax - 17) / 2, choices[i].c_str());
-            wattroff(menuwin, A_REVERSE);
-        }
-
-
-        wrefresh(menuwin);
-
-
-        choice = wgetch(menuwin);
-
-        switch (choice) {
-            case KEY_UP:
-                highlight--;
-                if (highlight == -1) {
-                    highlight = 0;
-                }
-                break;
-            case KEY_DOWN:
-                highlight++;
-                if (highlight == 3) {
-                    highlight = 2;
-                }
-                break;
-            default:
-                break;
-        }
-
-        // When pressing Enter
-        if (choice == 10) {
-            // main menu
-            if (highlight == 1) {
-                erase();
-                return 0;
-            }
-            // quit
-            else if (highlight == 2) {
-                erase();
-                return 3;
-            }
-            // continue
-            else if (highlight == 0){
-                erase();
-                clear();
-                refresh();
-                return 4;
-            }
-        }
-    }
+    std::vector<std::string> choices = {"Continue (infinite waves)", "Main Menu", "Quit"};
+    int choice = chooseOption(menuwin, choices, false);
+    int options[] = {-1, 0, 4};
+    clear();
+    refresh();
+    return options[choice];
 }
 
 int endscreen()
@@ -865,26 +610,8 @@ int endscreen()
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
-	std::string title1 = "  _____             __     __                                _          _ ";
-	std::string title2 = " / ____|            \\ \\   / /               /\\              (_)        | |";
-	std::string title3 = "| (___   ___  ___    \\ \\_/ /__  _   _      /  \\   __ _  __ _ _ _ __    | |";
-	std::string title4 = " \\___ \\ / _ \\/ _ \\    \\   / _ \\| | | |    / /\\ \\ / _` |/ _` | | '_ \\   | |";
-	std::string title5 = " ____) |  __/  __/     | | (_) | |_| |   / ____ \\ (_| | (_| | | | | |  |_|";
-	std::string title6 = "|_____/ \\___|\\___|     |_|\\___/ \\__,_|  /_/    \\_\\__, |\\__,_|_|_| |_|  (_)";
-	std::string title7 = "                                                   __/ |                   ";
-	std::string title8 = "                                                  |___/                    ";
-
-    	int titleX = (xMax - title1.length()) / 2 - 3;
-
-    mvprintw(yMax / 2 - 7, titleX, title1.c_str());
-    mvprintw(yMax / 2 - 6, titleX, title2.c_str());
-    mvprintw(yMax / 2 - 5, titleX, title3.c_str());
-    mvprintw(yMax / 2 - 4, titleX, title4.c_str());
-    mvprintw(yMax / 2 - 3, titleX, title5.c_str());
-    mvprintw(yMax / 2 - 2, titleX, title6.c_str());
-    mvprintw(yMax / 2 - 1, titleX, title7.c_str());
-	mvprintw(yMax / 2    , titleX, title8.c_str());
-	mvprintw(yMax / 2 - 15, titleX, "Press any key to exit...");
+    printgametitle(stdscr, "seeyouagain", yMax / 2 - 7);
+	mvprintw(yMax / 2 + 15, (xMax-12)/2-3, "Press any key to exit...");
 
 	// Wait for user input
 	getch();
@@ -1145,18 +872,14 @@ int playscreen(WINDOW *win, bool load = false)
             refresh();
             break;
         }
+        
         if (wave_num == 15)
         {
             clear();
             refresh();
-            int choise = winScreen();
-            if (choise == 0 || choise == 3)
-            {
-                return choise;
-            }
-            else
-            {
-                continue;
+            int choice = winScreen();
+            if (choice != -1){
+                return choice;
             }
         }
         saveGame(health, wave_num, money, mapnum, towers);
@@ -1203,9 +926,6 @@ int storyscreen(WINDOW *win){
   }
   return 0;
 }
-
-
-
 
 int helpscreen(WINDOW *win)
 {

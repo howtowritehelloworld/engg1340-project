@@ -1,7 +1,9 @@
+3
+16
+3813
 1
-14
-21
-2
-Mage 5 6 6
-Archer 7 4 7
-Sniper 3 3 3
+Mage 999 2 1
+Sniper 999 2 4
+Sniper 4 2 3
+Sniper 5 3 3
+Sniper 12 3 4
