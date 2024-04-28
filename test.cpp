@@ -1,6 +1,4 @@
 #include <ncurses.h>
-#include <iostream>
-#include <cmath>
 #include <string>
 #include <unistd.h>
 #include <vector>
@@ -15,11 +13,12 @@
 #include "enemy.h"
 #include "save.h"
 
-struct Coords{ // I didnt know pair existed and this looks nicer (to me)
-    int y;
-    int x;
-};
-
+std::string getString(char x)
+{
+    std::string s(1, x);
+ 
+    return s;   
+}
 
 int mainmenu(WINDOW *);
 int playscreen(WINDOW *, bool load);
@@ -99,12 +98,7 @@ std::vector<std::string> wave(int wave_num)
 }
 
 
-std::string getString(char x)
-{
-    std::string s(1, x);
- 
-    return s;   
-}
+
 
 void printgametitle(WINDOW* titlewin, std::string name, int row) {
     int yMax, xMax;
@@ -232,7 +226,7 @@ int main(int agrc, char **argv)
     return 0;
 }
 
-Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control cursor to select the tile they want to interact with
+std::pair<int, int> selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control cursor to select the tile they want to interact with
 {   
     wclear(actionBox);
     box(actionBox, ACS_VLINE, ACS_HLINE);
@@ -242,30 +236,30 @@ Coords selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control c
     wrefresh(actionBox);
     keypad(win, true);
     int ch;
-    Coords selected = {0, 0};
+    std::pair<int, int> selected = {0, 0};
     
     curs_set(1);
-    wmove(win, 3*selected.y+2, 6*selected.x+4);
+    wmove(win, 3*selected.first+2, 6*selected.second+4);
     while (1) {
         ch = wgetch(win);
         switch(ch) {
             case KEY_UP:
-                selected.y = std::max(0, selected.y-1);
+                selected.first = std::max(0, selected.first-1);
                 break;
             case KEY_DOWN:
-                selected.y = std::min(8, selected.y+1);
+                selected.first = std::min(8, selected.first+1);
                 break;
             case KEY_LEFT:
-                selected.x = std::max(0, selected.x-1);
+                selected.second = std::max(0, selected.second-1);
                 break;
             case KEY_RIGHT:
-                selected.x = std::min(15, selected.x+1);
+                selected.second = std::min(15, selected.second+1);
                 break;
             case KEY_BACKSPACE:
                 curs_set(0);
                 return {-1, -1};
         }
-        wmove(win, 3*selected.y+2, 5*selected.x+3);
+        wmove(win, 3*selected.first+2, 5*selected.second+3);
         wrefresh(win);
         if (ch == 10)
             break;
@@ -671,6 +665,9 @@ int playscreen(WINDOW *win, bool load = false)
     }
     else {
         loadGame(health, wave_num, money, mapnum, towers);
+        if (health == -1){
+            return 0;
+        }
         int tempmoney = 99999999;
         readmap(map, mapnum, path_start);
         configpath(map, path_start);
@@ -704,7 +701,7 @@ int playscreen(WINDOW *win, bool load = false)
     nodelay(towerBox, TRUE);
     nodelay(statsBox, TRUE);
 
-    Coords selected;
+    std::pair<int, int> selected;
 
     keypad(actionBox, true);
 
@@ -786,7 +783,7 @@ int playscreen(WINDOW *win, bool load = false)
             case 1: // Edit
             {
                 selected = selectSquare(mainBox, actionBox);
-                if (map[selected.y][selected.x] == -1 && selected.x != -1){ // Empty Tile
+                if (map[selected.first][selected.second] == -1 && selected.second != -1){ // Empty Tile
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Empty Tile");
@@ -799,11 +796,11 @@ int playscreen(WINDOW *win, bool load = false)
                             int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
                             
                             tower* t = new tower;
-                            t->coordinates = std::make_pair(selected.y, selected.x);
+                            t->coordinates = selected;
                             t->create_new_tower(tower_options[tower_option], 1, path_start, money);
                             if (t->name != ""){
                                 towers.push_back(t);
-                                map[selected.y][selected.x] = towers.size()-1;
+                                map[selected.first][selected.second] = towers.size()-1;
                             }
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
@@ -820,13 +817,13 @@ int playscreen(WINDOW *win, bool load = false)
                         }
                     }
                 }
-                if (map[selected.y][selected.x] >= 0 && selected.x != -1){ // Tower
+                if (map[selected.first][selected.second] >= 0 && selected.second != -1){ // Tower
                     bool editing = true;
                     do 
                     {
                         wclear(towerBox);
                         box(towerBox, ACS_VLINE, ACS_HLINE);
-                        int index = map[selected.y][selected.x];
+                        int index = map[selected.first][selected.second];
                         tower* selected_tower = towers[index];
                         print_tower(towerBox, selected_tower);
                         wrefresh(towerBox);
@@ -857,7 +854,7 @@ int playscreen(WINDOW *win, bool load = false)
                                         }
                                     }
                                 }
-                                map[selected.y][selected.x] = -1;
+                                map[selected.first][selected.second] = -1;
 
                                 wclear(towerBox);
                                 box(towerBox, ACS_VLINE, ACS_HLINE);
@@ -997,7 +994,7 @@ int helpscreen(WINDOW *win)
     nodelay(towerBox, TRUE);
     nodelay(statsBox, FALSE);
 
-    Coords selected;
+    std::pair<int, int> selected;
 
     keypad(actionBox, true);
 
@@ -1050,7 +1047,7 @@ int helpscreen(WINDOW *win)
                 mvwprintw(statsBox, 2, 1, "Use arrow keys to move the cursor and press enter to select");
                 wrefresh(statsBox); 
                 selected = selectSquare(mainBox, actionBox);
-                if (map[selected.y][selected.x] == -1 && selected.x != -1){ // Empty Tile
+                if (map[selected.first][selected.second] == -1 && selected.second != -1){ // Empty Tile
                     wclear(statsBox);
                     box(statsBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(statsBox, 2, 1, "Good Spot! Now click Place Tower");
@@ -1071,10 +1068,10 @@ int helpscreen(WINDOW *win)
                             int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
                             
                             tower* t = new tower;
-                            t->coordinates = std::make_pair(selected.y, selected.x);
+                            t->coordinates = std::make_pair(selected.first, selected.second);
                             t->create_new_tower(tower_options[tower_option], 1, path_start, money);
                             towers.push_back(t);
-                            map[selected.y][selected.x] = towers.size()-1;
+                            map[selected.first][selected.second] = towers.size()-1;
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
                             printMap(mainBox, path_start, towers);
@@ -1094,7 +1091,7 @@ int helpscreen(WINDOW *win)
                         }
                     }
                 }
-                if (map[selected.y][selected.x] >= 0 && selected.x != -1){ // Tower
+                if (map[selected.first][selected.second] >= 0 && selected.second != -1){ // Tower
                     wclear(statsBox);
                     box(statsBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(statsBox, 1, 1, "Here is the upgrade screen");
@@ -1106,7 +1103,7 @@ int helpscreen(WINDOW *win)
                     {   
                         wclear(towerBox);
                         box(towerBox, ACS_VLINE, ACS_HLINE);
-                        int index = map[selected.y][selected.x];
+                        int index = map[selected.first][selected.second];
                         tower* selected_tower = towers[index];
                         print_tower(towerBox, selected_tower);
                         wrefresh(towerBox);
@@ -1283,7 +1280,7 @@ int helpscreen(WINDOW *win)
             case 1: // Build
             {
                 selected = selectSquare(mainBox, actionBox);
-                if (map[selected.y][selected.x] == -1 && selected.x != -1){ // Empty Tile
+                if (map[selected.first][selected.second] == -1 && selected.second != -1){ // Empty Tile
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Empty Tile");
@@ -1296,10 +1293,10 @@ int helpscreen(WINDOW *win)
                             int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
                             
                             tower* t = new tower;
-                            t->coordinates = std::make_pair(selected.y, selected.x);
+                            t->coordinates = std::make_pair(selected.first, selected.second);
                             t->create_new_tower(tower_options[tower_option], 1, path_start, money);
                             towers.push_back(t);
-                            map[selected.y][selected.x] = towers.size()-1;
+                            map[selected.first][selected.second] = towers.size()-1;
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
                             printMap(mainBox, path_start, towers);
@@ -1315,13 +1312,13 @@ int helpscreen(WINDOW *win)
                         }
                     }
                 }
-                if (map[selected.y][selected.x] >= 0 && selected.x != -1){ // Tower
+                if (map[selected.first][selected.second] >= 0 && selected.second != -1){ // Tower
                     bool editing = true;
                     do 
                     {
                         wclear(towerBox);
                         box(towerBox, ACS_VLINE, ACS_HLINE);
-                        int index = map[selected.y][selected.x];
+                        int index = map[selected.first][selected.second];
                         tower* selected_tower = towers[index];
                         print_tower(towerBox, selected_tower);
                         wrefresh(towerBox);
@@ -1352,7 +1349,7 @@ int helpscreen(WINDOW *win)
                                         }
                                     }
                                 }
-                                map[selected.y][selected.x] = -1;
+                                map[selected.first][selected.second] = -1;
 
                                 wclear(towerBox);
                                 box(towerBox, ACS_VLINE, ACS_HLINE);

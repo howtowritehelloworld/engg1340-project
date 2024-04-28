@@ -19,15 +19,17 @@ void saveGame(int health, int wave_num, int money, int map_num, vector<tower*> t
             }
         savefile << towers[towers.size()-1]->name << " "<< towers[towers.size()-1]->level <<" "<< towers[towers.size()-1]->coordinates.first << " " <<towers[towers.size()-1]->coordinates.second;
 
-        
-        
     }
     savefile.close();
 }
 
 void loadGame(int &health, int &wave_num , int &money, int& map_num, vector<tower*> &towers) {
     ifstream loadfile("save.txt");
-    loadfile >> health >> wave_num >> money>> map_num;
+    if (!loadfile.is_open()){
+        health = -1;
+        return;
+    }
+    loadfile >> health >> wave_num >> money >> map_num;
     int i = 0;
     while (!loadfile.eof()){
         tower* t = new tower;
@@ -36,4 +38,5 @@ void loadGame(int &health, int &wave_num , int &money, int& map_num, vector<towe
         towers.push_back(t);
     }
     loadfile.close();
+    
 }
