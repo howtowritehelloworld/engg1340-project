@@ -1,2 +1,2 @@
-gametest: test.cpp map.cpp enemy.cpp path.cpp tower.cpp 
-	g++ test.cpp path.cpp map.cpp enemy.cpp tower.cpp save.cpp -o test -lncurses
+main: main.cpp src/game.cpp src/path.cpp src/map.cpp src/enemy.cpp src/tower.cpp src/save.cpp
+	g++ main.cpp src/game.cpp src/path.cpp src/map.cpp src/enemy.cpp src/tower.cpp src/save.cpp -o game -lncurses

@@ -1,17 +1,4 @@
-#include <ncurses.h>
-#include <string>
-#include <unistd.h>
-#include <vector>
-#include <fstream>
-#include <chrono>
-#include <thread>
-#include <cstdlib>
-#include <time.h>
-#include "map.h"
-#include "path.h"
-#include "tower.h"
-#include "enemy.h"
-#include "save.h"
+#include "game.h"
 
 std::string getString(char x)
 {
@@ -20,13 +7,6 @@ std::string getString(char x)
     return s;   
 }
 
-int mainmenu(WINDOW *);
-int playscreen(WINDOW *, bool load);
-int helpscreen(WINDOW *);
-int storyscreen(WINDOW *);
-int endscreen();
-int mapscreen(WINDOW* titlewin);
-void mapdisplay(WINDOW* mapwin, int count);
 std::vector<std::string> tutor_wave(int wave_num)
 {
     std::vector<std::vector<std::string>> tutor_wave = 
@@ -96,9 +76,6 @@ std::vector<std::string> wave(int wave_num)
         return enemy_lst;
     }        
 }
-
-
-
 
 void printgametitle(WINDOW* titlewin, std::string name, int row) {
     int yMax, xMax;
@@ -190,40 +167,6 @@ void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) //
         }
         current = current->next;
     }
-}
-
-int main(int agrc, char **argv) 
-{
-    initscr();
-    refresh();
-    start_color();
-    int screenchoice = 0;
-
-    while (screenchoice != 4)
-    {   
-        switch (screenchoice)
-        {
-            case 0: // mainmenu
-                screenchoice = mainmenu(stdscr);
-                break;
-            case 1: // new game
-                screenchoice = playscreen(stdscr, false);
-                break;
-            case 2: // load game
-                screenchoice = playscreen(stdscr, true);
-                break;
-            case 3: // help screen
-                screenchoice = storyscreen(stdscr);
-                break;
-            case 4:
-                // quit W
-                break;
-        }
-        clear();
-    }
-
-    endscreen();
-    return 0;
 }
 
 std::pair<int, int> selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control cursor to select the tile they want to interact with
@@ -484,8 +427,6 @@ void print_current_enemy(WINDOW *win, path*& path_start){
         current = current->next;
     }
 }
-
-
 
 void print_wave(WINDOW* win, int wave_num, std::vector<std::string> next_wave){
     mvwprintw(win, 2, 6, "Wave %d", wave_num); 
@@ -903,7 +844,6 @@ int playscreen(WINDOW *win, bool load = false)
     }
     return loseScreen();
 }
-
 
 void storydisplay(WINDOW* storywin, int count) {
     wclear(storywin);
