@@ -1,7 +1,7 @@
 # Kingdom of Eldoria (Tower Defense Game) ENGG1340 Project
 
 ## Table of contents
-
+-   [Quick Start](#quickstart)
 -   [Group members](#group-members)
 -   [Introduction](#introduction)
 -   [Gameplay](#gameplay)
@@ -10,7 +10,6 @@
     -   [3. Controls](#controls)
     -   [4. Towers](#towers)
     -   [5. Enemies](#enemies)
--   [Installation](#installation)
 -   [Project Requirements](#project-requirements)
     -   [1. Generation of random game elements](#random)
     -   [2. Data structures for storing game status](#data-structures)
@@ -20,21 +19,34 @@
     -   [6. Proper Indentation and naming styles](#external-libraries)
     -   [7. In-code documentation](#documentation)
 
+
+## Quick Start <a name="quickstart"></a>
+
+Download the zip file and unzip it.
+
+In the terminal,
+Type `make` to create the executable.
+Type `./game` to play the game.
+
+Use arrows keys <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> to navigate the menu
+
+We recommend opening the terminal in full size for the best gameplay experience
+
  ## Group members <a name="group-members"></a>
 
-There is a known problem where some commits doesn't count towards the person's contribution statistics. Hence the contribution percentages and numbers are inaccurate. To avoid being labelled as a "free rider", all the functions and features each of us has worked on will be written down here.
+Some commits don't count towards the person's contribution statistics. Hence the contribution percentages and numbers are inaccurate. To avoid being labeled as a "free rider", all the functions and features we have worked on will be written down here.
 
 | Group Member | uid | Work done |
 |---------|---------|---------|
-| Zheng Andy | 3036222642 | Pathfinding, wave display, gameplay mechanics |
+| Zheng Andy | 3036222642 | Pathfinding, wave display, gameplay mechanics, testing, debugging, documentation, formatting |
 | Jason Ip Tsz Shun | 3036226222 | GUI, damage calculation, tutorial mode |
 | Owen Wen Sze Hoi | 3036226583 | Towers, enemies, infinite waves generation, balancing, chests |
-| Cyric Wong Chun Sun | 3036222965 | Map design, save and load game, gametitle, video demo |
+| Cyric Wong Chun Sun | 3036222965 | Map design, save and load game, game title, video demo |
 | Donald Leung Kit Yiu | 3036226557 | GUI, tutorial mode, map display |
 
 ## Introduction <a name="introduction"></a>
 
-Kingdom of Eldoria is a tower defence simulator where the primary objective is to waves of incoming enemies from approaching the end of the map. The player must strategically place defensive towers, along predetermined paths or routes which enemies follow. These towers have unique abilities which make them suitable for different situations. With a limited amount of resources (money and health), players must carefully evaluate their positions and come up with the best defensive plan to stop the waves of incoming enemies.
+The Kingdom of Eldoria is a tower defense simulator with the primary objective of defending waves of enemies. The player must strategically place defensive towers, along predetermined paths or routes that enemies follow. These towers have unique abilities which make them suitable for different situations. With limited resources (money and health), players must carefully evaluate their positions and come up with the best defensive plan to stop the waves of incoming enemies.
 
 We recommend playing the tutorial of the game before playing the main game. The tutorial is located at the help button on the main screen. A short story will also be included.
 
@@ -45,10 +57,10 @@ We recommend playing the tutorial of the game before playing the main game. The 
 
 Our game includes: 
 - Colorful GUI
-- Easy to use controls
+- Simple controls
 - A wide variety of maps, even custom maps can be made
 - Diverse towers and enemies
-- Saving and loading
+- Auto-saving and loading
 
 ### 2. Gameflow <a name="gameflow"></a>
 
@@ -194,41 +206,49 @@ Money given after defeat: 4 per level
 
 Type: Air, Camo
 
-## Installation <a name="installation"></a>
-
-Run make && ./test into the terminal after downloading all the files and putting them into the same directory.
-
-Make sure your terminal is large enough so that the whole game can be presented.
-
-Also our game uses ncurses's color feature so there's a very slim chance that colors cannot be shown on you terminal due to your terminal is incapable of showing colors. However from our testing with vscode the color works fine.
-
 ## Project requirements <a name="project-requirements"></a>
 
 ### Generation of random game elements <a name="random"></a>
 
 The game provides an option for the player to choose the map randomly.
 
-The game features an "Infinite Mode" option, where players can engage in an endless gameplay experience. In this mode, random enemies are dynamically generated based on the wave number, ensuring that the difficulty scales as the player progresses through the waves.
+The game features an "Infinite Mode" option. In this mode, random enemies are randomly generated based on the wave number, ensuring that the difficulty scales as the player progresses through the waves.
 
 ### Data structures for storing game status <a name="data-structures"></a>
 
-The game creates numerous structures for tiles on maps and enemies.
+The game uses different data structures to store the game.
 
-The game implements a 2D vector to store the map elements, 
+Vector to store the pointers of all towers.
+
+Linked list to store the path and the pointers to the enemies.
+
+Use text file for saving the game.
 
 ### Dynamic Memory Management <a name="dyanmic-memory"></a>
 
-The game heaveily uses vectors and linked lists.
+Enemies and towers are all created and stored as pointers.
+
+When a tower is sold or when an enemy is defeated,
+
+the pointer will be deleted to free up memory.
 
 ### File input/output (e.g., for loading/saving game status) <a name="file-inputoutput"></a>
 
-The game saves the maps as text files and then reads and prints them out accordingly.
+The game saves the current progress in a text file. This includes
 
-Additionally, the game automatically saves the game every time you pass a wave inside a text file, so if you ever accidentally quit or want to continue playing another time, you can maintain all your progress.
+- Map number
+- Health
+- Money
+- Wave number
+- Tower information (Name, level, coordinates)
+
+When loading a game, the data from the text file will be read and the game status will be updated.
+
+Additionally, the game automatically saves the game after editing and after each wave. The player does not need to actively save their game.
 
 ### Program codes in multiple files <a name="multiple-files"></a>
 
-In total, the program includes X C++ files, X header files, X txt files and one Makefile.
+The source code is split into different components and stored inside `src` folder.
 
 ### Proper Indentation and naming styles <a name="external-libraries"></a>
 
