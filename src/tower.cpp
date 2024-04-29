@@ -19,11 +19,14 @@ void tower::mage(int tower_level)
     color_id = 3;
     icon = 'M';
     level = tower_level;
-    cost = 40*level;
-    damage = 3*tower_level;
+    cost = 40 * level;
+    damage = 3 * tower_level;
     attackspeed = 2;
     range = 1;
-    type[0] = "AOE"; type[1] = "Ground"; type[2] = "Air"; type[3] = "Camo";
+    type[0] = "AOE";
+    type[1] = "Ground";
+    type[2] = "Air";
+    type[3] = "Camo";
 }
 
 void tower::archer(int tower_level)
@@ -44,11 +47,14 @@ void tower::archer(int tower_level)
     color_id = 4;
     icon = 'A';
     level = tower_level;
-    cost = 20*level;
-    damage = 3*tower_level;
+    cost = 20 * level;
+    damage = 3 * tower_level;
     attackspeed = 1;
     range = 1;
-    type[0] = "Single"; type[1] = "Ground"; type[2] = "Air"; type[3] = ""; 
+    type[0] = "Single";
+    type[1] = "Ground";
+    type[2] = "Air";
+    type[3] = "";
 }
 
 void tower::sniper(int tower_level)
@@ -70,11 +76,14 @@ void tower::sniper(int tower_level)
     color_id = 5;
     icon = 's';
     level = tower_level;
-    cost = 50*level;
-    damage = 6*tower_level;
+    cost = 50 * level;
+    damage = 6 * tower_level;
     attackspeed = 3;
     range = 2;
-    type[0] = "Single"; type[1] = "Ground"; type[2] = "Air"; type[3] = "Camo";
+    type[0] = "Single";
+    type[1] = "Ground";
+    type[2] = "Air";
+    type[3] = "Camo";
 }
 
 void tower::cannon(int tower_level)
@@ -95,11 +104,14 @@ void tower::cannon(int tower_level)
     color_id = 6;
     icon = 'C';
     level = tower_level;
-    cost = 30*level;
-    damage = 5*tower_level;
+    cost = 30 * level;
+    damage = 5 * tower_level;
     attackspeed = 3;
     range = 1;
-    type[0] = "AOE"; type[1] = "Ground"; type[2] = ""; type[3] = "";
+    type[0] = "AOE";
+    type[1] = "Ground";
+    type[2] = "";
+    type[3] = "";
 }
 
 void tower::CalculateDamage()
@@ -120,16 +132,19 @@ void tower::CalculateDamage()
 
     */
 
-
-    if (cd > 0){
+    if (cd > 0)
+    {
         cd--;
         return;
     }
 
-    if (type[0] == "AOE"){
+    if (type[0] == "AOE")
+    {
         bool attacked = false;
-        for (int i = 0; i < path_covered.size(); i++){
-            if (path_covered[i]-> enemy_on_top != NULL){
+        for (int i = 0; i < path_covered.size(); i++)
+        {
+            if (path_covered[i]->enemy_on_top != NULL)
+            {
                 if (path_covered[i]->enemy_on_top->type[0] == "Air" && type[2] == "")
                 {
                     continue;
@@ -145,26 +160,34 @@ void tower::CalculateDamage()
                 }
             }
         }
-        if (attacked){
+        if (attacked)
+        {
             cd = attackspeed;
         }
     }
-    else if (type[0] == "Single"){
+    else if (type[0] == "Single")
+    {
         int last;
         bool no_enemy = true;
-        for (int i = 0; i < path_covered.size(); i++){
-            if (path_covered[i]->enemy_on_top != NULL){
-                if (path_covered[i]->enemy_on_top->type[0] == "Air" && type[2] == ""){
+        for (int i = 0; i < path_covered.size(); i++)
+        {
+            if (path_covered[i]->enemy_on_top != NULL)
+            {
+                if (path_covered[i]->enemy_on_top->type[0] == "Air" && type[2] == "")
+                {
                 }
-                else if (path_covered[i]->enemy_on_top->type[1] == "Camo" && type[3] == ""){
+                else if (path_covered[i]->enemy_on_top->type[1] == "Camo" && type[3] == "")
+                {
                 }
-                else{
+                else
+                {
                     last = i;
                     no_enemy = false;
                 }
             }
         }
-        if (no_enemy){
+        if (no_enemy)
+        {
             return;
         }
         path_covered[last]->enemy_on_top->health -= damage;
@@ -172,8 +195,8 @@ void tower::CalculateDamage()
     }
 }
 
-void tower::set_tower_coverage(path*& path_start)
-{   
+void tower::set_tower_coverage(path *&path_start)
+{
     /*
 
     Input:
@@ -188,11 +211,13 @@ void tower::set_tower_coverage(path*& path_start)
 
     */
     path_covered.clear();
-    path* current = path_start;
-    while (current != NULL){
+    path *current = path_start;
+    while (current != NULL)
+    {
         int row = current->coordinates.first;
         int col = current->coordinates.second;
-        if (abs(row - coordinates.first) <= range && abs(col - coordinates.second) <= range){
+        if (abs(row - coordinates.first) <= range && abs(col - coordinates.second) <= range)
+        {
             path_covered.push_back(current);
         }
         current = current->next;
@@ -237,7 +262,7 @@ void tower::upgrade_tower()
     /*
 
     Input:
-    
+
     Process:
     Increase the level of the tower by 1
     Calls create_tower to update the attributes of the tower
@@ -246,10 +271,11 @@ void tower::upgrade_tower()
     Modified struct tower with the attributes of the upgraded tower
 
     */
-    create_tower(name, level+1);
+    create_tower(name, level + 1);
 }
 
-void attack_all(vector<struct tower*> towers){
+void attack_all(vector<struct tower *> towers)
+{
     /*
 
     Input:
@@ -263,7 +289,8 @@ void attack_all(vector<struct tower*> towers){
     Modified enemy health
 
     */
-    for (int i = 0; i < towers.size(); i++){
+    for (int i = 0; i < towers.size(); i++)
+    {
         towers[i]->CalculateDamage();
     }
 }
