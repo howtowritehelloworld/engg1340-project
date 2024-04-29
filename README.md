@@ -42,7 +42,7 @@ Some commits don't count towards the person's contribution statistics. Hence th
 | Jason Ip Tsz Shun | 3036226222 | GUI, damage calculation, tutorial mode |
 | Owen Wen Sze Hoi | 3036226583 | Towers, enemies, infinite waves generation, balancing, chests |
 | Cyric Wong Chun Sun | 3036222965 | Map design, save and load game, game title, video demo |
-| Donald Leung Kit Yiu | 3036226557 | GUI, tutorial mode, map display |
+| Donald Leung Kit Yiu | 3036226557 | GUI, tutorial mode, map display, readme file|
 
 ## Introduction <a name="introduction"></a>
 
