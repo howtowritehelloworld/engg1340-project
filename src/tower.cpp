@@ -118,71 +118,27 @@ void tower::set_tower_coverage(path*& path_start){
     }
 }
 
-void tower::sample_tower(string tower_name){
+void tower::create_tower(string tower_name, int tower_level){
     if (tower_name == "Mage")
     {
-        mage(1);
+        mage(tower_level);
     }
     else if (tower_name == "Archer")
     {
-        archer(1);
+        archer(tower_level);
     }
     else if (tower_name == "Sniper")
     {
-        sniper(1);
+        sniper(tower_level);
     }
     else if (tower_name == "Cannon")
     {
-        cannon(1);
+        cannon(tower_level);
     }
 }
 
-void tower::create_new_tower(string name, int level, path*& path_start, int &money){
-    if (name == "Mage" && money >= 40*level)
-    {
-        money -= 40*level;
-        mage(level);
-    }
-    else if (name == "Archer" && money >= 20*level)
-    {
-        money -= 20*level;
-        archer(level);
-    }
-    else if (name == "Sniper" && money >= 50*level)
-    {
-        money -= 50*level;
-        sniper(level);
-    }
-    else if (name == "Cannon" && money >= 30*level)
-    {
-        money -= 30*level;
-        cannon(level);
-    }
-    set_tower_coverage(path_start);
-}
-
-void tower::upgrade_tower(std::string name, int level, path*& path_start, int &money){
-    if (name == "Mage" && money >= 40*level)
-    {
-        money -= 40*level;
-        mage(level+1);
-    }
-    else if (name == "Archer" && money >= 20*level)
-    {
-        money -= 20*level;
-        archer(level+1);
-    }
-    else if (name == "Sniper" && money >= 50*level)
-    {
-        money -= 50*level;
-        sniper(level+1);
-    }
-    else if (name == "Cannon" && money >= 30*level)
-    {
-        money -= 30*level;
-        cannon(level+1);
-    }
-    set_tower_coverage(path_start);  
+void tower::upgrade_tower(){
+    create_tower(name, level+1);
 }
 
 void attack_all(vector<struct tower*> towers){

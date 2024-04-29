@@ -312,7 +312,7 @@ int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::st
                 wattron(actionBox, A_REVERSE);
                 if (i != num_of_choices-1){
                     tower* temp_tower = new tower;
-                    temp_tower->sample_tower(tower_options[i]);
+                    temp_tower->create_tower(tower_options[i], 1);
                     print_tower(towerBox, temp_tower);
                     delete temp_tower;
                 }
@@ -539,14 +539,14 @@ int playscreen(WINDOW *win, bool load = false)
         if (health == -1){
             return 0;
         }
-        int tempmoney = 99999999;
         readmap(map, mapnum, path_start);
         configpath(map, path_start);
         for (int i = 0; i < towers.size(); i++){
             map[towers[i]->coordinates.first][towers[i]->coordinates.second] = i;
             tower* t = new tower;
             t = towers[i];
-            t->create_new_tower(t->name, t->level, path_start, tempmoney);
+            t->create_tower(t->name, t->level);
+            t->set_tower_coverage(path_start);
         }
     }
     
@@ -595,7 +595,6 @@ int playscreen(WINDOW *win, bool load = false)
         
         print_wave(towerBox, wave_num, current_wave);
         
-        // update stats, enemies, towers, the fun stuff ig, but they dont do anything rn
         mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
         mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
         mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
@@ -617,7 +616,6 @@ int playscreen(WINDOW *win, bool load = false)
                 int killed_enemies = 0;
                 while (killed_enemies < current_wave.size() && health > 0){
                     spawn_enemy(path_start, i, current_wave);
-
 
                     printMap(mainBox, path_start, towers);
                     mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
@@ -665,14 +663,28 @@ int playscreen(WINDOW *win, bool load = false)
                         {
                             std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon", "Cancel"};
                             int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
-                            
-                            tower* t = new tower;
-                            t->coordinates = selected;
-                            t->create_new_tower(tower_options[tower_option], 1, path_start, money);
-                            if (t->name != ""){
-                                towers.push_back(t);
-                                map[selected.first][selected.second] = towers.size()-1;
+
+                            // User selects last option (Cancel)
+                            if (tower_option == tower_options.size()-1)
+                            {
+                                break;
                             }
+                            
+                            // Create Sample Tower
+                            tower* t = new tower;
+                            t->create_tower(tower_options[tower_option], 1);
+
+                            // Cancels tower placement if the player does not have enough money
+                            if (money < t->cost){
+                                delete t;
+                                break;
+                            }
+                            t->coordinates = selected;
+                            t->set_tower_coverage(path_start);
+                            money -= t->cost;
+                            towers.push_back(t);
+                            map[selected.first][selected.second] = towers.size()-1;
+
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
                             printMap(mainBox, path_start, towers);
@@ -704,10 +716,10 @@ int playscreen(WINDOW *win, bool load = false)
                         {
                             case 0: // Upgrade
                             {
-                                if ( money - selected_tower->cost < 0){
+                                if ( money < selected_tower->cost){
                                     break;
                                 }
-                                selected_tower->upgrade_tower(selected_tower->name, selected_tower->level, path_start, money);
+                                selected_tower->upgrade_tower();
                                 wclear(towerBox);
                                 mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                                 wrefresh(statsBox);
@@ -822,20 +834,11 @@ int helpscreen(WINDOW *win)
     WINDOW * actionBox = newwin(10, 20, 0, mid_x + 41 - 5);
     WINDOW * towerBox = newwin(24, 20, 10, mid_x + 41 - 5);
     WINDOW * statsBox = newwin(5, 82, 29, mid_x - 41 - 5);
-    
-    int yMax, xMax;
-    getmaxyx(stdscr, yMax, xMax);
 
     box(mainBox, ACS_VLINE, ACS_HLINE);
     box(actionBox, ACS_VLINE, ACS_HLINE);
     box(towerBox, ACS_VLINE, ACS_HLINE);
     box(statsBox, ACS_VLINE, ACS_HLINE);
-    
-    refresh();
-    wrefresh(mainBox);
-    wrefresh(actionBox);
-    wrefresh(towerBox);
-    wrefresh(statsBox);
     
     int map[9][16];
     path* path_start = new path;
@@ -851,10 +854,8 @@ int helpscreen(WINDOW *win)
     wrefresh(statsBox);
 
     int highlight = 0;
-
-    int health = 99999999;
+    int health = 9999;
     int wave_num = 1;
-    int money = 10000000;
 
     noecho();
     curs_set(0);
@@ -877,15 +878,14 @@ int helpscreen(WINDOW *win)
     box(statsBox, ACS_VLINE, ACS_HLINE);
     mvwprintw(statsBox, 1, 1, "Let's build our first tower >>");
     wgetch(statsBox);
-    wrefresh(statsBox);
 
-    wclear(statsBox);
-    box(statsBox, ACS_VLINE, ACS_HLINE);
-    mvwprintw(statsBox, 1, 1, "On the action menu at the top right corner");
-    mvwprintw(statsBox, 2, 1, "Click Build to start placing towers");
-    wrefresh(statsBox);
+    bool finishTutorial = false;
 
     while (1){
+        wclear(mainBox);
+        wclear(actionBox);
+        wclear(towerBox);
+        wclear(statsBox);
 
         box(mainBox, ACS_VLINE, ACS_HLINE);
         box(actionBox, ACS_VLINE, ACS_HLINE);
@@ -898,180 +898,47 @@ int helpscreen(WINDOW *win)
         wrefresh(towerBox);
         wrefresh(statsBox);
 
-        bool built = false;
-
-        switch(chooseOption(actionBox, {"Start Wave", "Build", "Quit"}))
+        if (wave_num == 5) 
         {
-            case 0: // start wave
-            wclear(statsBox);
-            mvwprintw(statsBox, 1, 1, "Let's not start the wave right now");
-            mvwprintw(statsBox, 2, 1, "Let's build a tower first");
-            wrefresh(statsBox);  
-            break;  
-            
-            case 1: // Edit
-            {   
-                wclear(statsBox);
-                box(statsBox, ACS_VLINE, ACS_HLINE);
-                mvwprintw(statsBox, 1, 1, "Now select the tile you want to place the tower on");
-                mvwprintw(statsBox, 2, 1, "Use arrow keys to move the cursor and press enter to select");
-                wrefresh(statsBox); 
-                selected = selectSquare(mainBox, actionBox);
-                if (map[selected.first][selected.second] == -1 && selected.second != -1){ // Empty Tile
-                    wclear(statsBox);
-                    box(statsBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(statsBox, 2, 1, "Good Spot! Now click Place Tower");
-                    wrefresh(statsBox); 
-                    wclear(towerBox);
-                    box(towerBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(towerBox, 2, 4, "Empty Tile");
-                    wrefresh(towerBox);
-                    switch(chooseOption(actionBox, {"Place Tower", "Cancel"}))
-                    {
-                        case 0: // Place Tower
-                        {   
-                            wclear(statsBox);
-                            box(statsBox, ACS_VLINE, ACS_HLINE);
-                            mvwprintw(statsBox, 2, 1, "Now you can select any tower you want to place!");
-                            wrefresh(statsBox); 
-                            std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon"};
-                            int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
-                            
-                            tower* t = new tower;
-                            t->coordinates = std::make_pair(selected.first, selected.second);
-                            t->create_new_tower(tower_options[tower_option], 1, path_start, money);
-                            towers.push_back(t);
-                            map[selected.first][selected.second] = towers.size()-1;
-                            wclear(towerBox);
-                            box(towerBox, ACS_VLINE, ACS_HLINE);
-                            printMap(mainBox, path_start, towers);
-                            // mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
-                            wrefresh(mainBox);
-                            wrefresh(towerBox);
-                            // wrefresh(statsBox);
-                            break;
-                        }
-                        case 1: // Cancel
-                        {  
-                            wclear(statsBox);
-                            box(statsBox, ACS_VLINE, ACS_HLINE);
-                            mvwprintw(statsBox, 2, 1, "Why did you cancel? Go back please");
-                            wrefresh(statsBox); 
-                            break;
-                        }
-                    }
-                }
-                if (map[selected.first][selected.second] >= 0 && selected.second != -1){ // Tower
-                    wclear(statsBox);
-                    box(statsBox, ACS_VLINE, ACS_HLINE);
-                    mvwprintw(statsBox, 1, 1, "Here is the upgrade screen");
-                    mvwprintw(statsBox, 2, 1, "To reopen it just select a tower after you click Build");
-                    mvwprintw(statsBox, 3, 1, "Click cancel to move on to the next part");
-                    wrefresh(statsBox); 
-                    bool editing = true;
-                    do 
-                    {   
-                        wclear(towerBox);
-                        box(towerBox, ACS_VLINE, ACS_HLINE);
-                        int index = map[selected.first][selected.second];
-                        tower* selected_tower = towers[index];
-                        print_tower(towerBox, selected_tower);
-                        wrefresh(towerBox);
-                        
-
-                        switch (chooseOption(actionBox, {"Upgrade", "Sell", "Cancel"}))
-                        {
-                            case 0: // Upgrade
-                            {
-                                if (money - selected_tower->cost < 0){
-                                    break;
-                                }
-                                selected_tower->upgrade_tower(selected_tower->name, selected_tower->level, path_start, money);
-                                wclear(towerBox);
-                                mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
-                                wrefresh(statsBox);
-                                box(towerBox, ACS_VLINE, ACS_HLINE);
-                                wclear(statsBox);
-                                box(statsBox, ACS_VLINE, ACS_HLINE);
-                                mvwprintw(statsBox, 1, 1, "You've upgraded your tower! Normally it costs money");
-                                mvwprintw(statsBox, 2, 1, "but it's the tutorial right now so I'll let it fly this time");
-                                wrefresh(statsBox); 
-                                break;
-                            }
-                            case 1: // Sell
-                            {
-                                wclear(statsBox);
-                                box(statsBox, ACS_VLINE, ACS_HLINE);
-                                mvwprintw(statsBox, 2, 1, "Bruh don't sell your tower, click cancel");
-                                wrefresh(statsBox); 
-                                
-                                break;
-                            }
-                            case 2: // Cancel
-                            {
-                                editing = false;
-                                built = true;
-                                break;
-                            }
-                        }
-                    }
-                    while (editing);
-                }
-                break;
-            }
-            case 2: // Quit
-            {
-                return 0;
-            }
+            mvwprintw(statsBox, 1, 1, "Well done! You've finshed the tutorial!");
+            mvwprintw(statsBox, 2, 1, "You now know all the things you need to play! >>");
+            wrefresh(statsBox);
+            wgetch(statsBox);
+            clear();
+            return 0;
         }
 
-        if (built)
-            break;
-
-        // loaded map
-        // to do list:
-        // welcome
-        // build tutorial
-    }
-
-    wclear(statsBox);
-    box(statsBox, ACS_VLINE, ACS_HLINE);
-    mvwprintw(statsBox, 2, 1, "Well done! You've placed down your first tower!");
-    mvwprintw(statsBox, 2, 1, "You can go ahead and start the wave or place more towers!");
-    wrefresh(statsBox);
-
-    bool finishTutorial = false;
-
-    while(1)
-    {
-
-        wclear(mainBox);
-        wclear(actionBox);
-        wclear(towerBox);
-        wclear(statsBox);
-
-        box(mainBox, ACS_VLINE, ACS_HLINE);
-        box(actionBox, ACS_VLINE, ACS_HLINE);
-        box(towerBox, ACS_VLINE, ACS_HLINE);
-        box(statsBox, ACS_VLINE, ACS_HLINE);
-
-        //Print the Map
-        printMap(mainBox, path_start, towers);
-
-        // print_wave(towerBox, wave_num);
+        else if (towers.size() < 1)
+        {
+            wclear(statsBox);
+            box(statsBox, ACS_VLINE, ACS_HLINE);
+            mvwprintw(statsBox, 1, 1, "On the action menu at the top right corner");
+            mvwprintw(statsBox, 2, 1, "Click Build to start placing towers");
+            wrefresh(statsBox);
+        }
+        else 
+        { 
+            wclear(statsBox);
+            box(statsBox, ACS_VLINE, ACS_HLINE);
+            mvwprintw(statsBox, 2, 1, "You can go ahead and start the wave or place more towers!");
+            wrefresh(statsBox); 
+        }
         
-        // update stats, enemies, towers, the fun stuff ig, but they dont do anything rn
-        // mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
-        // mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
-        // mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
-        wrefresh(mainBox);
-        wrefresh(actionBox);
-        wrefresh(towerBox);
-        // wrefresh(statsBox);
+
         switch(chooseOption(actionBox, {"Start Wave", "Build", "Quit"}))
         {
-            case 0: // Start Wave
-            {   
+            case 0: // Start wave
+            {
+                // No towers placed
+                if (towers.size() < 1)
+                { 
+                    wclear(statsBox);
+                    mvwprintw(statsBox, 1, 1, "Let's not start the wave right now");
+                    mvwprintw(statsBox, 2, 1, "Let's build a tower first");
+                    wrefresh(statsBox);
+                    break;
+                }
+
                 switch(wave_num)
                 {
                     case 1:
@@ -1115,20 +982,20 @@ int helpscreen(WINDOW *win)
                 wclear(actionBox);
                 box(towerBox, ACS_VLINE, ACS_HLINE);
                 box(actionBox, ACS_VLINE, ACS_HLINE);
+                wrefresh(towerBox);
                 wrefresh(actionBox);
+
                 int i = 0;
                 int killed_enemies = 0;
-                while (killed_enemies < tutor_wave(wave_num).size() && health > 0){
+                while (killed_enemies < tutor_wave(wave_num).size()){
                     spawn_enemy(path_start, i, tutor_wave(wave_num));
 
 
                     printMap(mainBox, path_start, towers);
-                    // mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
                     print_current_enemy(towerBox, path_start);
 
                     wrefresh(towerBox);
                     wrefresh(mainBox);
-                    // wrefresh(statsBox);
                     
                     i++;
                     std::this_thread::sleep_for(std::chrono::milliseconds(700));
@@ -1141,39 +1008,61 @@ int helpscreen(WINDOW *win)
                     towers[i]->cd = 0;
                 }
                 wave_num++;
-                if (wave_num == 5) {
-                    finishTutorial = true;
-                }
-                money += 10*wave_num;
                 break;
-            }
-            case 1: // Build
-            {
+            } 
+            
+            case 1: // Edit
+            {   
+                wclear(statsBox);
+                box(statsBox, ACS_VLINE, ACS_HLINE);
+                mvwprintw(statsBox, 1, 1, "Now select the tile you want to place the tower on");
+                mvwprintw(statsBox, 2, 1, "Use arrow keys to move the cursor and press enter to select");
+                wrefresh(statsBox); 
                 selected = selectSquare(mainBox, actionBox);
                 if (map[selected.first][selected.second] == -1 && selected.second != -1){ // Empty Tile
+
+                    wclear(statsBox);
+                    box(statsBox, ACS_VLINE, ACS_HLINE);
+                    mvwprintw(statsBox, 2, 1, "Good Spot! Now click Place Tower");
+                    wrefresh(statsBox); 
+
                     wclear(towerBox);
                     box(towerBox, ACS_VLINE, ACS_HLINE);
                     mvwprintw(towerBox, 2, 4, "Empty Tile");
                     wrefresh(towerBox);
+                    
                     switch(chooseOption(actionBox, {"Place Tower", "Cancel"}))
                     {
                         case 0: // Place Tower
-                        {
-                            std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon"};
+                        {   
+                            wclear(statsBox);
+                            box(statsBox, ACS_VLINE, ACS_HLINE);
+                            mvwprintw(statsBox, 2, 1, "Now you can select any tower you want to place!");
+                            wrefresh(statsBox); 
+
+                            // Choose Tower
+                            std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon", "Cancel"};
                             int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
-                            
+
+                            // User selects last option (Cancel)
+                            if (tower_option == tower_options.size()-1)
+                            {
+                                break;
+                            }
+
+                            // Create Tower
                             tower* t = new tower;
-                            t->coordinates = std::make_pair(selected.first, selected.second);
-                            t->create_new_tower(tower_options[tower_option], 1, path_start, money);
+                            t->create_tower(tower_options[tower_option], 1);
+                            t->coordinates = selected;
+                            t->set_tower_coverage(path_start);
                             towers.push_back(t);
                             map[selected.first][selected.second] = towers.size()-1;
+
                             wclear(towerBox);
                             box(towerBox, ACS_VLINE, ACS_HLINE);
                             printMap(mainBox, path_start, towers);
-                            // mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
                             wrefresh(mainBox);
                             wrefresh(towerBox);
-                            // wrefresh(statsBox);
                             break;
                         }
                         case 1: // Cancel
@@ -1183,9 +1072,15 @@ int helpscreen(WINDOW *win)
                     }
                 }
                 if (map[selected.first][selected.second] >= 0 && selected.second != -1){ // Tower
+                    wclear(statsBox);
+                    box(statsBox, ACS_VLINE, ACS_HLINE);
+                    mvwprintw(statsBox, 1, 1, "Here is the upgrade screen");
+                    mvwprintw(statsBox, 2, 1, "To reopen it just select a tower after you click Build");
+                    mvwprintw(statsBox, 3, 1, "Click cancel to move on to the next part");
+                    wrefresh(statsBox); 
                     bool editing = true;
                     do 
-                    {
+                    {   
                         wclear(towerBox);
                         box(towerBox, ACS_VLINE, ACS_HLINE);
                         int index = map[selected.first][selected.second];
@@ -1198,19 +1093,18 @@ int helpscreen(WINDOW *win)
                         {
                             case 0: // Upgrade
                             {
-                                if (money - selected_tower->cost < 0){
-                                    break;
-                                }
-                                selected_tower->upgrade_tower(selected_tower->name, selected_tower->level, path_start, money);
+                                selected_tower->upgrade_tower();
                                 wclear(towerBox);
-                                mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
-                                wrefresh(statsBox);
                                 box(towerBox, ACS_VLINE, ACS_HLINE);
+                                wclear(statsBox);
+                                box(statsBox, ACS_VLINE, ACS_HLINE);
+                                mvwprintw(statsBox, 1, 1, "You've upgraded your tower! Normally it costs money");
+                                mvwprintw(statsBox, 2, 1, "but it's the tutorial right now so I'll let it fly this time");
+                                wrefresh(statsBox); 
                                 break;
                             }
                             case 1: // Sell
                             {
-                                money += selected_tower->cost/2;
                                 towers.erase(towers.begin() + index);
                                 for (int row = 0; row < 9; row++){
                                     for (int col = 0; col < 16; col++){
@@ -1226,7 +1120,6 @@ int helpscreen(WINDOW *win)
                                 wrefresh(towerBox);
                                 wrefresh(statsBox);
                                 editing = false;
-                                
                                 break;
                             }
                             case 2: // Cancel
@@ -1245,36 +1138,6 @@ int helpscreen(WINDOW *win)
                 return 0;
             }
         }
-        wrefresh(mainBox);
-        wrefresh(actionBox);
-        wrefresh(towerBox);
-        wrefresh(statsBox);
-
-        if (finishTutorial){
-            wclear(mainBox);
-            wclear(actionBox);
-            wclear(towerBox);
-            wclear(statsBox);
-
-            box(mainBox, ACS_VLINE, ACS_HLINE);
-            box(actionBox, ACS_VLINE, ACS_HLINE);
-            box(towerBox, ACS_VLINE, ACS_HLINE);
-            box(statsBox, ACS_VLINE, ACS_HLINE);
-
-            printMap(mainBox, path_start, towers);
-
-            wrefresh(mainBox);
-            wrefresh(actionBox);
-            wrefresh(towerBox);
-            box(statsBox, ACS_VLINE, ACS_HLINE);
-            mvwprintw(statsBox, 1, 1, "Well done! You've finshed the tutorial!");
-            mvwprintw(statsBox, 2, 1, "You now know all the things you need to play! >>");
-            wrefresh(statsBox);
-            wgetch(statsBox);
-            clear();
-            return 0;
-        }
     }
-
     return 0;
 }
