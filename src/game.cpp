@@ -7,7 +7,23 @@ std::string getString(char x)
     return s;   
 }
 
-void printgametitle(WINDOW* titlewin, std::string name, int row) {
+void printgametitle(WINDOW* titlewin, std::string name, int row) 
+{
+    /*
+    
+    Input:
+    titlewin : Pointer to the window where the title will be printed
+    name : Name of the file containing the title art
+    row : Row where the title will be printed
+
+    Process:
+    Reads the file containing the title art
+    Prints the title art in the center of the window
+
+    Output:
+    Modified titlewin window
+
+    */
     int yMax, xMax;
     getmaxyx(titlewin, yMax, xMax);
     std::ifstream inputfile("art/" + name + ".txt");
@@ -19,8 +35,25 @@ void printgametitle(WINDOW* titlewin, std::string name, int row) {
     inputfile.close();
 }
 
-void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) // Print the map of the game inside of the main window
+void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers)
 {   
+    /*
+    
+    Input:
+    mainBox : Pointer to the window where the map will be printed
+    path_start : Pointer to the first node of the path linked list
+    towers : Vector of pointers to the towers on the map
+
+    Process:
+    Sets the entire window to green
+    Prints the path (Colourless background)
+    Prints the enemies (Coloured text)
+    Prints the towers (Coloured background)
+
+    Output:
+    Modified mainBox window
+
+    */
     // Define background colors for map
     use_default_colors();
     init_pair(1, COLOR_WHITE, COLOR_GREEN);
@@ -99,8 +132,22 @@ void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers) //
     }
 }
 
-std::pair<int, int> selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player to control cursor to select the tile they want to interact with
+std::pair<int, int> selectSquare(WINDOW *win, WINDOW* actionBox) 
 {   
+    /*
+    
+    Input:
+    win : Pointer to the window where the map will be printed
+    actionBox : Pointer to the window where instruction will be printed
+
+    Process:
+    Prints the instructions on the actionBox window
+    Allows the player to move the cursor using arrow keys
+
+    Output:
+    Coordinates of the selected tile
+
+    */
     wclear(actionBox);
     box(actionBox, ACS_VLINE, ACS_HLINE);
     mvwprintw(actionBox, 3, 2, "Move: Arrow Keys");
@@ -141,7 +188,28 @@ std::pair<int, int> selectSquare(WINDOW *win, WINDOW* actionBox) // Allow player
     return selected;
 }
 
-void print_tower(WINDOW* win, tower* tower_on_top){
+void print_tower(WINDOW* win, tower* tower_on_top)
+{
+    /*
+    
+    Input:
+    win : Pointer to the window where the tower information will be printed
+    tower_on_top : Pointer to the tower object
+
+    Process:
+    Prints the tower information on the window
+        Name
+        Level
+        Damage
+        Range
+        Cost
+        Attack Speed
+        Type
+
+    Output:
+    Modified win window
+
+    */
     for (int i = 2; i < 18; i++){
         mvwprintw(win, i, 4, "               ");
     }
@@ -157,7 +225,23 @@ void print_tower(WINDOW* win, tower* tower_on_top){
     }
 }
 
-void mapdisplay(WINDOW* mapwin, int count) {
+void mapdisplay(WINDOW* mapwin, int count) 
+{
+
+    /*
+    
+    Input:
+    mapwin : Pointer to the window where the map will be printed
+    count : Map number of the map file
+
+    Process:
+    Reads the map file
+    Prints the map on the window
+
+    Output:
+    Modified mapwin window
+
+    */
     wclear(mapwin);
     std::ifstream mapfile("map/map_" + std::to_string(count) + ".txt");
     std::string line;
@@ -169,7 +253,23 @@ void mapdisplay(WINDOW* mapwin, int count) {
     mapfile.close();
 }
 
-int mapscreen(WINDOW* titlewin) {
+int mapscreen(WINDOW* titlewin) 
+{
+    /*
+    
+    Input:
+    titlewin : Pointer to the window where the title will be printed
+
+    Process:
+    Prints the choosemap.txt title art on the titlewin window
+    Prints the map on the mapwin window
+    Prints the menu options on the menuwin window
+    Allows the player to select a map using arrow keys
+
+    Output:
+    Map number of the selected map
+
+    */
     // Print "Choose a map" title
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
@@ -249,7 +349,23 @@ int mapscreen(WINDOW* titlewin) {
     return count;     
 }
 
-int chooseOption(WINDOW *win, std::vector<std::string> choices, bool box_on = true){
+int chooseOption(WINDOW *win, std::vector<std::string> choices, bool box_on = true)
+{
+    /*
+    
+    Input:
+    win : Pointer to the window where the options will be printed
+    choices : Vector of strings containing the options
+    box_on : Boolean value to determine if a box will be printed around the options
+
+    Process:
+    Prints the options on the window
+    Allows the player to select an option using arrow keys
+
+    Output:
+    Index of the selected option
+
+    */
     keypad(win, true);
     wclear(win);
     if (box_on){
@@ -296,16 +412,30 @@ int chooseOption(WINDOW *win, std::vector<std::string> choices, bool box_on = tr
     return highlight;
 }
 
-int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::string> tower_options){
+int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::string> tower_options)
+{
+    /*
+    
+    Input:
+    actionBox : Pointer to the window where the options will be printed
+    towerBox : Pointer to the window where the tower information will be printed
+    tower_options : Vector of strings containing the tower options
+
+    Process:
+    Prints the tower options on the actionBox window
+    Prints the tower information on the towerBox window
+    Allows the player to select a tower using arrow keys
+
+    Output:
+    Index of the selected tower
+
+    */
     keypad(actionBox, true);
     wclear(actionBox);
     box(actionBox, ACS_VLINE, ACS_HLINE);
     int highlight = 0;
     int keyboard_input = 0;
     int num_of_choices = tower_options.size();
-
-    
-
     while (keyboard_input != 10){
         for (int i = 0; i < num_of_choices; i++){
             if (i == highlight){
@@ -342,7 +472,22 @@ int choose_tower_option(WINDOW* actionBox, WINDOW* towerBox, std::vector<std::st
     return highlight;
 }
 
-void print_current_enemy(WINDOW *win, path*& path_start){
+void print_current_enemy(WINDOW *win, path*& path_start)
+{
+    /*
+    
+    Input:
+    win : Pointer to the window where the enemies will be printed
+    path_start: Pointer to the first node of the path linked list
+
+    Process:
+    Prints the enemies of the current wave on the window
+        Name, level
+    
+    Output:
+    Modified win window
+
+    */
     path* current = path_start;
     for (int i = 2; i < 18; i++){
         mvwprintw(win, i, 4, "               ");
@@ -358,7 +503,24 @@ void print_current_enemy(WINDOW *win, path*& path_start){
     }
 }
 
-void print_wave(WINDOW* win, int wave_num, std::vector<std::string> next_wave){
+void print_wave(WINDOW* win, int wave_num, std::vector<std::string> next_wave)
+{
+    /*
+    
+    Input:
+    win : Pointer to the window where the wave information will be printed
+    wave_num : Current wave number
+    next_wave : Vector of strings containing the enemies of the next wave
+
+    Process:
+    Prints the wave information on the window
+        Wave number
+        Enemies of the next wave
+    
+    Output:
+    Modified win window
+
+    */
     mvwprintw(win, 2, 6, "Wave %d", wave_num); 
     for (int i = 0; i < 19 && i < next_wave.size(); i++){
         mvwprintw(win, 4+i, 4, next_wave[i].c_str());
@@ -367,7 +529,20 @@ void print_wave(WINDOW* win, int wave_num, std::vector<std::string> next_wave){
 
 int mainmenu(WINDOW *win)
 {   
- 
+    
+    /*
+    
+    Input:
+    win : Pointer to the window where the main menu will be printed
+
+    Process:
+    Prints the main menu on the window
+    Allows the player to select an option using arrow keys
+
+    Output:
+    Index of the selected option
+
+    */
     int mid_x = win->_maxx / 2;
     int mid_y = win->_maxy / 2;
 
@@ -388,7 +563,21 @@ int mainmenu(WINDOW *win)
     return chooseOption(menuwin, choices, false) + 1;
 }
 
-int loseScreen() {
+int loseScreen() 
+{
+    /*
+    
+    Input:
+    
+    Process:
+    Prints the "You Lose" title on the window
+    Prints the menu options on the menuwin window
+    Allows the player to select an option using arrow keys
+
+    Output:
+    Index of the selected option
+
+    */
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
@@ -419,6 +608,19 @@ int loseScreen() {
 
 int chestscreen()
 {
+    /*
+    
+    Input:
+
+    Process:
+    Prints the "openachest" and "chest" titles on the window
+    Prints the menu options on the menuwin window
+    Allows the player to select an option using arrow keys
+
+    Output:
+    Index of the selected option
+
+    */
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
@@ -444,6 +646,19 @@ int chestscreen()
 
 int prizescreen(int dollars) 
 {
+    /*
+    
+    Input:
+    dollars : Amount of money the player receives
+
+    Process:
+    Prints the "prizescreen" title on the window
+    Prints the amount of money the player receives on the window
+    Waits for the player to press any key
+
+    Output:
+
+    */
 	initscr();
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
@@ -464,7 +679,21 @@ int prizescreen(int dollars)
     return 0;
 }
 
-int winScreen() {
+int winScreen() 
+{
+    /*
+    
+    Input:
+
+    Process:
+    Prints the "You Win" title on the window
+    Prints the menu options on the menuwin window
+    Allows the player to select an option using arrow keys
+
+    Output:
+    Index of the selected option
+
+    */
     int yMax, xMax;
     getmaxyx(stdscr, yMax, xMax);
 
@@ -488,6 +717,17 @@ int winScreen() {
 
 int endscreen()
 {
+    /*
+    
+    Input:
+
+    Process:
+    Prints the "seeyouagain" title on the window
+    Waits for the player to press any key
+
+    Output:
+
+    */
 	initscr();
 	cbreak();
 	noecho();
@@ -509,6 +749,23 @@ int endscreen()
 
 int playscreen(WINDOW *win, bool load = false)
 {   
+    /*
+    
+    Input:
+    win : Pointer to the window where the game will be played
+    load : Boolean value to determine if the game will be loaded
+
+    Process:
+    Initializes the game window
+    Initializes the actionBox, towerBox, statsBox windows
+    Initializes the health, wave number, money, map number, map, path, towers
+    Allows the player to select an option using arrow keys
+    Allows player to play the game
+
+    Output:
+    Index of main menu option
+
+    */
     int mid_x = win->_maxx / 2;
     int mid_y = win->_maxy / 2;
     WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
@@ -551,19 +808,6 @@ int playscreen(WINDOW *win, bool load = false)
     }
     
     int highlight = 0;
-
-    box(mainBox, ACS_VLINE, ACS_HLINE);
-    box(actionBox, ACS_VLINE, ACS_HLINE);
-    box(towerBox, ACS_VLINE, ACS_HLINE);
-    box(statsBox, ACS_VLINE, ACS_HLINE);
-    refresh();
-    wrefresh(mainBox);
-    wrefresh(actionBox);
-    wrefresh(towerBox);
-    wrefresh(statsBox);
-    
-    
-
     noecho();
     curs_set(0);
 
@@ -578,8 +822,6 @@ int playscreen(WINDOW *win, bool load = false)
 
     while(1)
     {
-        std::vector<std::string> current_wave = wave(wave_num);
-
         wclear(mainBox);
         wclear(actionBox);
         wclear(towerBox);
@@ -590,18 +832,21 @@ int playscreen(WINDOW *win, bool load = false)
         box(towerBox, ACS_VLINE, ACS_HLINE);
         box(statsBox, ACS_VLINE, ACS_HLINE);
 
-        //Print the Map
         printMap(mainBox, path_start, towers);
-        
+
+        std::vector<std::string> current_wave = wave(wave_num);
         print_wave(towerBox, wave_num, current_wave);
-        
+
         mvwprintw(statsBox, 2, 2, "Health: (%d)", health);
         mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
         mvwprintw(statsBox, 2, 42, "Wave: (%d)", wave_num);
+
         wrefresh(mainBox);
         wrefresh(actionBox);
         wrefresh(towerBox);
         wrefresh(statsBox);
+
+        
         switch(chooseOption(actionBox, {"Start Wave", "Build/Edit", "Quit"}))
         {
             case 0: // Start Wave
@@ -702,7 +947,7 @@ int playscreen(WINDOW *win, bool load = false)
                 }
                 if (map[selected.first][selected.second] >= 0 && selected.second != -1){ // Tower
                     bool editing = true;
-                    do 
+                    while (editing) 
                     {
                         wclear(towerBox);
                         box(towerBox, ACS_VLINE, ACS_HLINE);
@@ -754,7 +999,6 @@ int playscreen(WINDOW *win, bool load = false)
                             }
                         }
                     }
-                    while (editing);
                 }
                 break;
             }
@@ -787,7 +1031,22 @@ int playscreen(WINDOW *win, bool load = false)
     return loseScreen();
 }
 
-void storydisplay(WINDOW* storywin, int count) {
+void storydisplay(WINDOW* storywin, int count) 
+{
+    /*
+    
+    Input:
+    storywin : Pointer to the window where the story will be printed
+    count : Story number of the story file
+
+    Process:
+    Reads the story file based on count
+    Prints the story on the window
+
+    Output:
+    Modified storywin window
+
+    */
     wclear(storywin);
     std::ifstream storyfile("Story/Story_" + std::to_string(count) + ".txt");
     std::string line;
@@ -799,7 +1058,20 @@ void storydisplay(WINDOW* storywin, int count) {
     storyfile.close();
 }
 
-int storyscreen(WINDOW *win){
+int storyscreen(WINDOW *win)
+{
+    /*
+    
+    Input:
+    win : Pointer to the window where the story will be displayed
+
+    Process:
+    Prints the story on the window
+
+    Output:
+    Index of the selected option
+
+    */
     clear();
     int count = 1;
     int mid_x = win->_maxx / 2;
@@ -812,22 +1084,38 @@ int storyscreen(WINDOW *win){
     storydisplay(storywin, count);
     wrefresh(storywin);
     while (true){
-    int choice = wgetch(mainBox);
-    if (choice == 10){
-        if (count < 6){
-            count++;
-            storydisplay(storywin, count);
-            wrefresh(storywin);
-        } else {
-            return helpscreen(stdscr);
+        int choice = wgetch(mainBox);
+        if (choice == 10)
+        {
+            if (count < 6)
+            {
+
+                count++;
+                storydisplay(storywin, count);
+                wrefresh(storywin);
+            } 
+            else {
+                return helpscreen(stdscr);
+            }
         }
     }
-  }
-  return 0;
+    return 0;
 }
 
 int helpscreen(WINDOW *win)
 {
+    /*
+    
+    Input:
+    win : Pointer to the window where the help will be displayed
+
+    Process:
+    Tutorial mode for the game
+
+    Output:
+    Index of the main menu option
+    
+    */
     int mid_x = win->_maxx / 2;
     int mid_y = win->_maxy / 2;
     WINDOW * mainBox = newwin(29, 82, 0, mid_x - 41 - 5);
@@ -1079,7 +1367,7 @@ int helpscreen(WINDOW *win)
                     mvwprintw(statsBox, 3, 1, "Click cancel to move on to the next part");
                     wrefresh(statsBox); 
                     bool editing = true;
-                    do 
+                    while (editing)
                     {   
                         wclear(towerBox);
                         box(towerBox, ACS_VLINE, ACS_HLINE);
@@ -1129,7 +1417,6 @@ int helpscreen(WINDOW *win)
                             }
                         }
                     }
-                    while (editing);
                 }
                 break;
             }
