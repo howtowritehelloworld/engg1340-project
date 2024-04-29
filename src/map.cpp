@@ -95,9 +95,3 @@ void move(path*& path_start, int& killed_enemies, int& health) {
         health--;
     }
 }
-
-void attack_all(vector<struct tower*> towers){
-    for (int i = 0; i < towers.size(); i++){
-        towers[i]->CalculateDamage();
-    }
-}

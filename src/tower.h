@@ -36,4 +36,6 @@ struct tower{
     void upgrade_tower(std::string name, int level, path*& path_start, int &money);
 };
 
+void attack_all(std::vector<struct tower*> towers);
+
 #endif

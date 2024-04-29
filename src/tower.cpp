@@ -184,3 +184,9 @@ void tower::upgrade_tower(std::string name, int level, path*& path_start, int &m
     }
     set_tower_coverage(path_start);  
 }
+
+void attack_all(vector<struct tower*> towers){
+    for (int i = 0; i < towers.size(); i++){
+        towers[i]->CalculateDamage();
+    }
+}
