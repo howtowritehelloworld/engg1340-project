@@ -1,6 +1,7 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 #include <string>
+#include <vector>
 struct enemy
 {
     std::string name;
@@ -14,5 +15,8 @@ struct enemy
     void ghost(int level);
     void vampire(int level);
 };
+
+std::vector<std::string> tutor_wave(int wave_num);
+std::vector<std::string> wave(int wave_num);
 
 #endif // ENEMY_H

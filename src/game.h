@@ -24,8 +24,6 @@
 // Declare any function prototypes
 
 std::string getString(char x);
-std::vector<std::string> tutor_wave(int wave_num);
-std::vector<std::string> wave(int wave_num);
 void printgametitle(WINDOW* titlewin, std::string name, int row);
 void printMap(WINDOW *mainBox, path*& path_start, std::vector<tower*> towers);
 std::pair<int, int> selectSquare(WINDOW *win, WINDOW* actionBox);
