@@ -37,11 +37,11 @@ Some commits don't count towards the person's contribution statistics. Hence th
 
 | Group Member | uid | Work done |
 |---------|---------|---------|
-| Zheng Andy | 3036222642 | Pathfinding, wave display, gameplay mechanics, testing, debugging, documentation, formatting |
-| Jason Ip Tsz Shun | 3036226222 | GUI, damage calculation, tutorial mode |
-| Owen Wen Sze Hoi | 3036226583 | Towers, Enemies, Infinite waves generation, Balancing, Chest feature |
-| Cyric Wong Chun Sun | 3036222965 | Map design, save and load game, game title, video demo |
-| Donald Leung Kit Yiu | 3036226557 | GUI, tutorial mode, map display, readme file|
+| [Zheng Andy (Andy)](https://github.com/howtowritehelloworld) | 3036222642 | Pathfinding, wave display, gameplay mechanics, testing, debugging, documentation, formatting |
+| [Ip Tsz Shun (Jason)](https://github.com/rtween1) | 3036226222 | GUI, damage calculation, tutorial mode |
+| [Wen Sze Hoi (Owen)](https://github.com/WenSzeHoi) | 3036226583 | Towers, Enemies, Infinite waves generation, Balancing, Chest feature |
+| [Wong Chun Sun (Cyric)](https://github.com/suncyric) | 3036222965 | Map design, save and load game, game title, video demo |
+| [Leung Kit Yiu (Donald)](https://github.com/Dsl0503) | 3036226557 | GUI, tutorial mode, map display, readme file|
 
 ## Introduction <a name="introduction"></a>
 
@@ -56,6 +56,7 @@ We recommend playing the tutorial of the game before playing the main game. The 
 
 Our game includes: 
 - Colorful GUI
+- [Text Art](https://www.asciiart.eu/text-to-ascii-art)
 - Simple controls
 - A wide variety of maps, even custom maps can be made
 - Diverse towers and enemies
