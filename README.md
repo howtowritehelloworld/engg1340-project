@@ -27,7 +27,7 @@ In the terminal,
 Type `make` to create the executable.
 Type `./game` to play the game.
 
-Use arrows keys <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> to navigate the menu
+Use arrows keys <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> to navigate the menu, and ENTER to select.
 
 We recommend opening the terminal in full size for the best gameplay experience
 
@@ -213,6 +213,8 @@ The game provides an option for the player to choose the map randomly.
 
 The game features an "Infinite Mode" option. In this mode, random enemies are randomly generated based on the wave number, ensuring that the difficulty scales as the player progresses through the waves.
 
+Every 3 waves are completed, a player will be rewarded with a chest that they can choose from 3 chests. Each chest will contain a random amount of money based on the wave number.
+
 ### Data structures for storing game status <a name="data-structures"></a>
 
 The game uses different data structures to store the game.
@@ -221,7 +223,7 @@ Vector to store the pointers of all towers.
 
 Linked list to store the path and the pointers to the enemies.
 
-Use text file for saving the game.
+A Text file is used for saving and loading the game.
 
 ### Dynamic Memory Management <a name="dynamic-memory"></a>
 
@@ -252,6 +254,6 @@ The source code is split into different components and stored inside `src` folde
 A Makefile is created to compile all the code components.
 
 ## External Libraries <a name="external-libraries"></a>
-`Ncurses` is used for graphics in this project.
+`Ncurses` is used for the graphical user interface in this project.
 
 
