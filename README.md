@@ -213,6 +213,8 @@ The game provides an option for the player to choose the map randomly.
 
 The game features an "Infinite Mode" option. In this mode, random enemies are randomly generated based on the wave number, ensuring that the difficulty scales as the player progresses through the waves.
 
+Every 3 waves are completed, a player will be rewarded with a chest that they can choose from 3 chests. Each chest will contain a random amount of money based on the wave number.
+
 ### Data structures for storing game status <a name="data-structures"></a>
 
 The game uses different data structures to store the game.
