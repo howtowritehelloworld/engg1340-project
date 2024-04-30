@@ -933,15 +933,17 @@ int playscreen(WINDOW *win, bool load = false)
         {
             selected = selectSquare(mainBox, actionBox);
             if (map[selected.first][selected.second] == -1 && selected.second != -1)
-            { // Empty Tile
+            { 
+                // User selects an empty Tile
                 wclear(towerBox);
                 box(towerBox, ACS_VLINE, ACS_HLINE);
                 mvwprintw(towerBox, 2, 4, "Empty Tile");
                 wrefresh(towerBox);
                 switch (chooseOption(actionBox, {"Place Tower", "Cancel"}))
                 {
-                case 0: // Place Tower
+                case 0: // User selects Place Tower
                 {
+                    
                     std::vector<std::string> tower_options = {"Mage", "Archer", "Sniper", "Cannon", "Cancel"};
                     int tower_option = choose_tower_option(actionBox, towerBox, tower_options);
 
@@ -983,7 +985,8 @@ int playscreen(WINDOW *win, bool load = false)
                 }
             }
             if (map[selected.first][selected.second] >= 0 && selected.second != -1)
-            { // Tower
+            {
+                // User selects a Tower
                 bool editing = true;
                 while (editing)
                 {
@@ -1058,7 +1061,6 @@ int playscreen(WINDOW *win, bool load = false)
             refresh();
             break;
         }
-
         if (wave_num == 15)
         {
             clear();
