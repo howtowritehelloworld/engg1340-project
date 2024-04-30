@@ -20,6 +20,6 @@ save.o: src/save.cpp src/save.h src/map.h src/enemy.h src/tower.h src/path.h
 	g++ -c $<
 
 clean:
-	rm -f *.o game
+	rm -f *.o game save.txt
 
 .PHONY: clean
