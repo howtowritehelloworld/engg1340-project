@@ -27,7 +27,7 @@ In the terminal,
 Type `make` to create the executable.
 Type `./game` to play the game.
 
-Use arrows keys <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> to navigate the menu
+Use arrows keys <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> to navigate the menu, and ENTER to select.
 
 We recommend opening the terminal in full size for the best gameplay experience
 
@@ -221,7 +221,7 @@ Vector to store the pointers of all towers.
 
 Linked list to store the path and the pointers to the enemies.
 
-Use text file for saving the game.
+A Text file is used for saving and loading the game.
 
 ### Dynamic Memory Management <a name="dynamic-memory"></a>
 
@@ -252,6 +252,6 @@ The source code is split into different components and stored inside `src` folde
 A Makefile is created to compile all the code components.
 
 ## External Libraries <a name="external-libraries"></a>
-`Ncurses` is used for graphics in this project.
+`Ncurses` is used for the graphical user interface in this project.
 
 
