@@ -1,4 +1,4 @@
-main: main.cpp game.o path.o map.o enemy.o tower.o save.o
+main: src/main.cpp game.o path.o map.o enemy.o tower.o save.o
 	g++ $^ -o game -lncurses
 
 tower.o: src/tower.cpp src/tower.h src/enemy.h src/map.h src/path.h
