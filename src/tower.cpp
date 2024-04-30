@@ -89,7 +89,18 @@ void tower::sniper(int tower_level)
 
 void tower::cannon(int tower_level)
 {
+    /*
 
+    Input:
+    tower_level : Level of the tower to be created
+
+    Process:
+    Sets the attributes for a cannon tower according to tower_level
+
+    Output:
+    Modified struct tower
+
+    */
     name = "Cannon";
     color_id = 6;
     icon = 'C';
