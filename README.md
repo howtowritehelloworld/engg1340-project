@@ -21,7 +21,7 @@
 
 ## Quick Start <a name="quickstart"></a>
 
-Download the zip file and unzip it.
+Download the [zip file](https://github.com/howtowritehelloworld/engg1340-project/archive/refs/heads/main.zip) and unzip it.
 
 In the terminal,
 Type `make` to create the executable.
