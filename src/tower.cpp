@@ -3,18 +3,7 @@
 using namespace std;
 void tower::mage(int tower_level)
 {
-    /*
 
-    Input:
-    tower_level : Level of the tower to be created
-
-    Process:
-    Sets the attributes for a mage tower according to tower_level
-
-    Output:
-    Modified struct tower
-
-    */
     name = "Mage";
     color_id = 3;
     icon = 'M';
