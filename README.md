@@ -16,8 +16,7 @@
     -   [3. Dynamic Memory Management](#dynamic-memory)
     -   [4. File input/output (e.g., for loading/saving game status)](#file-inputoutput)
     -   [5. Program codes in multiple files](#multiple-files)
-    -   [6. Proper Indentation and naming styles](#external-libraries)
-    -   [7. In-code documentation](#documentation)
+-   [External Libraries](#external-libraries)
 
 
 ## Quick Start <a name="quickstart"></a>
@@ -224,7 +223,7 @@ Linked list to store the path and the pointers to the enemies.
 
 Use text file for saving the game.
 
-### Dynamic Memory Management <a name="dyanmic-memory"></a>
+### Dynamic Memory Management <a name="dynamic-memory"></a>
 
 Enemies and towers are all created and stored as pointers.
 
@@ -248,12 +247,11 @@ Additionally, the game automatically saves the game after editing and after each
 
 ### Program codes in multiple files <a name="multiple-files"></a>
 
-The source code is split into different components and stored inside `src` folder.
+The source code is split into different components and stored inside `src` folder. 
 
-### Proper Indentation and naming styles <a name="external-libraries"></a>
+A Makefile is created to compile all the code components.
 
-Each control structures provide an indentati on and all the variables have meaningful names.
+## External Libraries <a name="external-libraries"></a>
+`Ncurses` is used for graphics in this project.
 
-### In-code documentation <a name="documentation"></a>
 
-Easy-to-understand documentation is included in the code.
