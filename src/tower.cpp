@@ -31,18 +31,7 @@ void tower::mage(int tower_level)
 
 void tower::archer(int tower_level)
 {
-    /*
-
-    Input:
-    tower_level : Level of the tower to be created
-
-    Process:
-    Sets the attributes for an archer tower according to tower_level
-
-    Output:
-    Modified struct tower
-
-    */
+    
     name = "Archer";
     color_id = 4;
     icon = 'A';
