@@ -2,6 +2,10 @@
 #include "src/game.h"
 using namespace std;
 
+    /*
+    show the main screen 
+    */
+
 int main(int agrc, char **argv) 
 {
     initscr();
@@ -32,6 +36,6 @@ int main(int agrc, char **argv)
         clear();
     }
 
-    endscreen();
+    endscreen(); // show "seeyouagain"
     return 0;
 }
