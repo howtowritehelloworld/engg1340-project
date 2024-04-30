@@ -63,7 +63,7 @@ Our game includes:
 
 ### 2. Gameflow <a name="gameflow"></a>
 
-Each time a wave is completed, the player will be rewarded with $(8*wave_number) to further enhance their defence.
+Each time a wave is completed, the player will be rewarded with $ 8*(wave_number+1) to further enhance their defence.
 
 If the player runs out of health, a game over screen will pop up and they will have to play again.
 
@@ -74,8 +74,6 @@ To start playing, choose New Game or Help to play the main game or tutorial leve
 If you have played the game before, click load game to get back your progress.
 
 Upon entering, you will be prompted to place towers or start the wave.
-
-Once you complete a wave, money will be granted to you based on the wave number. Moreover killing enemies also grant you a specific amount of money based on enemy type and their level.
 
 Upon completing wave 15, you have won the required stages of the game and can continue by pressing the infinite waves option.
 
@@ -177,15 +175,11 @@ Camoflauged enemies (Camo) will be of color green.
 
 Health: 9 per level
 
-Money given after defeat: 4 per level
-
 Type: Ground
 
 #### Dragon
 
 Health: 12 per level
-
-Money given after defeat: 4 per level
 
 Type: Air
 
@@ -193,15 +187,11 @@ Type: Air
 
 Health: 9 per level
 
-Money given after defeat: 3 per level
-
 Type: Ground, Camo
 
 #### Vampire
 
 Health: 9 per level
-
-Money given after defeat: 4 per level
 
 Type: Air, Camo
 
