@@ -2,12 +2,12 @@
 #include "src/game.h"
 using namespace std;
 
-    /*
-    show the main screen 
-    */
 
 int main(int agrc, char **argv) 
 {
+    /*
+    show the main screen 
+    */
     initscr();
     refresh();
     start_color();
