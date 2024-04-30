@@ -1005,6 +1005,7 @@ int playscreen(WINDOW *win, bool load = false)
                         {
                             break;
                         }
+                        money -= selected_tower->cost;
                         selected_tower->upgrade_tower();
                         wclear(towerBox);
                         mvwprintw(statsBox, 2, 22, "Money: (%d)", money);
