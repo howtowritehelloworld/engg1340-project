@@ -63,7 +63,7 @@ Our game includes:
 
 ### 2. Gameflow <a name="gameflow"></a>
 
-Each time an enemy is killed, the player will be rewarded with money to further enhance their defence.
+Each time a wave is completed, the player will be rewarded with money to further enhance their defence.
 
 If the player runs out of health, a game over screen will pop up and they will have to play again.
 
